@@ -1,0 +1,583 @@
+/**
+ * Offline embedding pipeline + vector store for Retrieval-Augmented Generation.
+ *
+ * Uses @huggingface/transformers (the maintained successor to @xenova/transformers)
+ * to run all-MiniLM-L6-v2 (~23 MB ONNX) in-browser via ONNX Runtime Web, with
+ * automatic WebGPU → WebNN → WASM fallback handled by transformers.js.
+ *
+ * Embeddings are stored in IndexedDB via a tiny hand-rolled vector store
+ * (cosine similarity over Float32Arrays). This keeps the implementation
+ * dependency-free — no need for vectra/hnswlib-wasm — and is fast enough
+ * for ~10k chunks (linear scan at ~0.1ms per chunk on M1).
+ *
+ * For larger corpora (>50k chunks), consider swapping the in-house store
+ * for hnswlib-wasm or vectra. The `VectorStore` interface below is the
+ * only contract that would need to be re-implemented.
+ *
+ * Browser-only.
+ */
+
+import type { OfflineChatMessage } from './prompts';
+
+// ── Public types ─────────────────────────────────────────────────────────────
+
+export interface RAGChunk {
+  /** Stable id (e.g. `qbank:q_12345`). */
+  id: string;
+  /** Source namespace — qbank, drugs, vignettes, notes, etc. */
+  source: string;
+  /** Text to embed (max ~512 tokens, ~1.5KB chars). */
+  text: string;
+  /** Optional metadata for citation display. */
+  title?: string;
+  url?: string;
+  tags?: string[];
+  /** Wall-clock when this chunk was embedded (ms epoch). */
+  embeddedAt: number;
+}
+
+export interface RAGQueryResult {
+  chunk: RAGChunk;
+  score: number; // 0..1 cosine similarity
+}
+
+export interface RAGRetrievalOptions {
+  /** Max chunks to return (default 4). */
+  topK?: number;
+  /** Min similarity score to include (default 0.20). */
+  minScore?: number;
+  /** Restrict to these source namespaces. */
+  sources?: string[];
+}
+
+// ── Embedding pipeline ──────────────────────────────────────────────────────
+
+const EMBEDDING_MODEL_ID = 'Xenova/all-MiniLM-L6-v2';
+const EMBEDDING_DIM = 384;
+
+let pipelinePromise: Promise<unknown> | null = null;
+let warmupPromise: Promise<void> | null = null;
+
+interface PipelineResult {
+  data: Float32Array | Float32Array[] | number[] | number[][];
+  dims?: number[];
+}
+
+interface ExtractorFn {
+  (texts: string[], opts: { pooling: 'mean'; normalize: boolean }): Promise<PipelineResult>;
+}
+
+interface TransformersModule {
+  pipeline?: (
+    task: 'feature-extraction',
+    model: string,
+    opts?: { dtype?: 'fp32' | 'fp16' | 'q8' | 'q4'; device?: 'webgpu' | 'wasm' | 'webnn' },
+  ) => Promise<ExtractorFn>;
+  env?: {
+    allowLocalModels?: boolean;
+    useBrowserCache?: boolean;
+    backends?: { onnx?: { wasm?: { proxy?: boolean } } };
+  };
+}
+
+/**
+ * Lazily import @huggingface/transformers and build the feature-extraction
+ * pipeline. Dynamic import keeps the ONNX runtime (~5 MB) out of the
+ * initial bundle. The pipeline itself is cached for the session.
+ *
+ * The pipeline is configured with:
+ *   - dtype: 'fp32' — fp16 sometimes fails on Windows WebGL; q8 quantized
+ *     embeddings lose ~3-5% retrieval quality for a 60% size reduction.
+ *     Pick fp32 for safety; advanced users can override via env.
+ *   - device: auto — transformers.js probes WebGPU → WebNN → WASM in order
+ *     and picks the first that works. No manual tier logic needed here.
+ */
+async function getExtractor(): Promise<ExtractorFn> {
+  if (!pipelinePromise) {
+    pipelinePromise = (async () => {
+      const mod = (await import('@huggingface/transformers')) as unknown as TransformersModule;
+      if (!mod.pipeline) {
+        throw new Error('transformers.js: pipeline() not exported');
+      }
+      // Allow loading from HF Hub (default) but also use the browser cache
+      // so we don't re-download the 23MB model on every session.
+      if (mod.env) {
+        mod.env.allowLocalModels = false;
+        mod.env.useBrowserCache = true;
+      }
+      return mod.pipeline('feature-extraction', EMBEDDING_MODEL_ID, {
+        dtype: 'fp32',
+      });
+    })();
+  }
+  return pipelinePromise as Promise<ExtractorFn>;
+}
+
+/**
+ * Pre-compile the ONNX model + load weights into memory so the first
+ * embedding call has no 5-8s cold start. Safe to call multiple times.
+ *
+ * Wire this into `requestIdleCallback` on app boot — see wireIdleWarmup().
+ */
+export async function warmupEmbedder(): Promise<void> {
+  if (warmupPromise) return warmupPromise;
+  warmupPromise = (async () => {
+    try {
+      const extractor = await getExtractor();
+      // Run a trivial embedding to force model load + WASM/ WebGPU init.
+      await extractor(['warmup'], { pooling: 'mean', normalize: true });
+    } catch (err) {
+      console.warn('[rag] warmup failed:', err);
+      // Reset so a future call can retry.
+      warmupPromise = null;
+      throw err;
+    }
+  })();
+  return warmupPromise;
+}
+
+/**
+ * Embed a single text. Returns a 384-dim L2-normalized Float32Array.
+ */
+export async function embedText(text: string): Promise<Float32Array> {
+  const extractor = await getExtractor();
+  const out = await extractor([text.slice(0, 8000)], {
+    pooling: 'mean',
+    normalize: true,
+  });
+  return toArray(out);
+}
+
+/**
+ * Embed multiple texts in one call (batched). Returns one Float32Array per
+ * input text, in the same order. Batching is more efficient than calling
+ * embedText() in a loop because the ONNX forward pass amortizes overhead.
+ *
+ * Batch size is capped at 32 — transformers.js handles internal chunking,
+ * but very large batches can OOM on low-end devices.
+ */
+export async function embedBatch(
+  texts: string[],
+  onProgress?: (done: number, total: number) => void,
+): Promise<Float32Array[]> {
+  if (texts.length === 0) return [];
+  const extractor = await getExtractor();
+  const BATCH = 32;
+  const results: Float32Array[] = [];
+  for (let i = 0; i < texts.length; i += BATCH) {
+    const slice = texts.slice(i, i + BATCH).map((t) => t.slice(0, 8000));
+    const out = await extractor(slice, { pooling: 'mean', normalize: true });
+    results.push(...toArrayOfArrays(out, slice.length));
+    onProgress?.(Math.min(i + BATCH, texts.length), texts.length);
+  }
+  return results;
+}
+
+function toArray(out: PipelineResult): Float32Array {
+  if (out.data instanceof Float32Array) return out.data;
+  if (Array.isArray(out.data) && out.data.length > 0 && out.data[0] instanceof Float32Array) {
+    // Some versions return Float32Array[] even for single input.
+    return out.data[0] as Float32Array;
+  }
+  if (Array.isArray(out.data) && typeof out.data[0] === 'number') {
+    return new Float32Array(out.data as number[]);
+  }
+  // Array of arrays of numbers
+  const flat = (out.data as number[][]).flat();
+  return new Float32Array(flat);
+}
+
+function toArrayOfArrays(out: PipelineResult, expected: number): Float32Array[] {
+  if (out.data instanceof Float32Array) {
+    // Single result despite batch — split assuming EMBEDDING_DIM width.
+    const dim = EMBEDDING_DIM;
+    const count = Math.floor(out.data.length / dim);
+    const result: Float32Array[] = [];
+    for (let i = 0; i < count; i++) {
+      result.push(out.data.subarray(i * dim, (i + 1) * dim));
+    }
+    return result;
+  }
+  if (Array.isArray(out.data) && out.data.length > 0 && out.data[0] instanceof Float32Array) {
+    return out.data as Float32Array[];
+  }
+  if (Array.isArray(out.data) && typeof out.data[0] === 'number') {
+    // Flatten trick
+    return [new Float32Array(out.data as number[])];
+  }
+  // Array of arrays of numbers
+  return (out.data as number[][]).map((arr) => new Float32Array(arr));
+}
+
+// ── Vector store (IndexedDB) ────────────────────────────────────────────────
+
+const DB_NAME = 'medq-rag';
+const DB_VERSION = 1;
+const STORE_CHUNKS = 'chunks';
+const STORE_VECS = 'vectors';
+
+interface StoredChunk {
+  id: string;
+  source: string;
+  text: string;
+  title?: string;
+  url?: string;
+  tags?: string[];
+  embeddedAt: number;
+}
+
+interface StoredVector {
+  /** Matches StoredChunk.id */
+  id: string;
+  /** Float32Array, serialized as ArrayBuffer for IDB storage. */
+  vec: ArrayBuffer;
+}
+
+let dbPromise: Promise<IDBDatabase> | null = null;
+
+function openDB(): Promise<IDBDatabase> {
+  if (dbPromise) return dbPromise;
+  dbPromise = new Promise((resolve, reject) => {
+    if (typeof indexedDB === 'undefined') {
+      reject(new Error('IndexedDB unavailable — RAG disabled'));
+      return;
+    }
+    const req = indexedDB.open(DB_NAME, DB_VERSION);
+    req.onupgradeneeded = () => {
+      const db = req.result;
+      if (!db.objectStoreNames.contains(STORE_CHUNKS)) {
+        const store = db.createObjectStore(STORE_CHUNKS, { keyPath: 'id' });
+        store.createIndex('source', 'source', { unique: false });
+      }
+      if (!db.objectStoreNames.contains(STORE_VECS)) {
+        db.createObjectStore(STORE_VECS, { keyPath: 'id' });
+      }
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+  return dbPromise;
+}
+
+function tx<T>(
+  db: IDBDatabase,
+  store: string,
+  mode: IDBTransactionMode,
+  fn: (s: IDBObjectStore) => IDBRequest<T>,
+): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const t = db.transaction(store, mode);
+    const req = fn(t.objectStore(store));
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+/**
+ * Insert (or replace) chunks + their embeddings. Idempotent on chunk.id.
+ */
+export async function putChunks(
+  chunks: RAGChunk[],
+  vectors: Float32Array[],
+): Promise<void> {
+  if (chunks.length !== vectors.length) {
+    throw new Error(`putChunks: chunks (${chunks.length}) and vectors (${vectors.length}) length mismatch`);
+  }
+  if (chunks.length === 0) return;
+  const db = await openDB();
+  const t = db.transaction([STORE_CHUNKS, STORE_VECS], 'readwrite');
+  const chunksStore = t.objectStore(STORE_CHUNKS);
+  const vecsStore = t.objectStore(STORE_VECS);
+  for (let i = 0; i < chunks.length; i++) {
+    const c = chunks[i];
+    const stored: StoredChunk = {
+      id: c.id,
+      source: c.source,
+      text: c.text,
+      title: c.title,
+      url: c.url,
+      tags: c.tags,
+      embeddedAt: c.embeddedAt,
+    };
+    chunksStore.put(stored);
+    vecsStore.put({ id: c.id, vec: vectors[i].buffer.slice(0) } as StoredVector);
+  }
+  return new Promise<void>((resolve, reject) => {
+    t.oncomplete = () => resolve();
+    t.onerror = () => reject(t.error);
+  });
+}
+
+export async function deleteChunk(id: string): Promise<void> {
+  const db = await openDB();
+  await tx(db, STORE_CHUNKS, 'readwrite', (s) => s.delete(id));
+  await tx(db, STORE_VECS, 'readwrite', (s) => s.delete(id));
+}
+
+export async function deleteSource(source: string): Promise<void> {
+  const db = await openDB();
+  const ids = await new Promise<string[]>((resolve, reject) => {
+    const idx = db.transaction(STORE_CHUNKS, 'readonly').objectStore(STORE_CHUNKS).index('source');
+    const req = idx.getAllKeys(source);
+    req.onsuccess = () => resolve(req.result as string[]);
+    req.onerror = () => reject(req.error);
+  });
+  if (ids.length === 0) return;
+  const t = db.transaction([STORE_CHUNKS, STORE_VECS], 'readwrite');
+  const cs = t.objectStore(STORE_CHUNKS);
+  const vs = t.objectStore(STORE_VECS);
+  for (const id of ids) {
+    cs.delete(id);
+    vs.delete(id);
+  }
+  return new Promise<void>((resolve, reject) => {
+    t.oncomplete = () => resolve();
+    t.onerror = () => reject(t.error);
+  });
+}
+
+export async function countChunks(source?: string): Promise<number> {
+  const db = await openDB();
+  if (source) {
+    return tx(db, STORE_CHUNKS, 'readonly', (s) => s.index('source').count(source));
+  }
+  return tx(db, STORE_CHUNKS, 'readonly', (s) => s.count());
+}
+
+/**
+ * Load all chunks for the given sources (or all chunks if no sources given).
+ * Returns both chunks and their deserialized vectors in one pass.
+ */
+async function loadAll(
+  sources?: string[],
+): Promise<{ chunks: StoredChunk[]; vectors: Map<string, Float32Array> }> {
+  const db = await openDB();
+  const chunks = await tx(db, STORE_CHUNKS, 'readonly', (s) => s.getAll() as IDBRequest<StoredChunk[]>);
+  const filtered = sources && sources.length > 0
+    ? chunks.filter((c) => sources.includes(c.source))
+    : chunks;
+  const ids = filtered.map((c) => c.id);
+  const vectors = new Map<string, Float32Array>();
+  // Fetch vectors one by one — getAll() on the vector store would load
+  // all of them, but we only want the filtered subset.
+  for (const id of ids) {
+    const v = await tx(db, STORE_VECS, 'readonly', (s) => s.get(id) as IDBRequest<StoredVector | undefined>);
+    if (v) {
+      vectors.set(id, new Float32Array(v.vec));
+    }
+  }
+  return { chunks: filtered, vectors };
+}
+
+/**
+ * Search the vector store for chunks most similar to `queryVec`.
+ * Returns top-K results above `minScore`, restricted to `sources` if given.
+ *
+ * This is a linear scan — O(n) over all stored vectors. For ~10k chunks
+ * this takes ~1-2ms on M1 and ~5-10ms on mid-range phones. Acceptable for
+ * offline RAG where the corpus is the user's local knowledge base.
+ *
+ * For >50k chunks, swap this for hnswlib-wasm. The function signature
+ * stays the same.
+ */
+export async function search(
+  queryVec: Float32Array,
+  opts: RAGRetrievalOptions = {},
+): Promise<RAGQueryResult[]> {
+  const topK = opts.topK ?? 4;
+  const minScore = opts.minScore ?? 0.20;
+  const { chunks, vectors } = await loadAll(opts.sources);
+
+  const scored: RAGQueryResult[] = [];
+  for (const c of chunks) {
+    const v = vectors.get(c.id);
+    if (!v) continue;
+    const score = cosine(queryVec, v);
+    if (score >= minScore) {
+      scored.push({
+        chunk: {
+          id: c.id,
+          source: c.source,
+          text: c.text,
+          title: c.title,
+          url: c.url,
+          tags: c.tags,
+          embeddedAt: c.embeddedAt,
+        },
+        score,
+      });
+    }
+  }
+  scored.sort((a, b) => b.score - a.score);
+  return scored.slice(0, topK);
+}
+
+function cosine(a: Float32Array, b: Float32Array): number {
+  // Vectors are already L2-normalized (embedText does this), so cosine =
+  // dot product. Still works if they aren't normalized — divides by the
+  // product of magnitudes.
+  const n = Math.min(a.length, b.length);
+  let dot = 0;
+  let normA = 0;
+  let normB = 0;
+  for (let i = 0; i < n; i++) {
+    dot += a[i] * b[i];
+    normA += a[i] * a[i];
+    normB += b[i] * b[i];
+  }
+  if (normA === 0 || normB === 0) return 0;
+  return dot / Math.sqrt(normA * normB);
+}
+
+// ── High-level retrieval + formatting ──────────────────────────────────────
+
+/**
+ * Run a RAG retrieval: embed the query, search the store, return formatted
+ * context string suitable for injection into a chat prompt.
+ *
+ * Returns '' if no chunks above threshold — caller should still proceed
+ * with non-RAG generation.
+ */
+export async function retrieveContext(
+  query: string,
+  opts: RAGRetrievalOptions = {},
+): Promise<{ context: string; chunks: RAGQueryResult[] }> {
+  try {
+    const qv = await embedText(query);
+    const hits = await search(qv, opts);
+    if (hits.length === 0) return { context: '', chunks: [] };
+    const context = hits
+      .map((h, i) => {
+        const title = h.chunk.title ? ` [${h.chunk.title}]` : '';
+        return `[${i + 1}]${title} ${h.chunk.text}`;
+      })
+      .join('\n\n');
+    return { context, chunks: hits };
+  } catch (err) {
+    console.warn('[rag] retrieveContext failed:', err);
+    return { context: '', chunks: [] };
+  }
+}
+
+/**
+ * Build a RAG-augmented message list for the offline chat pipeline.
+ * Injects retrieved context as an additional system message BEFORE the
+ * user's question, formatted so a small model can understand it.
+ */
+export async function buildRAGMessages(
+  systemPrompt: string,
+  userPrompt: string,
+  history: OfflineChatMessage[] = [],
+  opts: RAGRetrievalOptions = {},
+): Promise<{ messages: OfflineChatMessage[]; citations: RAGQueryResult[] }> {
+  const { context, chunks } = await retrieveContext(userPrompt, opts);
+  const messages: OfflineChatMessage[] = [{ role: 'system', content: systemPrompt }];
+  if (context) {
+    messages.push({
+      role: 'system',
+      content:
+        `Relevant context from the user's local knowledge base (MedQ RAG):\n${context}\n\n` +
+        `Use this context to ground your answer. Cite by [1], [2] etc. when quoting. ` +
+        `If the context conflicts with your knowledge, prefer the context.`,
+    });
+  }
+  messages.push(...history.slice(-4), { role: 'user', content: userPrompt });
+  return { messages, citations: chunks };
+}
+
+// ── Indexing helpers ────────────────────────────────────────────────────────
+
+/**
+ * Index a batch of texts. Each chunk gets a stable id (caller-supplied).
+ * Idempotent — re-indexing the same chunks overwrites by id.
+ *
+ * On progress: `onProgress(done, total)` fires per batch of 32.
+ */
+export async function indexChunks(
+  chunks: Omit<RAGChunk, 'embeddedAt'>[],
+  onProgress?: (done: number, total: number) => void,
+): Promise<{ indexed: number; skipped: number }> {
+  if (chunks.length === 0) return { indexed: 0, skipped: 0 };
+  const texts = chunks.map((c) => c.text);
+  const vectors = await embedBatch(texts, onProgress);
+  const fullChunks: RAGChunk[] = chunks.map((c) => ({
+    ...c,
+    embeddedAt: Date.now(),
+  }));
+  await putChunks(fullChunks, vectors);
+  return { indexed: chunks.length, skipped: 0 };
+}
+
+/**
+ * Index a long document by splitting it into ~512-token chunks (approximated
+ * as ~2000 chars with overlap). Each chunk is embedded and stored.
+ */
+export async function indexDocument(
+  source: string,
+  docId: string,
+  text: string,
+  title?: string,
+  url?: string,
+  onProgress?: (done: number, total: number) => void,
+): Promise<number> {
+  const CHUNK_SIZE = 2000;
+  const OVERLAP = 200;
+  const chunks: Omit<RAGChunk, 'embeddedAt'>[] = [];
+  for (let i = 0; i < text.length; i += CHUNK_SIZE - OVERLAP) {
+    const slice = text.slice(i, i + CHUNK_SIZE);
+    if (slice.trim().length === 0) break;
+    chunks.push({
+      id: `${source}:${docId}:${i}`,
+      source,
+      text: slice,
+      title,
+      url,
+    });
+    if (i + CHUNK_SIZE >= text.length) break;
+  }
+  if (chunks.length === 0) return 0;
+  await indexChunks(chunks, onProgress);
+  return chunks.length;
+}
+
+/**
+ * Wipe the entire RAG store. Used when the user clears offline data.
+ */
+export async function clearAll(): Promise<void> {
+  const db = await openDB();
+  const t = db.transaction([STORE_CHUNKS, STORE_VECS], 'readwrite');
+  t.objectStore(STORE_CHUNKS).clear();
+  t.objectStore(STORE_VECS).clear();
+  return new Promise<void>((resolve, reject) => {
+    t.oncomplete = () => resolve();
+    t.onerror = () => reject(t.error);
+  });
+}
+
+// ── Idle warm-up wiring ─────────────────────────────────────────────────────
+
+/**
+ * Schedule embedder warm-up on idle. Safe to call multiple times — only
+ * the first call schedules the actual work.
+ *
+ * Uses `requestIdleCallback` when available (Chrome/Firefox/Safari 17+),
+ * falls back to `setTimeout(2000)` elsewhere.
+ */
+export function wireIdleWarmup(): void {
+  if (typeof window === 'undefined') return;
+  const schedule = () => {
+    try {
+      warmupEmbedder().catch(() => {
+        /* silent — logged inside warmupEmbedder */
+      });
+    } catch {
+      /* ignore */
+    }
+  };
+  if ('requestIdleCallback' in window) {
+    (window as unknown as { requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => number })
+      .requestIdleCallback(schedule, { timeout: 4000 });
+  } else {
+    setTimeout(schedule, 2000);
+  }
+}

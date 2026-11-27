@@ -1,0 +1,147 @@
+{
+  "version": 1,
+  "functions": {
+    "/api/agent/agui": {
+      "maxDuration": 300
+    },
+    "/api/agent/approvals": {},
+    "/api/agent/approvals/[id]": {},
+    "/api/agent/chat": {
+      "maxDuration": 120
+    },
+    "/api/agent/chat/v2": {
+      "maxDuration": 300
+    },
+    "/api/agent/chat/v2/cancel": {},
+    "/api/agent/chat/v2/events": {
+      "maxDuration": 300
+    },
+    "/api/agent/feedback/v2": {},
+    "/api/agent/followups": {
+      "maxDuration": 40
+    },
+    "/api/agent/graph-runs": {},
+    "/api/agent/mcp/servers": {},
+    "/api/agent/mcp/servers/[id]": {},
+    "/api/agent/permissions": {},
+    "/api/agent/skills": {},
+    "/api/agent/skills/generate": {
+      "maxDuration": 120
+    },
+    "/api/agent/skills/history": {},
+    "/api/agent/skills/import": {
+      "maxDuration": 60
+    },
+    "/api/agent/tasks": {},
+    "/api/agent/tasks/[id]": {},
+    "/api/agent/threads": {},
+    "/api/agent/threads/[threadId]": {},
+    "/api/agent/threads/[threadId]/messages": {},
+    "/api/agent/workspace": {},
+    "/api/chat/call-notify": {},
+    "/api/chat/digest": {
+      "maxDuration": 120
+    },
+    "/api/chat/mirotalk-room": {},
+    "/api/extract": {
+      "maxDuration": 120
+    },
+    "/api/freellmapi-bridge": {},
+    "/api/generate/agent": {
+      "maxDuration": 800
+    },
+    "/api/generate/agent-profiles": {
+      "maxDuration": 120
+    },
+    "/api/generate/deep-agent": {
+      "maxDuration": 10800
+    },
+    "/api/generate/image": {
+      "maxDuration": 60
+    },
+    "/api/generate/scene-actions": {
+      "maxDuration": 60
+    },
+    "/api/generate/scene-content": {
+      "maxDuration": 300
+    },
+    "/api/generate/scene-outlines-stream": {
+      "maxDuration": 300
+    },
+    "/api/generate/tts": {
+      "maxDuration": 30
+    },
+    "/api/generate/video": {
+      "maxDuration": 300
+    },
+    "/api/generate/voice": {
+      "maxDuration": 30
+    },
+    "/api/generate/weakness": {
+      "maxDuration": 800
+    },
+    "/api/knowledge/drive/callback": {},
+    "/api/knowledge/drive/connect": {},
+    "/api/knowledge/drive/disconnect": {},
+    "/api/knowledge/drive/files": {},
+    "/api/knowledge/drive/import": {
+      "maxDuration": 300
+    },
+    "/api/knowledge/drive/status": {},
+    "/api/knowledge/search": {
+      "maxDuration": 120
+    },
+    "/api/knowledge/sources": {
+      "maxDuration": 300
+    },
+    "/api/knowledge/sources/[id]": {},
+    "/api/knowledge/sources/[id]/audio": {},
+    "/api/knowledge/sources/[id]/file": {},
+    "/api/knowledge/sources/[id]/reindex": {
+      "maxDuration": 300
+    },
+    "/api/knowledge/sources/[id]/retry": {
+      "maxDuration": 300
+    },
+    "/api/knowledge/upload": {
+      "maxDuration": 300
+    },
+    "/api/medq-agent/artifacts/[id]": {},
+    "/api/medq-agent/artifacts/[id]/pdf": {
+      "maxDuration": 60
+    },
+    "/api/medq-agent/generate": {
+      "maxDuration": 300
+    },
+    "/api/medq-agent/job": {},
+    "/api/medq-agent/job/[jobId]": {},
+    "/api/notifications/stream": {},
+    "/api/osce/debrief": {
+      "maxDuration": 120
+    },
+    "/api/osce/history": {},
+    "/api/osce/scenarios": {
+      "maxDuration": 90
+    },
+    "/api/osce/turn": {
+      "maxDuration": 60
+    },
+    "/api/osce/voice": {
+      "maxDuration": 30
+    },
+    "/api/push/send": {},
+    "/api/push/subscribe": {},
+    "/api/push/unsubscribe": {},
+    "/api/push/vapid-public": {},
+    "/api/security/devices": {},
+    "/api/security/events": {},
+    "/api/security/verify": {},
+    "/api/uploads": {},
+    "/api/uploads/[uploadId]": {},
+    "/api/uploads/[uploadId]/chunks/[index]": {},
+    "/api/uploads/[uploadId]/complete": {},
+    "/freellm/[[...path]]": {},
+    "/freellmapi/[[...path]]": {},
+    "/v1/[[...path]]": {}
+  }
+}

@@ -1,0 +1,24 @@
+1:"$Sreact.fragment"
+2:I[61304,[],"ClientPageRoot"]
+3:I[61657,["18409","static/chunks/18409-561e9c4d6f4390a3.js","68298","static/chunks/68298-d599790162114ddc.js","27173","static/chunks/27173-f8918f7bea74005e.js","33697","static/chunks/33697-7a9bce3d608f5187.js","31573","static/chunks/31573-0b8d8bd1c1521470.js","52968","static/chunks/52968-b7927e8671ddb872.js","2040","static/chunks/2040-0357ec8935b38b66.js","57083","static/chunks/57083-f00062bc7cd0cd25.js","97432","static/chunks/97432-0861e93c38d9cd17.js","92703","static/chunks/92703-0ea490e2fc1213f8.js","10962","static/chunks/10962-23d3db403998def5.js","76393","static/chunks/app/agent-skills/page-1436642027e93404.js"],"default"]
+6:I[90484,[],"OutletBoundary"]
+7:"$Sreact.suspense"
+b:I[90484,[],"ViewportBoundary"]
+c:I[90484,[],"MetadataBoundary"]
+d:I[86869,[],"IconMark"]
+f:I[57121,[],""]
+10:I[74581,[],""]
+a:X
+12:X
+12:C
+0:{"buildId":"1qBpmi4JFMxBVgXRipMsz","data":[{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"Component":"$3","serverProvidedParams":{"searchParams":{},"params":{},"promises":["$@4","$@5"]}}],null,["$","$L6",null,{"children":["$","$7",null,{"name":"Next.MetadataOutlet","children":"$@8"}]}]]}],"isPartial":"$@9","staleTime":"$a","varyParams":null},{"rsc":["$","$1","h",{"children":[null,["$","$Lb",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","2",{"name":"theme-color","content":"#00e5a0"}]]}],["$","div",null,{"hidden":true,"children":["$","$Lc",null,{"children":["$","$7",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"MedQ — Medical Question Generator"}],["$","meta","1",{"name":"description","content":"Generate visually rich, exam-ready medical questions powered by AI"}],["$","link","2",{"rel":"manifest","href":"/manifest.json"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"MedQ"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","meta","6",{"property":"og:title","content":"MedQ — Medical Question Generator"}],["$","meta","7",{"property":"og:description","content":"Generate visually rich, exam-ready medical questions powered by AI"}],["$","meta","8",{"property":"og:image","content":"http://localhost:3000/opengraph-image.jpg?f6a9d396c00f4060"}],["$","meta","9",{"property":"og:image:type","content":"image/jpeg"}],["$","meta","10",{"property":"og:image:width","content":"1024"}],["$","meta","11",{"property":"og:image:height","content":"1024"}],["$","meta","12",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","13",{"name":"twitter:title","content":"MedQ — Medical Question Generator"}],["$","meta","14",{"name":"twitter:description","content":"Generate visually rich, exam-ready medical questions powered by AI"}],["$","meta","15",{"name":"twitter:image","content":"http://localhost:3000/opengraph-image.jpg?f6a9d396c00f4060"}],["$","meta","16",{"name":"twitter:image:type","content":"image/jpeg"}],["$","meta","17",{"name":"twitter:image:width","content":"1024"}],["$","meta","18",{"name":"twitter:image:height","content":"1024"}],["$","link","19",{"rel":"icon","href":"/favicon.ico?bfdba65b84bfc68d","type":"image/x-icon","sizes":"192x192"}],["$","link","20",{"rel":"icon","href":"/favicon.ico","sizes":"32x32"}],["$","link","21",{"rel":"icon","href":"/icon.png","sizes":"512x512","type":"image/png"}],["$","link","22",{"rel":"apple-touch-icon","href":"/apple-icon.png","sizes":"180x180","type":"image/png"}],["$","$Ld","23",{}]]}]}]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"isPartial":"$@e","staleTime":"$a","varyParams":null},{"rsc":["$","$1","c",{"children":[null,["$","$Lf",null,{"parallelRouterKey":"children","template":["$","$L10",null,{}]}]]}],"isPartial":"$@11","staleTime":"$a","varyParams":"$12"}],"isUpgradeableISRFallback":false,"a":"$@13","rootVaryParams":null,"needsRuntimeRequest":"$@14"}
+4:{}
+5:"$0:data:0:rsc:props:children:0:props:serverProvidedParams:params"
+8:null
+14:true
+a:300
+a:C
+13:0
+e:"$undefined"
+11:"$undefined"
+9:"$undefined"

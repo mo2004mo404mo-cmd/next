@@ -1,0 +1,10 @@
+import pg from 'pg';
+const c = new pg.Client({ host: '127.0.0.1', port: 5432, user: 'postgres', password: 'postgres', database: 'nextapp' });
+await c.connect();
+const ok = await c.query('SELECT 1 AS ok, now() AS now');
+console.log('SELECT 1 ->', ok.rows[0]);
+const tables = await c.query(`SELECT tablename FROM pg_tables WHERE schemaname='public' ORDER BY tablename`);
+console.log(`tables (${tables.rowCount}):`, tables.rows.map(r=>r.tablename).join(', '));
+const users = await c.query('SELECT count(*)::int AS n FROM "User"');
+console.log('User rows:', users.rows[0].n);
+await c.end();

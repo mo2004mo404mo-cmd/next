@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0c0e14">
+<title>MedQ — Question Bank (Offline)</title>
+<style>
+  :root {
+    --bg: #0c0e14; --bg-deep: #0a0e1a; --surface: #1a1e2b; --surface-2: #151821;
+    --border: rgba(255,255,255,0.06); --border-strong: rgba(255,255,255,0.1);
+    --text: #e8ecf4; --text-2: #c8d0e0; --muted: #8b95a8; --faint: #5a6478;
+    --accent: #00e5a0; --accent-dim: rgba(0,229,160,0.12);
+    --warn: #ffb347; --warn-dim: rgba(255,179,71,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    min-height: 100vh; -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 20px 16px 60px; }
+  header { display: flex; align-items: center; gap: 12px; padding: 8px 0 16px; flex-wrap: wrap; }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; }
+  .logo .mark {
+    width: 34px; height: 34px; border-radius: 10px; background: var(--accent-dim);
+    border: 1px solid rgba(0,229,160,0.3); display: flex; align-items: center; justify-content: center;
+    color: var(--accent); font-size: 16px; font-weight: 800;
+  }
+  .offline-badge {
+    display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px; border-radius: 999px;
+    background: var(--warn-dim); border: 1px solid rgba(255,179,71,0.25); color: var(--warn);
+    font-size: 12px; font-weight: 600;
+  }
+  .banner {
+    display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; margin-bottom: 16px;
+    background: var(--warn-dim); border: 1px solid rgba(255,179,71,0.25); border-radius: 14px;
+    color: var(--warn); font-size: 13px; line-height: 1.55;
+  }
+  .banner svg { flex-shrink: 0; margin-top: 1px; }
+  .reconnect-bar {
+    display: none; margin-bottom: 16px; padding: 12px 14px; border-radius: 14px; gap: 12px;
+    background: var(--accent-dim); border: 1px solid rgba(0,229,160,0.3); color: var(--accent);
+    font-size: 13px; align-items: center; justify-content: space-between;
+  }
+  .reconnect-bar.show { display: flex; }
+  .btn {
+    border: 1px solid rgba(0,229,160,0.35); background: rgba(0,229,160,0.08); color: var(--accent);
+    padding: 6px 14px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer;
+  }
+  .btn:hover { background: rgba(0,229,160,0.16); }
+  .btn.ghost { border-color: var(--border-strong); background: transparent; color: var(--muted); }
+  .toolbar { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  .search { flex: 1 1 240px; position: relative; }
+  .search input {
+    width: 100%; padding: 11px 14px; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; color: var(--text); font-size: 13px; outline: none;
+  }
+  .search input:focus { border-color: rgba(0,229,160,0.35); }
+  select {
+    padding: 11px 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    color: var(--text-2); font-size: 12px; outline: none; cursor: pointer; max-width: 46vw;
+  }
+  select:focus { border-color: rgba(0,229,160,0.35); }
+  .meta { color: var(--faint); font-size: 12px; padding: 2px 2px 14px; }
+  .meta b { color: var(--muted); font-weight: 600; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    margin-bottom: 10px; overflow: hidden; transition: border-color .15s;
+  }
+  .card.open { border-color: var(--border-strong); }
+  .card-head { display: flex; gap: 12px; padding: 13px 14px; cursor: pointer; align-items: flex-start; }
+  .card-head:hover { background: rgba(255,255,255,0.015); }
+  .chev { color: var(--faint); flex-shrink: 0; margin-top: 3px; transition: transform .15s; }
+  .card.open .chev { transform: rotate(90deg); color: var(--accent); }
+  .q-main { flex: 1; min-width: 0; }
+  .q-title { font-size: 13.5px; line-height: 1.55; color: var(--text); word-wrap: break-word; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  .chip {
+    font-size: 10.5px; font-weight: 600; padding: 3px 9px; border-radius: 999px;
+    background: rgba(255,255,255,0.04); border: 1px solid var(--border); color: var(--muted);
+  }
+  .chip.type { background: var(--accent-dim); border-color: rgba(0,229,160,0.25); color: var(--accent); }
+  .card-body { display: none; padding: 0 14px 14px 46px; }
+  .card.open .card-body { display: block; }
+  .opt {
+    display: flex; gap: 10px; padding: 9px 12px; border-radius: 10px; margin-bottom: 6px;
+    background: var(--surface-2); border: 1px solid var(--border); font-size: 13px; line-height: 1.5; color: var(--text-2);
+  }
+  .opt.correct { border-color: rgba(0,229,160,0.4); background: var(--accent-dim); color: var(--text); }
+  .opt .tag { flex-shrink: 0; font-weight: 700; font-size: 12px; color: var(--faint); }
+  .opt.correct .tag { color: var(--accent); }
+  .section-label {
+    font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em;
+    color: var(--faint); margin: 12px 0 6px;
+  }
+  .explanation { font-size: 13px; line-height: 1.6; color: var(--text-2); }
+  .pearl {
+    margin-top: 10px; padding: 10px 12px; border-radius: 10px; font-size: 12.5px; line-height: 1.55;
+    background: var(--warn-dim); border: 1px solid rgba(255,179,71,0.2); color: var(--warn);
+  }
+  .pager { display: flex; align-items: center; justify-content: center; gap: 14px; padding: 18px 0 0; }
+  .pager button {
+    background: var(--surface); border: 1px solid var(--border); color: var(--text-2);
+    padding: 8px 16px; border-radius: 10px; font-size: 12px; cursor: pointer;
+  }
+  .pager button:disabled { opacity: .35; cursor: default; }
+  .pager .info { color: var(--muted); font-size: 12px; }
+  .state { text-align: center; padding: 70px 20px; }
+  .state .icon {
+    width: 64px; height: 64px; margin: 0 auto 16px; border-radius: 18px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .state.warn .icon { background: var(--warn-dim); border: 1px solid rgba(255,179,71,0.2); }
+  .state h2 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .state p { color: var(--muted); font-size: 13px; line-height: 1.6; max-width: 420px; margin: 0 auto; }
+  footer { text-align: center; color: var(--faint); font-size: 11px; padding-top: 30px; line-height: 1.7; }
+  .skel { height: 74px; border-radius: 14px; margin-bottom: 10px; background: var(--surface); border: 1px solid var(--border); position: relative; overflow: hidden; }
+  .skel::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+    animation: shine 1.4s infinite;
+  }
+  @keyframes shine { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">
+      <div class="mark">M</div>
+      <div>MedQ <span style="color:var(--faint);font-weight:500;font-size:14px">· Question Bank</span></div>
+    </div>
+    <div class="offline-badge" id="offlineBadge">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="1" x2="23" y2="23"/><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/><path d="M10.71 5.05A16 16 0 0 1 22.58 9"/><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+      Offline mode
+    </div>
+  </header>
+
+  <div class="banner">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    <div>You're offline — showing your cached question bank. Reading, searching and revising work offline; connect again to practice, edit, or import.</div>
+  </div>
+
+  <div class="reconnect-bar" id="reconnectBar">
+    <span>Connection restored — refresh to get back to the full app.</span>
+    <button class="btn" onclick="location.reload()">Refresh</button>
+  </div>
+
+  <div class="toolbar">
+    <div class="search">
+      <input id="search" type="text" placeholder="Search by topic, text, or system…" autocomplete="off">
+    </div>
+    <select id="systemFilter"><option value="all">All Systems</option></select>
+    <select id="difficultyFilter">
+      <option value="all">All Difficulty</option>
+      <option>Easy</option><option>Basic</option><option>Moderate</option><option>Hard</option><option>Expert</option>
+    </select>
+    <select id="typeFilter">
+      <option value="all">All Types</option>
+      <option value="mcq">MCQ</option><option value="tf">True / False</option>
+      <option value="short">Short Answer</option><option value="k-type">K-Type</option>
+    </select>
+  </div>
+
+  <div class="meta" id="meta"></div>
+  <div id="list"></div>
+  <div class="pager" id="pager" style="display:none">
+    <button id="prevBtn">← Prev</button>
+    <span class="info" id="pageInfo"></span>
+    <button id="nextBtn">Next →</button>
+  </div>
+
+  <footer>
+    MedQ offline study mode · this page is served from your device's cache.<br>
+    Visit the Question Bank while online to refresh the offline copy.
+  </footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  /* Offline shell for /bank.
+   *
+   * The Next.js DEV runtime cannot boot without its HMR websocket, so when
+   * the network is down the SW serves THIS static page for /bank navigations
+   * instead of the cached dev HTML (which would freeze on its loading state).
+   *
+   * Question data comes from the SW's API cache — the SW warms
+   * /api/questions?page=1&2&limit=50 on every online /bank visit. No auth,
+   * no React, no HMR — guaranteed to work offline. */
+
+  var API_PAGES = ['/api/questions?page=1&limit=50', '/api/questions?page=2&limit=50'];
+  var PER_PAGE = 12;
+
+  var state = { all: [], filtered: [], page: 1, openId: null, cachedAt: null };
+  var el = function (id) { return document.getElementById(id); };
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function stripHtml(html) {
+    var d = document.createElement('div'); d.innerHTML = html; return d.textContent || '';
+  }
+  var TYPE_LABEL = { mcq: 'MCQ', tf: 'True/False', short: 'Short', 'k-type': 'K-Type' };
+  var DIFF_COLOR = {
+    Easy: '#4ade80', Basic: '#2dd4bf', Moderate: '#fbbf24', Hard: '#fb923c', Expert: '#f87171'
+  };
+
+  function load() {
+    el('list').innerHTML = new Array(5).fill('<div class="skel"></div>').join('');
+    var fetched = 0;
+    var cachedAt = null;
+    var all = [];
+    var done = 0;
+    API_PAGES.forEach(function (url) {
+      fetch(url).then(function (r) {
+        return r.json().then(function (d) { return { r: r, d: d }; });
+      }).then(function (res) {
+        if (res.r.ok && res.d && Array.isArray(res.d.questions)) {
+          all = all.concat(res.d.questions);
+          var dt = res.r.headers.get('date');
+          if (dt) cachedAt = dt;
+        }
+      }).catch(function () { /* offline + not cached */ })
+        .then(function () {
+          done++;
+          if (done === API_PAGES.length) {
+            var seen = {};
+            state.all = all.filter(function (q) {
+              if (!q || !q.id || seen[q.id]) return false;
+              seen[q.id] = 1; return true;
+            });
+            state.cachedAt = cachedAt;
+            el('meta').innerHTML = state.all.length
+              ? 'Offline copy · <b>' + state.all.length + ' questions</b> cached'
+                + (cachedAt ? ' on ' + esc(new Date(cachedAt).toLocaleString()) : '')
+              : '';
+            buildSystemFilter();
+            applyFilters();
+          }
+        });
+    });
+  }
+
+  function buildSystemFilter() {
+    var systems = {};
+    state.all.forEach(function (q) { if (q.system) systems[q.system] = 1; });
+    var sel = el('systemFilter');
+    sel.innerHTML = '<option value="all">All Systems</option>' +
+      Object.keys(systems).sort().map(function (s) {
+        return '<option value="' + esc(s) + '">' + esc(s) + '</option>';
+      }).join('');
+  }
+
+  function applyFilters() {
+    var q = el('search').value.trim().toLowerCase();
+    var sys = el('systemFilter').value;
+    var diff = el('difficultyFilter').value;
+    var type = el('typeFilter').value;
+    state.filtered = state.all.filter(function (item) {
+      if (sys !== 'all' && item.system !== sys) return false;
+      if (diff !== 'all' && item.difficulty !== diff) return false;
+      if (type !== 'all' && item.type !== type) return false;
+      if (q) {
+        var hay = (stripHtml(item.text) + ' ' + (item.system || '') + ' ' + (item.topic || '') + ' ' +
+          (item.tags || []).join(' ') + ' ' + (item.options || []).join(' ')).toLowerCase();
+        if (hay.indexOf(q) === -1) return false;
+      }
+      return true;
+    });
+    var maxPage = Math.max(1, Math.ceil(state.filtered.length / PER_PAGE));
+    if (state.page > maxPage) state.page = maxPage;
+    render();
+  }
+
+  function render() {
+    var list = el('list');
+    if (state.all.length === 0) {
+      list.innerHTML =
+        '<div class="state warn"><div class="icon">' +
+        '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ffb347" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="1" x2="23" y2="23"/><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/><path d="M10.71 5.05A16 16 0 0 1 22.58 9"/><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>' +
+        '</div><h2>No offline copy yet</h2>' +
+        '<p>Open MedQ while online and visit the Question Bank once — your questions will be cached here for offline study.</p>' +
+        '<p style="margin-top:14px"><button class="btn ghost" onclick="location.reload()">Retry</button></p></div>';
+      el('pager').style.display = 'none';
+      return;
+    }
+    if (state.filtered.length === 0) {
+      list.innerHTML = '<div class="state"><h2>No questions match your filters</h2><p>Try clearing the search or choosing a different system.</p></div>';
+      el('pager').style.display = 'none';
+      return;
+    }
+    var start = (state.page - 1) * PER_PAGE;
+    var slice = state.filtered.slice(start, start + PER_PAGE);
+    list.innerHTML = slice.map(function (item) {
+      var open = state.openId === item.id;
+      var opts = (item.options || []);
+      var optsHtml = opts.map(function (o, i) {
+        var correct = opts.length > 1 && o === item.answer;
+        return '<div class="opt' + (correct ? ' correct' : '') + '"><span class="tag">' +
+          String.fromCharCode(65 + i) + '</span><span>' + (o || '') + '</span></div>';
+      }).join('');
+      var answerHtml = opts.length <= 1 && item.answer
+        ? '<div class="opt correct"><span class="tag">✓</span><span>' + esc(item.answer) + '</span></div>' : '';
+      var diffColor = DIFF_COLOR[item.difficulty] || '#8b95a8';
+      return '<div class="card' + (open ? ' open' : '') + '" data-id="' + esc(item.id) + '">' +
+        '<div class="card-head" onclick="window.__toggle(\'' + esc(item.id) + '\')">' +
+          '<svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>' +
+          '<div class="q-main">' +
+            '<div class="q-title">' + (item.text || '') + '</div>' +
+            '<div class="chips">' +
+              '<span class="chip type">' + esc(TYPE_LABEL[item.type] || item.type || 'Q') + '</span>' +
+              (item.difficulty ? '<span class="chip" style="color:' + diffColor + ';border-color:' + diffColor + '44">' + esc(item.difficulty) + '</span>' : '') +
+              (item.system ? '<span class="chip">' + esc(item.system) + '</span>' : '') +
+              (item.topic ? '<span class="chip">' + esc(item.topic) + '</span>' : '') +
+              (item.isAIGenerated ? '<span class="chip" style="color:#a78bfa">AI</span>' : '') +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="card-body">' +
+          (item.imageUrl ? '<img src="' + esc(item.imageUrl) + '" alt="Question illustration" loading="lazy" onerror="this.style.display=\'none\'" style="max-width:100%;border-radius:10px;margin-bottom:12px;border:1px solid #e2e8f0" />' : '') +
+          (item.audioUrl ? '<audio controls preload="metadata" src="' + esc(item.audioUrl) + '" style="width:100%;height:40px;margin-bottom:12px"></audio>' : '') +
+          (optsHtml ? '<div class="section-label">Options</div>' + optsHtml : '') +
+          answerHtml +
+          (item.explanation ? '<div class="section-label">Explanation</div><div class="explanation">' + item.explanation + '</div>' : '') +
+          (item.mnemonic ? '<div class="section-label">Mnemonic</div><div class="pearl">🧠 ' + item.mnemonic + '</div>' : '') +
+          (item.clinicalPearl ? '<div class="section-label">Clinical Pearl</div><div class="pearl">💡 ' + item.clinicalPearl + '</div>' : '') +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+    var maxPage = Math.ceil(state.filtered.length / PER_PAGE);
+    el('pager').style.display = maxPage > 1 ? 'flex' : 'none';
+    el('pageInfo').textContent = 'Page ' + state.page + ' of ' + maxPage;
+    el('prevBtn').disabled = state.page <= 1;
+    el('nextBtn').disabled = state.page >= maxPage;
+    var shown = state.filtered.length === 0 ? 0 : start + 1;
+    var thru = Math.min(start + PER_PAGE, state.filtered.length);
+    el('meta').innerHTML = 'Offline copy · <b>' + state.all.length + ' questions</b> cached'
+      + (state.cachedAt ? ' on ' + esc(new Date(state.cachedAt).toLocaleString()) : '')
+      + ' · showing <b>' + shown + '–' + thru + '</b> of ' + state.filtered.length;
+  }
+
+  window.__toggle = function (id) {
+    state.openId = state.openId === id ? null : id;
+    render();
+  };
+
+  var debounceTimer;
+  el('search').addEventListener('input', function () {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function () { state.page = 1; applyFilters(); }, 180);
+  });
+  ['systemFilter', 'difficultyFilter', 'typeFilter'].forEach(function (id) {
+    el(id).addEventListener('change', function () { state.page = 1; applyFilters(); });
+  });
+  el('prevBtn').addEventListener('click', function () { if (state.page > 1) { state.page--; render(); window.scrollTo(0, 0); } });
+  el('nextBtn').addEventListener('click', function () { state.page++; render(); window.scrollTo(0, 0); });
+
+  window.addEventListener('online', function () { el('reconnectBar').classList.add('show'); });
+  load();
+})();
+</script>
+</body>
+</html>

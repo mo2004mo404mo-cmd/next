@@ -1,0 +1,86 @@
+{
+  "voice": "jam",
+  "speed": 1.0,
+  "segments": [
+    {
+      "id": "01-intro",
+      "caption": "MedQ AI Router · /freellm — Complete Tutorial",
+      "text": "Welcome to MedQ, your medical education platform. This tutorial walks through the MedQ AI Router at slash freellm — a complete bring-your-own-key AI gateway built into MedQ. We will cover the model catalog, key management, the streaming playground, coding agents, analytics, and how the router powers MedQ's own AI features."
+    },
+    {
+      "id": "02-login",
+      "caption": "Sign in with your MedQ account — one login for everything",
+      "text": "Start by signing in with your MedQ account. The router shares MedQ's login — there is no separate account and no second password to remember. I'll enter the demo credentials and click Sign In."
+    },
+    {
+      "id": "03-open",
+      "caption": "Sidebar → AI Tools → AI Router · BYOK — or open /freellm directly",
+      "text": "Once you're in, open the left sidebar and find AI Router, B Y O K, under AI Tools. It opens as a real MedQ tab, exactly like the Bank or Flashcards tabs — no iframe. You can also jump straight to your MedQ domain, slash freellm. Both paths open the same dashboard."
+    },
+    {
+      "id": "04-bridge",
+      "caption": "Auto sign-in via the MedQ bridge — no second login",
+      "text": "Notice what didn't happen: no second sign-in. The dashboard authenticated automatically through the MedQ bridge, using your live MedQ session. One account, one login — the router feels native, because it is."
+    },
+    {
+      "id": "05-models",
+      "caption": "350+ free models · search · detail pages · routing strategies",
+      "text": "This is the model catalog — more than three hundred and fifty models with free tiers, synced from dozens of providers. Search by name or provider, filter by context window, and read the free-tier limits on every row. Click any model for its detail page — capabilities, context window, and providers. Up top, choose a routing strategy: manual priority, balanced, smartest, fastest, most reliable, or custom weights."
+    },
+    {
+      "id": "06-modalities",
+      "caption": "Every modality: fusion · embeddings · image · video · audio · search · decision",
+      "text": "The Models menu also covers every other modality. Fusion blends several providers into one answer. There are embeddings, image, video, and audio generation, plus web search — and decision models that pick the best model for each request automatically."
+    },
+    {
+      "id": "07-playground",
+      "caption": "Playground — streaming answers through your own keys",
+      "text": "The Playground is your live test bench. Type a question — here's a classic clinical vignette — and send it. The router picks a healthy model automatically and streams the answer token by token, finishing with the model that served it and the response time. Everything runs through your own keys, with automatic failover across providers."
+    },
+    {
+      "id": "08-keys-providers",
+      "caption": "Keys → Providers — 70+ providers, encrypted at rest",
+      "text": "The Keys page is where credentials live. The Providers tab lists every connected key with live health, quota signals, and failover order — all encrypted at rest. Click Add key to connect any of seventy-plus providers, or a custom endpoint such as a local Ollama server. The router verifies every key the moment you save it."
+    },
+    {
+      "id": "09-apikey",
+      "caption": "Unified API key — one OpenAI-compatible /v1 endpoint",
+      "text": "On the Unified API key tab, one key unlocks everything. Point any OpenAI-compatible tool — curl, a coding agent, a notebook — at your domain slash v1 with this key, and the entire catalog speaks the standard chat-completions format."
+    },
+    {
+      "id": "10-link",
+      "caption": "Link with MedQ generation — router models in every MedQ picker",
+      "text": "This tab also holds the most important card: Link with MedQ generation. The first time, one click on Link router to MedQ registers the router as a provider inside MedQ — its models then appear in every MedQ model picker, from question generation to the AI classroom, all routed through your own keys. I'll refresh the linked models now — the status confirms the connection."
+    },
+    {
+      "id": "11-keys-tabs",
+      "caption": "Quota signals · Anthropic · Agents — the rest of key management",
+      "text": "The remaining tabs round out key management. Quota signals tracks rate limits across providers. Anthropic configures a Claude-compatible endpoint. And Agents checks which of your keys work with external coding agents."
+    },
+    {
+      "id": "12-agents",
+      "caption": "Coding agents — Claude Code, Codex CLI, Cline, Aider…",
+      "text": "The Agents page catalogs popular coding tools — Claude Code, Codex CLI, Cline, Aider, and more. Each card has a setup guide, and one click copies your router's endpoint and key, so the agent uses MedQ as its free-model backend."
+    },
+    {
+      "id": "13-analytics",
+      "caption": "Analytics — requests · tokens · latency · savings",
+      "text": "Analytics is the full picture: requests, success rate, tokens in and out, average and ninety-fifth-percentile latency, time to first token, and estimated savings versus paid APIs — broken down by model, provider, and agent."
+    },
+    {
+      "id": "14-logs",
+      "caption": "Logs — live, filterable, searchable",
+      "text": "For deep debugging, Logs streams the live server log — every request with its model, provider, status, attempts, tokens, and latency, filterable by level and fully searchable."
+    },
+    {
+      "id": "15-account",
+      "caption": "Account — Back to MedQ · Settings · Sign out — no upsell, no external links",
+      "text": "The account menu keeps you in control: Back to MedQ, Settings for language, theme, and prompt compression, and Sign out. Notice what's missing — no Premium upsell, and no external links. The router is fully branded as part of MedQ, and nothing ever navigates away from your app."
+    },
+    {
+      "id": "16-outro",
+      "caption": "MedQ AI Router — your keys, your models, one endpoint · /freellm",
+      "text": "And we're back in MedQ, where the router's models now power AI features across the platform. That's the MedQ AI Router: hundreds of free models, your own keys, one unified endpoint — at slash freellm. Thanks for watching."
+    }
+  ]
+}

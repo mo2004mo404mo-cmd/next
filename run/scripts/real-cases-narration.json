@@ -1,0 +1,66 @@
+{
+  "voice": "jam",
+  "speed": 1.0,
+  "segments": [
+    {
+      "id": "01-intro",
+      "caption": "Adding Providers & Models — Real Cases, Step by Step",
+      "text": "This is the AI Router inside MedQ. Today I will add providers and models for real. A built-in provider. A custom provider from my own server. Models found by discovery. And one model typed by hand. Then I will use them to chat. Everything you see is real. Nothing is fake."
+    },
+    {
+      "id": "02-login",
+      "caption": "Sign in — one account for MedQ and the router",
+      "text": "First, I sign in to MedQ. One account, one password. The router is part of MedQ, so there is no second login."
+    },
+    {
+      "id": "03-keys-page",
+      "caption": "Keys page — this is where providers live",
+      "text": "I open the AI Router tab, and I go to the Keys page. This is where providers live. Providers are the companies or servers that give us models. Right now we have none. Let us add them, step by step."
+    },
+    {
+      "id": "04-builtin-kilo",
+      "caption": "Case 1 — built-in provider: Kilo, free, no key needed",
+      "text": "Case one. Add a built-in provider. I click Add key. The first pane is Provider key. I search for Kilo. Kilo is free, and it needs no key at all. So I simply click Add key again. Done. Kilo is now a provider, with thirteen free models."
+    },
+    {
+      "id": "05-builtin-llm7",
+      "caption": "Case 2 — another built-in provider: LLM7, anonymous",
+      "text": "Case two. One more built-in provider: LLM7. Same steps. I click Add key, I search for it, and I pick it. This one asks for a key, so I type the words: no-key. LLM7 is free without a real key, so this works. I click Add key. Now we have two providers."
+    },
+    {
+      "id": "06-custom-provider",
+      "caption": "Case 3 — custom provider: MY OWN server (OpenAI-style URL)",
+      "text": "Case three. Now my own custom provider. Use this for any server that speaks the OpenAI style. I click Add key, and I choose the Custom endpoint pane. I paste my server address. I type the first model name: zai-llm. And I click Add model. My server is now a provider inside the router."
+    },
+    {
+      "id": "07-discovery",
+      "caption": "Case 4 — discovery: the router asks my server for its models",
+      "text": "Case four. My server has more models, but I do not want to type them all. So I press Fetch models on the row. The router asks my server directly, and it finds all eight models. I tick the six I want. I click Add six models. Done. They are all in my list now."
+    },
+    {
+      "id": "08-manual-model",
+      "caption": "Case 5 — add a model BY HAND (typed, not discovered)",
+      "text": "Case five. Some servers hide their model list. Then you add a model by hand. I press the Add Custom Model button on the row. I type the model name: zai-vision. I give it a friendly name: Z.AI Vision. I turn on the vision switch. And I click Add. The model is in the list, same as the others."
+    },
+    {
+      "id": "09-models-page",
+      "caption": "Models page — everything we added, in one list",
+      "text": "Let us look at the Models page. I search for zai. Here they are: every model we just added. They sit next to the big catalog of three hundred models. These rows are ours. We can rename them, rank them, or turn them off. Nothing here is a mock."
+    },
+    {
+      "id": "10-test",
+      "caption": "Test a model — one small REAL request, true result",
+      "text": "Each model can be tested. I press Test models on the row, and I test the vision model. The router sends one small, real request, and shows the true result. If the server is busy, you see that too. No guessing. This free gateway is busy right now, so the test says rate limit. It will come back on its own."
+    },
+    {
+      "id": "11-playground",
+      "caption": "USE them — a real chat in the Playground",
+      "text": "Now the best part. We use what we added. I open the Playground. I pick a model from one of our new providers. I ask a simple medical question. And the answer streams in, word by word. At the end, the model name and the answer time are shown. This is a real answer, from a provider we added minutes ago."
+    },
+    {
+      "id": "12-outro",
+      "caption": "That's it — providers and models are just rows you add",
+      "text": "That is the whole picture. Built-in providers, added with a key or with no key at all. A custom provider, with my own server. Models found by discovery. And a model typed by hand. Then real chats at the end. Providers and models are just rows you add. The router does the rest. Thanks for watching."
+    }
+  ]
+}

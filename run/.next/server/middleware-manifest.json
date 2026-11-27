@@ -1,0 +1,34 @@
+{
+  "version": 3,
+  "middleware": {
+    "/": {
+      "files": [
+        "server/edge-instrumentation.js",
+        "server/edge-runtime-webpack.js",
+        "server/src/middleware.js"
+      ],
+      "entrypoint": "server/src/middleware.js",
+      "name": "src/middleware",
+      "page": "/",
+      "matchers": [
+        {
+          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?(?:\\/((?!_next\\/static|_next\\/image|favicon.ico|apple-icon.png|manifest.json|scripts\\/|generated\\/|sw.js).*))(\\.json|\\.rsc|\\.segments\\/.+\\.segment\\.rsc)?[\\/#\\?]?$",
+          "originalSource": "/((?!_next/static|_next/image|favicon.ico|apple-icon.png|manifest.json|scripts/|generated/|sw.js).*)"
+        }
+      ],
+      "wasm": [],
+      "assets": [],
+      "env": {
+        "__NEXT_BUILD_ID": "1qBpmi4JFMxBVgXRipMsz",
+        "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "MLD7xnRJHJdaqBZ1p/8ZiDvM8fdQ1UeWk6oEpwR9K0U=",
+        "__NEXT_PREVIEW_MODE_ID": "1e941d6be8c16166361b566f5a23c144",
+        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "f90474fab553a4ffc9c151edd760e3183f042c05d4698aaa4ed325c621c6aec1",
+        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "9098a761498b137205e14edc90c58c2faf41f862ce7a112f51c5f3719d3603e7"
+      }
+    }
+  },
+  "functions": {},
+  "sortedMiddleware": [
+    "/"
+  ]
+}

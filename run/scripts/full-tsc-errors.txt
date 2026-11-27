@@ -1,0 +1,944 @@
+src/app/agent-skills/page.tsx(858,27): error TS2322: Type '{ children: Element; asChild: true; size: "lg"; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & VariantProps<(props?: (ConfigVariants<{ variant: { default: string; outline: string; secondary: string; ghost: string; destructive: string; link: string; }; size: { ...; }; }> & ClassProp) | undefined) => string>'.
+  Property 'asChild' does not exist on type 'IntrinsicAttributes & ButtonProps & VariantProps<(props?: (ConfigVariants<{ variant: { default: string; outline: string; secondary: string; ghost: string; destructive: string; link: string; }; size: { ...; }; }> & ClassProp) | undefined) => string>'.
+src/app/agent-skills/page.tsx(956,46): error TS2339: Property 'multimodalContent' does not exist on type '{ description: string; artifact?: Record<string, unknown> | undefined; actions?: { id: string; label: string; type: string; target: string; }[] | undefined; }'.
+src/app/api/achievements/route.ts(396,38): error TS2345: Argument of type '(request: NextRequest) => Promise<NextResponse<{ error: string; }> | NextResponse<{ success: boolean; post: { id: string; content: string; type: string; createdAt: Date; }; }>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'request' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/admin/analytics/route.ts(22,31): error TS2345: Argument of type '(request: NextRequest) => Promise<NextResponse<{ windowDays: number; generatedAt: string; summary: { dau: number; mau: number; totalUsers: number; cohortSize: number; newUsersLastWindow: number; }; dauSeries: { ...; }[]; newUsersSeries: { ...; }[]; retentionCurve: { ...; }[]; featureUsage: { ...; }[]; tierBreakdown:...' is not assignable to parameter of type 'Handler<Record<string, string>>'.
+  Types of parameters 'request' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/admin/audit-log/route.ts(14,31): error TS2345: Argument of type '(request: NextRequest) => Promise<NextResponse<{ entries: ({ actor: { id: string; name: string | null; email: string | null; image: string | null; }; } & { id: string; action: string; createdAt: Date; metadata: string; actorId: string; targetType: string; targetId: string; ipAddress: string; })[]; total: number; pag...' is not assignable to parameter of type 'Handler<Record<string, string>>'.
+  Types of parameters 'request' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/admin/reports/[id]/route.ts(25,3): error TS2345: Argument of type '(request: NextRequest, ctx: AuthContext & { params: { id: string; }; }) => Promise<NextResponse<{ error: string; }> | NextResponse<{ report: { id: string; status: string; ... 4 more ...; comment: string | null; }; }>>' is not assignable to parameter of type 'Handler<{ id: string; }>'.
+  Types of parameters 'request' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/admin/reports/[id]/route.ts(64,3): error TS2345: Argument of type '(request: NextRequest, ctx: AuthContext & { params: { id: string; }; }) => Promise<NextResponse<{ error: string; }> | NextResponse<{ deleted: boolean; id: string; }>>' is not assignable to parameter of type 'Handler<{ id: string; }>'.
+  Types of parameters 'request' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/admin/reports/route.ts(16,31): error TS2345: Argument of type '(request: NextRequest) => Promise<NextResponse<{ reports: ({ user: { id: string; name: string | null; email: string | null; image: string | null; }; question: { type: string; id: string; system: string; topic: string; text: string; difficulty: string; isAIGenerated: boolean; }; } & { ...; })[]; total: number; page: ...' is not assignable to parameter of type 'Handler<Record<string, string>>'.
+  Types of parameters 'request' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/admin/revenue/route.ts(26,31): error TS2345: Argument of type '(request: NextRequest) => Promise<NextResponse<{ windowDays: number; generatedAt: string; summary: { totalUsd: number; totalCreditsEarned: number; totalCreditsInWallets: number; paidOrders: number; refundedOrders: number; pendingOrders: number; walletCount: number; totalEarnedAll: number; totalSpentAll: number; }; d...' is not assignable to parameter of type 'Handler<Record<string, string>>'.
+  Types of parameters 'request' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/admin/users/[id]/reset-password/route.ts(24,3): error TS2345: Argument of type '(request: NextRequest, ctx: AuthContext & { params: { id: string; }; }) => Promise<NextResponse<{ error: string; }> | NextResponse<{ temporaryPassword: string; message: string; }>>' is not assignable to parameter of type 'Handler<{ id: string; }>'.
+  Types of parameters 'request' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/admin/users/[id]/route.ts(16,3): error TS2345: Argument of type '(request: NextRequest, ctx: AuthContext & { params: { id: string; }; }) => Promise<NextResponse<{ error: string; }> | NextResponse<{ user: { id: string; name: string | null; ... 13 more ...; _count: { ...; }; }; }>>' is not assignable to parameter of type 'Handler<{ id: string; }>'.
+  Types of parameters 'request' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/admin/users/[id]/route.ts(73,3): error TS2345: Argument of type '(request: NextRequest, ctx: AuthContext & { params: { id: string; }; }) => Promise<NextResponse<{ error: string; }> | NextResponse<{ user: { id: string; name: string | null; ... 10 more ...; updatedAt: Date; }; }>>' is not assignable to parameter of type 'Handler<{ id: string; }>'.
+  Types of parameters 'request' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/admin/users/[id]/route.ts(144,3): error TS2345: Argument of type '(request: NextRequest, ctx: AuthContext & { params: { id: string; }; }) => Promise<NextResponse<{ error: string; }> | NextResponse<{ message: string; deletedUserId: string; }>>' is not assignable to parameter of type 'Handler<{ id: string; }>'.
+  Types of parameters 'request' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/admin/users/[id]/status/route.ts(23,3): error TS2345: Argument of type '(request: NextRequest, ctx: AuthContext & { params: { id: string; }; }) => Promise<NextResponse<{ error: string; }> | NextResponse<{ user: { id: string; name: string | null; ... 5 more ...; bannedReason: string | null; }; }>>' is not assignable to parameter of type 'Handler<{ id: string; }>'.
+  Types of parameters 'request' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/admin/users/[id]/subscription/route.ts(13,3): error TS2345: Argument of type '(request: NextRequest, ctx: AuthContext & { params: { id: string; }; }) => Promise<NextResponse<{ error: string; }> | NextResponse<{ message: string; subscription: { ...; }; }>>' is not assignable to parameter of type 'Handler<{ id: string; }>'.
+  Types of parameters 'request' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/admin/users/route.ts(10,31): error TS2345: Argument of type '(request: NextRequest) => Promise<NextResponse<{ users: { id: string; name: string | null; email: string | null; image: string | null; role: string; tier: string; credits: number; status: string; suspendedUntil: Date | null; ... 4 more ...; createdAt: Date; }[]; total: number; page: number; totalPages: number; }>>' is not assignable to parameter of type 'Handler<Record<string, string>>'.
+  Types of parameters 'request' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/ads/impression/route.ts(19,38): error TS2345: Argument of type '(request: NextRequest) => Promise<NextResponse<{ error: string; }> | NextResponse<{ id: string; createdAt: Date; userId: string | null; completed: boolean; adType: string; placement: string; revenue: number; rewarded: boolean; campaignId: string; clicked: boolean; }>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'request' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/agent/tasks/[id]/route.ts(27,39): error TS2345: Argument of type '(req: NextRequest, ctx: Ctx) => Promise<NextResponse<{ error: string; }> | NextResponse<{ task: { id: string; name: string; status: string; createdAt: Date; updatedAt: Date; userId: string; ... 7 more ...; deliverViaJson: string | null; }; }> | NextResponse<...>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'req' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/agent/tasks/[id]/route.ts(74,40): error TS2345: Argument of type '(_req: NextRequest, ctx: Ctx) => Promise<NextResponse<{ error: string; }> | NextResponse<{ deleted: boolean; }>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters '_req' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/agent/tasks/route.ts(41,38): error TS2345: Argument of type '(req: NextRequest) => Promise<NextResponse<{ error: string; }> | NextResponse<{ task: { recurrence: string; id: string; name: string; status: string; createdAt: Date; updatedAt: Date; userId: string; ... 7 more ...; deliverViaJson: string | null; }; }>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'req' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/chat/rooms/[id]/study-group/route.ts(74,24): error TS18047: 'group' is possibly 'null'.
+src/app/api/credits/history/route.ts(16,37): error TS2345: Argument of type '(req: NextRequest) => Promise<NextResponse<{ history: { type: string; id: string; createdAt: Date; userId: string; description: string; balance: number; amount: number; category: string; referenceId: string; }[]; count: number; }>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'req' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/credits/purchase/route.ts(22,38): error TS2345: Argument of type '(request: NextRequest) => Promise<NextResponse<{ error: string; }> | NextResponse<{ url: string; mock: boolean; orderId: string; packageId: string; credits: number; amountUsd: number; }>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'request' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/credits/route.ts(35,38): error TS2345: Argument of type '(request: NextRequest) => Promise<NextResponse<{ error: string; }> | NextResponse<{ balance: number; }>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'request' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/credits/spend/route.ts(26,38): error TS2345: Argument of type '(request: NextRequest) => Promise<NextResponse<{ error: string; }> | NextResponse<{ success: boolean; action: any; balance: number; transactionId: string | undefined; message: string; }>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'request' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/exam-sim/[id]/submit/route.ts(26,38): error TS2345: Argument of type '(req: NextRequest, { params }: { params: Promise<{ id: string; }>; }) => Promise<NextResponse<{ error: string; }> | NextResponse<{ attemptId: string; score: number; total: number; percentage: number; ... 4 more ...; results: { ...; }[]; }>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'req' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/exam-sim/start/route.ts(42,38): error TS2345: Argument of type '(req: NextRequest) => Promise<NextResponse<{ error: string; }> | NextResponse<{ examId: string; title: string; durationMinutes: number; count: number; questions: ({ options: string; type: string; ... 17 more ...; blueprintTask: string; } | undefined)[]; blueprintBreakdown: { ...; }; }>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'req' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/flashcard/route.ts(38,37): error TS2345: Argument of type '(request: NextRequest) => Promise<NextResponse<{ error: string; }> | NextResponse<{ questions: { flashcardProgress: { id: string; questionId: string; interval: number; repetition: number; ... 4 more ...; updatedAt: Date; } | null; options: any; tags: any; sources: any; }[]; }>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'request' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/flashcard/route.ts(161,38): error TS2345: Argument of type '(request: NextRequest) => Promise<NextResponse<{ error: string; }> | NextResponse<{ progress: { id: string; questionId: string; interval: number; repetition: number; efactor: number; nextReview: Date; lastReview: Date; createdAt: Date; updatedAt: Date; }; xpEarned: number; }>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'request' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/generate/agent/route.ts(24,37): error TS2345: Argument of type '(req: NextRequest) => Promise<NextResponse<{ error: string; }> | NextResponse<GenerationJob>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'req' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/generate/agent/route.ts(36,38): error TS2345: Argument of type '(req: NextRequest) => Promise<NextResponse<{ error: string; }> | NextResponse<{ jobId: string; mode: string; engineVersion: number; gated: { source: "none" | "credits" | "tier_limit"; creditsSpent: number; }; }>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'req' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/generate/deep-agent/route.ts(29,37): error TS2345: Argument of type '(req: NextRequest) => Promise<NextResponse<{ error: string; }> | NextResponse<GenerationJob>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'req' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/generate/deep-agent/route.ts(51,38): error TS2345: Argument of type '(req: NextRequest) => Promise<NextResponse<{ error: string; }> | NextResponse<{ jobId: string; mode: string; engineVersion: number; gated: { source: "none" | "credits" | "tier_limit"; creditsSpent: number; }; }>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'req' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/generate/route.ts(701,45): error TS1501: This regular expression flag is only available when targeting 'es2018' or later.
+src/app/api/generate/route.ts(898,37): error TS2345: Argument of type '(req: NextRequest) => Promise<NextResponse<{ error: string; }> | NextResponse<GenerationJob>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'req' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/generate/route.ts(910,38): error TS2345: Argument of type '(req: NextRequest) => Promise<NextResponse<{ error: string; reason: "unknown_tool" | "no_credits" | "limit_reached_and_no_credits" | undefined; category: string; used: number | undefined; limit: number | undefined; balance: number | undefined; creditCost: number; upgradeUrl: string; }> | NextResponse<...>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'req' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/generate/scene-actions/route.ts(166,16): error TS7006: Parameter 'a' implicitly has an 'any' type.
+src/app/api/generate/scene-actions/route.ts(167,13): error TS7006: Parameter 'a' implicitly has an 'any' type.
+src/app/api/generate/weakness/route.ts(150,37): error TS2345: Argument of type '(req: NextRequest) => Promise<NextResponse<{ error: string; }> | NextResponse<{ overall: { attempts: number; correct: number; accuracy: number; }; weakAreas: WeakArea[]; recommendation: { ...; }; }>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'req' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/generate/weakness/route.ts(162,38): error TS2345: Argument of type '(req: NextRequest) => Promise<NextResponse<{ error: string; }> | NextResponse<{ jobId: string; mode: string; weakness: { topic: string; system: string; weakTopics: string[]; focusHint: string; suggestedCount: number; }; gated: { ...; }; }>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'req' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/groups/[id]/join/route.ts(89,23): error TS2304: Cannot find name 'user'.
+src/app/api/knowledge/search/route.ts(21,38): error TS2345: Argument of type '(req: NextRequest) => Promise<NextResponse<{ error: string; }> | NextResponse<{ chunks: { chunkId: string; documentTitle: string; sourceId: string; idx: number; contextSummary: string; content: string; ... 4 more ...; reranked: boolean; }[]; diagnostics: { ...; }; }>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'req' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/knowledge/sources/[id]/audio/route.ts(45,37): error TS2345: Argument of type '(req: NextRequest, ctx: { params: Promise<{ id: string; }>; }) => Promise<NextResponse<unknown>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'req' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/knowledge/sources/[id]/file/route.ts(51,37): error TS2345: Argument of type '(req: NextRequest, ctx: { params: Promise<{ id: string; }>; }) => Promise<NextResponse<unknown>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'req' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/knowledge/sources/[id]/reindex/route.ts(37,38): error TS2345: Argument of type '(req: Request, { params }: { params: Promise<{ id: string; }>; }) => Promise<NextResponse<{ error: string; }> | NextResponse<{ sourceId: string; status: string; }>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters '__1' and 'ctx' are incompatible.
+    Type '{ params: Record<string, string>; }' is not assignable to type '{ params: Promise<{ id: string; }>; }'.
+      Types of property 'params' are incompatible.
+        Type 'Record<string, string>' is missing the following properties from type 'Promise<{ id: string; }>': then, catch, finally, [Symbol.toStringTag]
+src/app/api/knowledge/sources/[id]/retry/route.ts(24,38): error TS2345: Argument of type '(req: Request, { params }: { params: Promise<{ id: string; }>; }) => Promise<NextResponse<{ error: string; }> | NextResponse<{ sourceId: string; status: string; }>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters '__1' and 'ctx' are incompatible.
+    Type '{ params: Record<string, string>; }' is not assignable to type '{ params: Promise<{ id: string; }>; }'.
+      Types of property 'params' are incompatible.
+        Type 'Record<string, string>' is missing the following properties from type 'Promise<{ id: string; }>': then, catch, finally, [Symbol.toStringTag]
+src/app/api/knowledge/sources/[id]/route.ts(23,40): error TS2345: Argument of type '(_req: NextRequest, ctx: { params: Promise<{ id: string; }>; }) => Promise<NextResponse<{ error: string; }> | NextResponse<{ ok: boolean; }>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters '_req' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/knowledge/sources/[id]/route.ts(33,37): error TS2345: Argument of type '(_req: NextRequest, ctx: { params: Promise<{ id: string; }>; }) => Promise<NextResponse<{ error: string; }> | NextResponse<{ content?: string | undefined; contentTruncated?: boolean | undefined; chunkTotal?: number | undefined; source: { ...; }; preview: string; }>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters '_req' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/knowledge/sources/route.ts(32,38): error TS2345: Argument of type '(req: NextRequest) => Promise<NextResponse<{ error: string; }> | NextResponse<{ documentId: string; title: string; chunks: number; sourceId: string; }> | NextResponse<...>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'req' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/notes/route.ts(28,37): error TS2345: Argument of type '(request: NextRequest) => Promise<NextResponse<{ error: string; }> | NextResponse<{ note: { id: string; createdAt: Date; updatedAt: Date; userId: string; note: string; questionId: string; } | null; }>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'request' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/notes/route.ts(53,38): error TS2345: Argument of type '(request: NextRequest) => Promise<NextResponse<{ error: string; }> | NextResponse<{ note: { id: string; createdAt: Date; updatedAt: Date; userId: string; note: string; questionId: string; }; }>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'request' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/notes/route.ts(102,40): error TS2345: Argument of type '(request: NextRequest) => Promise<NextResponse<{ error: string; }> | NextResponse<{ success: boolean; }>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'request' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/questions/attempt/route.ts(18,38): error TS2345: Argument of type '(req: NextRequest) => Promise<NextResponse<{ error: string; }> | NextResponse<{ attempt: { id: string; createdAt: Date; userId: string; mode: string; questionId: string; selectedAnswer: string; isCorrect: boolean; confidence: string; timeSpent: number; }; isCorrect: boolean; calibration: CalibrationResult | null; }>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'req' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/questions/discussions/route.ts(26,37): error TS2345: Argument of type '(request: NextRequest) => Promise<NextResponse<{ error: string; }> | NextResponse<{ discussions: { id: string; content: string; likes: number; isExpert: boolean; createdAt: string; updatedAt: string; user: { ...; }; }[]; total: number; page: number; totalPages: number; }>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'request' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/questions/discussions/route.ts(85,38): error TS2345: Argument of type '(request: NextRequest) => Promise<NextResponse<{ error: string; }> | NextResponse<{ id: string; content: string; likes: number; isExpert: boolean; createdAt: string; updatedAt: string; user: { ...; }; }>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'request' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/questions/discussions/route.ts(154,39): error TS2345: Argument of type '(request: NextRequest) => Promise<NextResponse<{ error: string; }> | NextResponse<{ id: string; likes: number; }>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'request' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/questions/report/route.ts(38,38): error TS2345: Argument of type '(request: NextRequest) => Promise<NextResponse<{ error: string; }> | NextResponse<{ success: boolean; report: { id: string; questionId: string; reason: string; status: string; createdAt: Date; }; }>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'request' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/questions/report/route.ts(106,37): error TS2345: Argument of type '(request: NextRequest) => Promise<NextResponse<{ error: string; }> | NextResponse<{ reports: ({ user: { id: string; name: string | null; email: string | null; }; } & { id: string; status: string; ... 4 more ...; comment: string | null; })[]; }> | NextResponse<...>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'request' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/review-hub/route.ts(108,37): error TS2345: Argument of type '(request: NextRequest) => Promise<NextResponse<{ items: ReviewItem[]; stats: ReviewStats; }>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'request' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/review-hub/route.ts(335,38): error TS2345: Argument of type '(request: NextRequest) => Promise<NextResponse<{ error: string; }> | NextResponse<{ progress: { id: string; questionId: string; interval: number; repetition: number; efactor: number; nextReview: Date; lastReview: Date; fsrs: { ...; }; }; xpEarned: number; newInterval: number; nextReviewDate: string; }>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'request' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/streaks/route.ts(81,59): error TS2322: Type '{ date: string; }' is not assignable to type 'StudyStreakWhereUniqueInput'.
+  Type '{ date: string; }' is not assignable to type '{ id: string; userId_date: StudyStreakUserIdDateCompoundUniqueInput; } & { id?: string | undefined; userId_date?: StudyStreakUserIdDateCompoundUniqueInput | undefined; ... 11 more ...; user?: (((Without<...> & UserWhereInput) | (Without<...> & UserScalarRelationFilter)) & object) | undefined; }'.
+    Type '{ date: string; }' is missing the following properties from type '{ id: string; userId_date: StudyStreakUserIdDateCompoundUniqueInput; }': id, userId_date
+src/app/api/streaks/route.ts(236,7): error TS2322: Type '{ date: string; }' is not assignable to type 'StudyStreakWhereUniqueInput'.
+  Type '{ date: string; }' is not assignable to type '{ id: string; userId_date: StudyStreakUserIdDateCompoundUniqueInput; } & { id?: string | undefined; userId_date?: StudyStreakUserIdDateCompoundUniqueInput | undefined; ... 11 more ...; user?: (((Without<...> & UserWhereInput) | (Without<...> & UserScalarRelationFilter)) & object) | undefined; }'.
+    Type '{ date: string; }' is missing the following properties from type '{ id: string; userId_date: StudyStreakUserIdDateCompoundUniqueInput; }': id, userId_date
+src/app/api/streaks/route.ts(242,7): error TS2322: Type '{ date: string; questionsStudied: number; timeSpent: number; xpEarned: number; }' is not assignable to type '((Without<StudyStreakCreateInput, StudyStreakUncheckedCreateInput> & StudyStreakUncheckedCreateInput) | (Without<...> & StudyStreakCreateInput)) & object'.
+  Type '{ date: string; questionsStudied: number; timeSpent: number; xpEarned: number; }' is not assignable to type 'Without<StudyStreakUncheckedCreateInput, StudyStreakCreateInput> & StudyStreakCreateInput & object'.
+    Property 'user' is missing in type '{ date: string; questionsStudied: number; timeSpent: number; xpEarned: number; }' but required in type 'StudyStreakCreateInput'.
+src/app/api/subscription/checkout/route.ts(23,38): error TS2345: Argument of type '(request: NextRequest) => Promise<NextResponse<{ error: string; }> | NextResponse<{ url: string; mock: boolean; orderId: string; tier: "premium" | "pro"; amountUsd: number; }>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'request' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/subscription/portal/route.ts(20,38): error TS2345: Argument of type '(_request: NextRequest) => Promise<NextResponse<{ url: string; mock: boolean; }>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters '_request' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/api/subscription/usage/route.ts(14,38): error TS2345: Argument of type '(req: NextRequest) => Promise<NextResponse<{ error: string; }> | NextResponse<UsageEntry>>' is not assignable to parameter of type 'PublicHandler<Record<string, string>>'.
+  Types of parameters 'req' and 'req' are incompatible.
+    Type 'Request' is missing the following properties from type 'NextRequest': cookies, nextUrl, page, ua
+src/app/bank/page.tsx(1516,88): error TS2881: This expression is never nullish.
+src/app/exam-sim/page.tsx(19,11): error TS2430: Interface 'ExamQuestionSafe' incorrectly extends interface 'Partial<Question>'.
+  Types of property 'type' are incompatible.
+    Type 'string' is not assignable to type '"short" | "mcq" | "tf" | undefined'.
+src/app/flashcards/page.tsx(688,40): error TS2322: Type 'Dispatch<SetStateAction<string>>' is not assignable to type '(value: string | null, eventDetails: SelectRootChangeEventDetails) => void'.
+  Types of parameters 'value' and 'value' are incompatible.
+    Type 'string | null' is not assignable to type 'SetStateAction<string>'.
+      Type 'null' is not assignable to type 'SetStateAction<string>'.
+src/app/flashcards/page.tsx(826,38): error TS2322: Type 'Dispatch<SetStateAction<string>>' is not assignable to type '(value: string | null, eventDetails: SelectRootChangeEventDetails) => void'.
+  Types of parameters 'value' and 'value' are incompatible.
+    Type 'string | null' is not assignable to type 'SetStateAction<string>'.
+      Type 'null' is not assignable to type 'SetStateAction<string>'.
+src/app/home/page.tsx(54,22): error TS2741: Property 'onTabSwitch' is missing in type '{ activeTab: "challenge" | "achievements" | "collections" | "video" | "create" | "admin" | "files" | "insights" | "feed" | "voice" | "chat" | "friends" | "groups" | "arena" | "mnemonics" | ... 64 more ... | "freellm"; tier: Tier; isOpen: boolean; onClose: () => void; }' but required in type 'SidebarNavProps'.
+src/app/landing/advanced-components-5.tsx(1054,15): error TS2345: Argument of type '{ id: number; x: number; color: string; rot: number; delay: number; shape: string; }[]' is not assignable to parameter of type 'SetStateAction<{ id: number; x: number; color: string; rot: number; delay: number; shape: "rect" | "circ"; }[]>'.
+  Type '{ id: number; x: number; color: string; rot: number; delay: number; shape: string; }[]' is not assignable to type '{ id: number; x: number; color: string; rot: number; delay: number; shape: "rect" | "circ"; }[]'.
+    Type '{ id: number; x: number; color: string; rot: number; delay: number; shape: string; }' is not assignable to type '{ id: number; x: number; color: string; rot: number; delay: number; shape: "rect" | "circ"; }'.
+      Types of property 'shape' are incompatible.
+        Type 'string' is not assignable to type '"rect" | "circ"'.
+src/app/landing/advanced-components-6.tsx(525,28): error TS2339: Property 'q' does not exist on type '{ label: string; done: boolean; } | { q: string; options: string[]; answer: number; } | { topic: string; pct: number; }'.
+  Property 'q' does not exist on type '{ label: string; done: boolean; }'.
+src/app/landing/advanced-components-6.tsx(528,28): error TS2339: Property 'options' does not exist on type '{ label: string; done: boolean; } | { q: string; options: string[]; answer: number; } | { topic: string; pct: number; }'.
+  Property 'options' does not exist on type '{ label: string; done: boolean; }'.
+src/app/landing/advanced-components-6.tsx(534,51): error TS2339: Property 'answer' does not exist on type '{ label: string; done: boolean; } | { q: string; options: string[]; answer: number; } | { topic: string; pct: number; }'.
+  Property 'answer' does not exist on type '{ label: string; done: boolean; }'.
+src/app/landing/advanced-components-6.tsx(535,60): error TS2339: Property 'answer' does not exist on type '{ label: string; done: boolean; } | { q: string; options: string[]; answer: number; } | { topic: string; pct: number; }'.
+  Property 'answer' does not exist on type '{ label: string; done: boolean; }'.
+src/app/landing/advanced-components-6.tsx(537,46): error TS2339: Property 'answer' does not exist on type '{ label: string; done: boolean; } | { q: string; options: string[]; answer: number; } | { topic: string; pct: number; }'.
+  Property 'answer' does not exist on type '{ label: string; done: boolean; }'.
+src/app/landing/advanced-components-6.tsx(538,51): error TS2339: Property 'answer' does not exist on type '{ label: string; done: boolean; } | { q: string; options: string[]; answer: number; } | { topic: string; pct: number; }'.
+  Property 'answer' does not exist on type '{ label: string; done: boolean; }'.
+src/app/landing/advanced-components.tsx(34,45): error TS2305: Module '"lucide-react"' has no exported member 'Wreath'.
+src/app/landing/advanced-components.tsx(79,6): error TS2745: This JSX tag's 'children' prop expects type 'never' which requires multiple children, but only a single child was provided.
+src/app/landing/advanced-components.tsx(80,7): error TS2322: Type 'any' is not assignable to type 'never'.
+src/app/landing/advanced-components.tsx(81,7): error TS2322: Type 'string' is not assignable to type 'never'.
+src/app/landing/advanced-components.tsx(82,7): error TS2322: Type '{ opacity: number; transform: string; transition: string; }' is not assignable to type 'never'.
+src/app/landing/page.tsx(1589,9): error TS2322: Type '{ data: number[]; width: number; height: number; color: string; className: string; }' is not assignable to type 'IntrinsicAttributes & { data: number[]; width?: number | undefined; height?: number | undefined; color?: string | undefined; fill?: boolean | undefined; }'.
+  Property 'className' does not exist on type 'IntrinsicAttributes & { data: number[]; width?: number | undefined; height?: number | undefined; color?: string | undefined; fill?: boolean | undefined; }'.
+src/app/messages/page.tsx(5349,46): error TS2352: Conversion of type '{ questionId: string; type: string; text: string; options: never[]; answer: string; explanation: string; }' to type 'SharedQuestionPayload' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type '{ questionId: string; type: string; text: string; options: never[]; answer: string; explanation: string; }' is missing the following properties from type 'SharedQuestionPayload': system, topic, difficulty
+src/components/medq/AuthModal.tsx(196,41): error TS2322: Type '{ children: Element; asChild: true; }' is not assignable to type 'IntrinsicAttributes & Props<unknown>'.
+  Property 'asChild' does not exist on type 'IntrinsicAttributes & Props<unknown>'.
+src/components/medq/ChatWhiteboard.tsx(5295,33): error TS2339: Property 'getName' does not exist on type 'Shape<ShapeConfig> | Stage'.
+  Property 'getName' does not exist on type 'Shape<ShapeConfig>'.
+src/components/medq/ChatWhiteboard.tsx(5321,66): error TS2339: Property 'getName' does not exist on type 'Container<Node<NodeConfig>, ContainerConfig>'.
+src/components/medq/ChatWhiteboard.tsx(5322,31): error TS2339: Property 'getId' does not exist on type 'Shape<ShapeConfig> | Stage'.
+  Property 'getId' does not exist on type 'Shape<ShapeConfig>'.
+src/components/medq/ChatWhiteboard.tsx(5331,51): error TS7006: Parameter 'node' implicitly has an 'any' type.
+src/components/medq/ChatWhiteboard.tsx(5338,40): error TS2339: Property 'getId' does not exist on type 'Node<NodeConfig>'.
+src/components/medq/ChatWhiteboard.tsx(5401,34): error TS2339: Property 'getId' does not exist on type 'Shape<ShapeConfig> | Stage'.
+  Property 'getId' does not exist on type 'Shape<ShapeConfig>'.
+src/components/medq/ChatWhiteboard.tsx(5581,35): error TS2339: Property 'getName' does not exist on type 'Shape<ShapeConfig> | Stage'.
+  Property 'getName' does not exist on type 'Shape<ShapeConfig>'.
+src/components/medq/ChatWhiteboard.tsx(5582,53): error TS7006: Parameter 'node' implicitly has an 'any' type.
+src/components/medq/ChatWhiteboard.tsx(5584,42): error TS2339: Property 'getId' does not exist on type 'Node<NodeConfig>'.
+src/components/medq/ChatWhiteboard.tsx(5586,35): error TS2339: Property 'getId' does not exist on type 'Shape<ShapeConfig> | Stage'.
+  Property 'getId' does not exist on type 'Shape<ShapeConfig>'.
+src/components/medq/ChatWhiteboard.tsx(5603,53): error TS7006: Parameter 'node' implicitly has an 'any' type.
+src/components/medq/ChatWhiteboard.tsx(5605,42): error TS2339: Property 'getId' does not exist on type 'Node<NodeConfig>'.
+src/components/medq/ChatWhiteboard.tsx(5607,35): error TS2339: Property 'getId' does not exist on type 'Shape<ShapeConfig> | Stage'.
+  Property 'getId' does not exist on type 'Shape<ShapeConfig>'.
+src/components/medq/ChatWhiteboard.tsx(5760,35): error TS2339: Property 'getName' does not exist on type 'Shape<ShapeConfig> | Stage'.
+  Property 'getName' does not exist on type 'Shape<ShapeConfig>'.
+src/components/medq/ChatWhiteboard.tsx(5802,55): error TS7006: Parameter 'node' implicitly has an 'any' type.
+src/components/medq/ChatWhiteboard.tsx(5803,60): error TS2339: Property 'getId' does not exist on type 'Node<NodeConfig>'.
+src/components/medq/ChatWhiteboard.tsx(5803,79): error TS2339: Property 'getId' does not exist on type 'Shape<ShapeConfig> | Stage'.
+  Property 'getId' does not exist on type 'Shape<ShapeConfig>'.
+src/components/medq/ChatWhiteboard.tsx(7939,52): error TS2345: Argument of type '"straight" | "curved" | "elbow" | undefined' is not assignable to parameter of type 'SetStateAction<"straight" | "curved" | "elbow">'.
+  Type 'undefined' is not assignable to type 'SetStateAction<"straight" | "curved" | "elbow">'.
+src/components/medq/ChatWhiteboard.tsx(7962,56): error TS2345: Argument of type '"end" | "start" | "none" | "both" | undefined' is not assignable to parameter of type 'SetStateAction<"end" | "start" | "none" | "both">'.
+  Type 'undefined' is not assignable to type 'SetStateAction<"end" | "start" | "none" | "both">'.
+src/components/medq/ChatWhiteboard.tsx(8245,16): error TS2367: This comparison appears to be unintentional because the types '"text" | "line" | "rectangle" | "circle" | "arrow" | "pen" | "highlighter" | "eraser"' and '"laser"' have no overlap.
+src/components/medq/ExamSimulatorTab.tsx(27,11): error TS2430: Interface 'ExamQuestionSafe' incorrectly extends interface 'Partial<Question>'.
+  Types of property 'type' are incompatible.
+    Type 'string' is not assignable to type '"short" | "mcq" | "tf" | undefined'.
+src/components/medq/GlobalSearch.tsx(400,7): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+src/components/medq/GlobalSearch.tsx(404,7): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+src/components/medq/GlobalSearch.tsx(409,7): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+src/components/medq/LiveQuizSection.tsx(422,63): error TS2339: Property 'system' does not exist on type 'QuizQuestion'.
+src/components/medq/LiveQuizSection.tsx(422,89): error TS2339: Property 'topic' does not exist on type 'QuizQuestion'.
+src/components/medq/LiveQuizSection.tsx(434,32): error TS2339: Property 'system' does not exist on type 'QuizQuestion'.
+src/components/medq/LiveQuizSection.tsx(437,36): error TS2339: Property 'system' does not exist on type 'QuizQuestion'.
+src/components/medq/LiveQuizSection.tsx(437,60): error TS2339: Property 'topic' does not exist on type 'QuizQuestion'.
+src/components/medq/LiveQuizSection.tsx(437,90): error TS2339: Property 'topic' does not exist on type 'QuizQuestion'.
+src/components/medq/OnboardingDialog.tsx(402,21): error TS2322: Type 'Dispatch<SetStateAction<number[]>>' is not assignable to type '(value: number | readonly number[], eventDetails: SliderRootChangeEventDetails) => void'.
+  Types of parameters 'value' and 'value' are incompatible.
+    Type 'number | readonly number[]' is not assignable to type 'SetStateAction<number[]>'.
+      Type 'number' is not assignable to type 'SetStateAction<number[]>'.
+src/components/medq/ProfileDialog.tsx(182,84): error TS2345: Argument of type '(p: ProfileData) => { specialty: string | null; name: string; bio: string; medicalSchool: string; graduationYear: string; country: string; }' is not assignable to parameter of type 'SetStateAction<ProfileData>'.
+  Type '(p: ProfileData) => { specialty: string | null; name: string; bio: string; medicalSchool: string; graduationYear: string; country: string; }' is not assignable to type '(prevState: ProfileData) => ProfileData'.
+    Call signature return types '{ specialty: string | null; name: string; bio: string; medicalSchool: string; graduationYear: string; country: string; }' and 'ProfileData' are incompatible.
+      The types of 'specialty' are incompatible between these types.
+        Type 'string | null' is not assignable to type 'string'.
+          Type 'null' is not assignable to type 'string'.
+src/components/medq/ProfileDialog.tsx(200,82): error TS2345: Argument of type '(p: ProfileData) => { country: string | null; name: string; bio: string; medicalSchool: string; graduationYear: string; specialty: string; }' is not assignable to parameter of type 'SetStateAction<ProfileData>'.
+  Type '(p: ProfileData) => { country: string | null; name: string; bio: string; medicalSchool: string; graduationYear: string; specialty: string; }' is not assignable to type '(prevState: ProfileData) => ProfileData'.
+    Call signature return types '{ country: string | null; name: string; bio: string; medicalSchool: string; graduationYear: string; specialty: string; }' and 'ProfileData' are incompatible.
+      The types of 'country' are incompatible between these types.
+        Type 'string | null' is not assignable to type 'string'.
+          Type 'null' is not assignable to type 'string'.
+src/components/medq/RichTextEditor.tsx(178,34): error TS2345: Argument of type '({ node }: { node: { attrs: { rawHtml: string; className: string; }; }; }) => Element' is not assignable to parameter of type 'ComponentType<ReactNodeViewProps<HTMLElement>>'.
+  Type '({ node }: { node: { attrs: { rawHtml: string; className: string; }; }; }) => Element' is not assignable to type 'FunctionComponent<ReactNodeViewProps<HTMLElement>>'.
+    Types of parameters '__0' and 'props' are incompatible.
+      Type 'ReactNodeViewProps<HTMLElement>' is not assignable to type '{ node: { attrs: { rawHtml: string; className: string; }; }; }'.
+        The types of 'node.attrs' are incompatible between these types.
+          Type 'Attrs' is missing the following properties from type '{ rawHtml: string; className: string; }': rawHtml, className
+src/components/medq/RichTextEditor.tsx(470,57): error TS2345: Argument of type 'Node<any, any>' is not assignable to parameter of type 'Node'.
+  Type 'Node<any, any>' is missing the following properties from type 'Node': baseURI, childNodes, firstChild, isConnected, and 46 more.
+src/components/medq/RichTextEditor.tsx(470,57): error TS2352: Conversion of type 'EventTarget | null' to type 'Node<any, any>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'EventTarget' is missing the following properties from type 'Node<any, any>': type, configure, extend, parent, and 5 more.
+src/components/medq/RichTextEditor.tsx(471,61): error TS2345: Argument of type 'Node<any, any>' is not assignable to parameter of type 'Node'.
+  Type 'Node<any, any>' is missing the following properties from type 'Node': baseURI, childNodes, firstChild, isConnected, and 46 more.
+src/components/medq/RichTextEditor.tsx(471,61): error TS2352: Conversion of type 'EventTarget | null' to type 'Node<any, any>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'EventTarget' is missing the following properties from type 'Node<any, any>': type, configure, extend, parent, and 5 more.
+src/components/medq/RichTextEditor.tsx(587,59): error TS2345: Argument of type 'Node<any, any>' is not assignable to parameter of type 'Node'.
+  Type 'Node<any, any>' is missing the following properties from type 'Node': baseURI, childNodes, firstChild, isConnected, and 46 more.
+src/components/medq/RichTextEditor.tsx(587,59): error TS2352: Conversion of type 'EventTarget | null' to type 'Node<any, any>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'EventTarget' is missing the following properties from type 'Node<any, any>': type, configure, extend, parent, and 5 more.
+src/components/medq/RichTextEditor.tsx(588,62): error TS2345: Argument of type 'Node<any, any>' is not assignable to parameter of type 'Node'.
+  Type 'Node<any, any>' is missing the following properties from type 'Node': baseURI, childNodes, firstChild, isConnected, and 46 more.
+src/components/medq/RichTextEditor.tsx(588,62): error TS2352: Conversion of type 'EventTarget | null' to type 'Node<any, any>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'EventTarget' is missing the following properties from type 'Node<any, any>': type, configure, extend, parent, and 5 more.
+src/components/medq/RichTextEditor.tsx(897,35): error TS2345: Argument of type 'Node<any, any>' is not assignable to parameter of type 'Node'.
+  Type 'Node<any, any>' is missing the following properties from type 'Node': baseURI, childNodes, firstChild, isConnected, and 46 more.
+src/components/medq/RichTextEditor.tsx(897,35): error TS2352: Conversion of type 'EventTarget | null' to type 'Node<any, any>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'EventTarget' is missing the following properties from type 'Node<any, any>': type, configure, extend, parent, and 5 more.
+src/components/medq/ServiceWorkerRegistrar.tsx(152,29): error TS18047: 'window.top' is possibly 'null'.
+src/components/medq/SidebarNav.tsx(28,29): error TS2307: Cannot find module '@/lib/medq/navigation' or its corresponding type declarations.
+src/components/medq/SidebarNav.tsx(30,28): error TS2307: Cannot find module '@/lib/medq/navigation' or its corresponding type declarations.
+src/components/medq/SidebarNav.tsx(90,27): error TS7006: Parameter 'section' implicitly has an 'any' type.
+src/components/medq/SidebarNav.tsx(90,36): error TS7006: Parameter 'si' implicitly has an 'any' type.
+src/components/medq/SidebarNav.tsx(98,35): error TS7006: Parameter 'item' implicitly has an 'any' type.
+src/components/medq/TranscriptStudioModal.tsx(510,30): error TS2345: Argument of type '{}' is not assignable to parameter of type 'string'.
+src/components/medq/admin/AdminTab.tsx(688,40): error TS2322: Type 'Dispatch<SetStateAction<string>>' is not assignable to type '(value: string | null, eventDetails: SelectRootChangeEventDetails) => void'.
+  Types of parameters 'value' and 'value' are incompatible.
+    Type 'string | null' is not assignable to type 'SetStateAction<string>'.
+      Type 'null' is not assignable to type 'SetStateAction<string>'.
+src/components/medq/admin/AdminTab.tsx(846,39): error TS2322: Type 'Dispatch<SetStateAction<string>>' is not assignable to type '(value: string | null, eventDetails: SelectRootChangeEventDetails) => void'.
+  Types of parameters 'value' and 'value' are incompatible.
+    Type 'string | null' is not assignable to type 'SetStateAction<string>'.
+      Type 'null' is not assignable to type 'SetStateAction<string>'.
+src/components/medq/admin/AdminTab.tsx(1198,80): error TS2322: Type 'string | null' is not assignable to type 'string'.
+  Type 'null' is not assignable to type 'string'.
+src/components/medq/admin/AdminTab.tsx(1211,80): error TS2322: Type 'string | null' is not assignable to type 'string'.
+  Type 'null' is not assignable to type 'string'.
+src/components/medq/admin/AdminTab.tsx(1225,83): error TS2322: Type 'string | null' is not assignable to type 'string'.
+  Type 'null' is not assignable to type 'string'.
+src/components/medq/admin/AdminTab.tsx(2022,100): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'SetStateAction<string>'.
+  Type 'null' is not assignable to type 'SetStateAction<string>'.
+src/components/medq/admin/AdminTab.tsx(2219,40): error TS2322: Type 'Dispatch<SetStateAction<string>>' is not assignable to type '(value: string | null, eventDetails: SelectRootChangeEventDetails) => void'.
+  Types of parameters 'value' and 'value' are incompatible.
+    Type 'string | null' is not assignable to type 'SetStateAction<string>'.
+      Type 'null' is not assignable to type 'SetStateAction<string>'.
+src/components/medq/admin/AdminTab.tsx(2488,51): error TS2322: Type 'Dispatch<SetStateAction<string>>' is not assignable to type '(value: string | null, eventDetails: SelectRootChangeEventDetails) => void'.
+  Types of parameters 'value' and 'value' are incompatible.
+    Type 'string | null' is not assignable to type 'SetStateAction<string>'.
+      Type 'null' is not assignable to type 'SetStateAction<string>'.
+src/components/medq/admin/AdminTab.tsx(2625,48): error TS2322: Type 'Dispatch<SetStateAction<string>>' is not assignable to type '(value: string | null, eventDetails: SelectRootChangeEventDetails) => void'.
+  Types of parameters 'value' and 'value' are incompatible.
+    Type 'string | null' is not assignable to type 'SetStateAction<string>'.
+      Type 'null' is not assignable to type 'SetStateAction<string>'.
+src/components/medq/admin/AdminTab.tsx(2798,46): error TS2322: Type 'Dispatch<SetStateAction<string>>' is not assignable to type '(value: string | null, eventDetails: SelectRootChangeEventDetails) => void'.
+  Types of parameters 'value' and 'value' are incompatible.
+    Type 'string | null' is not assignable to type 'SetStateAction<string>'.
+      Type 'null' is not assignable to type 'SetStateAction<string>'.
+src/components/medq/admin/AdminTab.tsx(3463,46): error TS2322: Type '(value: string) => void' is not assignable to type '(value: string | null, eventDetails: SelectRootChangeEventDetails) => void'.
+  Types of parameters 'value' and 'value' are incompatible.
+    Type 'string | null' is not assignable to type 'string'.
+      Type 'null' is not assignable to type 'string'.
+src/components/medq/admin/AdminTab.tsx(3485,46): error TS2322: Type '(value: string) => void' is not assignable to type '(value: string | null, eventDetails: SelectRootChangeEventDetails) => void'.
+  Types of parameters 'value' and 'value' are incompatible.
+    Type 'string | null' is not assignable to type 'string'.
+      Type 'null' is not assignable to type 'string'.
+src/components/medq/admin/AdminTab.tsx(3509,61): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'SetStateAction<string>'.
+  Type 'null' is not assignable to type 'SetStateAction<string>'.
+src/components/medq/admin/AdminTab.tsx(3872,40): error TS2322: Type 'Dispatch<SetStateAction<string>>' is not assignable to type '(value: string | null, eventDetails: SelectRootChangeEventDetails) => void'.
+  Types of parameters 'value' and 'value' are incompatible.
+    Type 'string | null' is not assignable to type 'SetStateAction<string>'.
+      Type 'null' is not assignable to type 'SetStateAction<string>'.
+src/components/medq/admin/AdminTab.tsx(3898,40): error TS2322: Type 'Dispatch<SetStateAction<string>>' is not assignable to type '(value: string | null, eventDetails: SelectRootChangeEventDetails) => void'.
+  Types of parameters 'value' and 'value' are incompatible.
+    Type 'string | null' is not assignable to type 'SetStateAction<string>'.
+      Type 'null' is not assignable to type 'SetStateAction<string>'.
+src/components/medq/admin/AdminTab.tsx(4188,50): error TS2322: Type 'Dispatch<SetStateAction<string>>' is not assignable to type '(value: string | null, eventDetails: SelectRootChangeEventDetails) => void'.
+  Types of parameters 'value' and 'value' are incompatible.
+    Type 'string | null' is not assignable to type 'SetStateAction<string>'.
+      Type 'null' is not assignable to type 'SetStateAction<string>'.
+src/components/medq/ai-agent/UIActionEngine.ts(191,13): error TS2322: Type '"top" | "center" | "bottom"' is not assignable to type 'ScrollLogicalPosition | undefined'.
+  Type '"top"' is not assignable to type 'ScrollLogicalPosition | undefined'.
+src/components/medq/ai-agent/UIActionEngine.ts(587,100): error TS2339: Property 'type' does not exist on type 'never'.
+src/components/medq/ai-agent/VisualGuidanceOverlay.tsx(105,52): error TS2304: Cannot find name 'TourStep'.
+src/components/medq/ai-agent/VisualGuidanceOverlay.tsx(111,18): error TS2304: Cannot find name 'TourStep'.
+src/components/medq/ai-agent/VisualGuidanceOverlay.tsx(133,52): error TS2304: Cannot find name 'TourStep'.
+src/components/medq/ai-agent/VisualGuidanceOverlay.tsx(138,18): error TS2304: Cannot find name 'TourStep'.
+src/components/medq/ai-agent/VisualGuidanceOverlay.tsx(153,52): error TS2304: Cannot find name 'TourStep'.
+src/components/medq/freellm/Overview.tsx(335,64): error TS2322: Type '{ className: string; title: string; }' is not assignable to type 'IntrinsicAttributes & Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>'.
+  Property 'title' does not exist on type 'IntrinsicAttributes & Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>'.
+src/components/medq/header.tsx(84,28): error TS2339: Property 'role' does not exist on type 'User'.
+src/components/medq/header.tsx(162,13): error TS2322: Type '{ id: string | undefined; name: string | null | undefined; email: string | null | undefined; image: string | null | undefined; role: any; } | null' is not assignable to type 'UserMenuUser | null'.
+  Type '{ id: string | undefined; name: string | null | undefined; email: string | null | undefined; image: string | null | undefined; role: any; }' is not assignable to type 'UserMenuUser'.
+    Types of property 'id' are incompatible.
+      Type 'string | undefined' is not assignable to type 'string'.
+        Type 'undefined' is not assignable to type 'string'.
+src/components/medq/navigation/SidebarNav.tsx(27,36): error TS2339: Property 'role' does not exist on type 'User'.
+src/components/openmaic/agent/agent-avatar.tsx(11,53): error TS2307: Cannot find module '@/components/ui/avatar' or its corresponding type declarations.
+src/components/openmaic/agent/agent-config-panel.tsx(17,53): error TS2307: Cannot find module '@/components/ui/avatar' or its corresponding type declarations.
+src/components/openmaic/ai-elements/canvas.tsx(1,60): error TS2307: Cannot find module '@xyflow/react' or its corresponding type declarations.
+src/components/openmaic/ai-elements/connection.tsx(1,46): error TS2307: Cannot find module '@xyflow/react' or its corresponding type declarations.
+src/components/openmaic/ai-elements/connection.tsx(5,55): error TS7031: Binding element 'fromX' implicitly has an 'any' type.
+src/components/openmaic/ai-elements/connection.tsx(5,62): error TS7031: Binding element 'fromY' implicitly has an 'any' type.
+src/components/openmaic/ai-elements/connection.tsx(5,69): error TS7031: Binding element 'toX' implicitly has an 'any' type.
+src/components/openmaic/ai-elements/connection.tsx(5,74): error TS7031: Binding element 'toY' implicitly has an 'any' type.
+src/components/openmaic/ai-elements/context.tsx(9,26): error TS2307: Cannot find module 'tokenlens' or its corresponding type declarations.
+src/components/openmaic/ai-elements/context.tsx(283,34): error TS2339: Property 'reasoningTokens' does not exist on type 'LanguageModelUsage'.
+src/components/openmaic/ai-elements/context.tsx(316,30): error TS2339: Property 'cachedInputTokens' does not exist on type 'LanguageModelUsage'.
+src/components/openmaic/ai-elements/controls.tsx(4,47): error TS2307: Cannot find module '@xyflow/react' or its corresponding type declarations.
+src/components/openmaic/ai-elements/conversation.tsx(8,56): error TS2307: Cannot find module 'use-stick-to-bottom' or its corresponding type declarations.
+src/components/openmaic/ai-elements/edge.tsx(10,8): error TS2307: Cannot find module '@xyflow/react' or its corresponding type declarations.
+src/components/openmaic/ai-elements/edge.tsx(47,6): error TS7006: Parameter 'h' implicitly has an 'any' type.
+src/components/openmaic/ai-elements/message.tsx(11,28): error TS2307: Cannot find module 'streamdown' or its corresponding type declarations.
+src/components/openmaic/ai-elements/node.tsx(11,34): error TS2307: Cannot find module '@xyflow/react' or its corresponding type declarations.
+src/components/openmaic/ai-elements/panel.tsx(2,41): error TS2307: Cannot find module '@xyflow/react' or its corresponding type declarations.
+src/components/openmaic/ai-elements/reasoning.tsx(9,28): error TS2307: Cannot find module 'streamdown' or its corresponding type declarations.
+src/components/openmaic/ai-elements/toolbar.tsx(2,39): error TS2307: Cannot find module '@xyflow/react' or its corresponding type declarations.
+src/components/openmaic/canvas/canvas-toolbar.tsx(257,30): error TS2322: Type '{ children: Element; delayDuration: number; }' is not assignable to type 'IntrinsicAttributes & TooltipProviderProps'.
+  Property 'delayDuration' does not exist on type 'IntrinsicAttributes & TooltipProviderProps'.
+src/components/openmaic/canvas/canvas-toolbar.tsx(259,33): error TS2322: Type '{ children: Element; asChild: true; }' is not assignable to type 'IntrinsicAttributes & Props<unknown>'.
+  Property 'asChild' does not exist on type 'IntrinsicAttributes & Props<unknown>'.
+src/components/openmaic/canvas/canvas-toolbar.tsx(360,30): error TS2322: Type '{ children: Element; delayDuration: number; }' is not assignable to type 'IntrinsicAttributes & TooltipProviderProps'.
+  Property 'delayDuration' does not exist on type 'IntrinsicAttributes & TooltipProviderProps'.
+src/components/openmaic/canvas/canvas-toolbar.tsx(362,33): error TS2322: Type '{ children: Element; asChild: true; }' is not assignable to type 'IntrinsicAttributes & Props<unknown>'.
+  Property 'asChild' does not exist on type 'IntrinsicAttributes & Props<unknown>'.
+src/components/openmaic/chat/chat-area.tsx(152,18): error TS7006: Parameter 'a' implicitly has an 'any' type.
+src/components/openmaic/chat/chat-area.tsx(159,21): error TS7006: Parameter 'a' implicitly has an 'any' type.
+src/components/openmaic/chat/chat-session.tsx(23,31): error TS2307: Cannot find module '@/components/ui/avatar-display' or its corresponding type declarations.
+src/components/openmaic/chat/use-chat-sessions.ts(35,30): error TS2307: Cannot find module '@/lib/buffer/stream-buffer' or its corresponding type declarations.
+src/components/openmaic/chat/use-chat-sessions.ts(36,49): error TS2307: Cannot find module '@/lib/buffer/stream-buffer' or its corresponding type declarations.
+src/components/openmaic/chat/use-chat-sessions.ts(37,56): error TS2307: Cannot find module '@/lib/chat/agent-loop' or its corresponding type declarations.
+src/components/openmaic/chat/use-chat-sessions.ts(38,30): error TS2307: Cannot find module '@/lib/action/engine' or its corresponding type declarations.
+src/components/openmaic/chat/use-chat-sessions.ts(516,23): error TS7006: Parameter 'body' implicitly has an 'any' type.
+src/components/openmaic/chat/use-chat-sessions.ts(516,29): error TS7006: Parameter 'signal' implicitly has an 'any' type.
+src/components/openmaic/chat/use-chat-sessions.ts(524,21): error TS7006: Parameter 'event' implicitly has an 'any' type.
+src/components/openmaic/edit/ActionsBar/ActionsBar.tsx(707,8): error TS7006: Parameter 'a' implicitly has an 'any' type.
+src/components/openmaic/edit/ActionsBar/ActionsBar.tsx(811,39): error TS7006: Parameter 'a' implicitly has an 'any' type.
+src/components/openmaic/edit/ActionsBar/ActionsBar.tsx(815,30): error TS7006: Parameter 'action' implicitly has an 'any' type.
+src/components/openmaic/edit/ActionsBar/ActionsBar.tsx(815,38): error TS7006: Parameter 'index' implicitly has an 'any' type.
+src/components/openmaic/edit/ActionsBar/ActionsBar.tsx(952,27): error TS7031: Binding element 'action' implicitly has an 'any' type.
+src/components/openmaic/edit/ActionsBar/ActionsBar.tsx(952,35): error TS7031: Binding element 'index' implicitly has an 'any' type.
+src/components/openmaic/edit/ActionsBar/ActionsBar.tsx(952,42): error TS7031: Binding element 'key' implicitly has an 'any' type.
+src/components/openmaic/edit/ActionsBar/ActionsBar.tsx(952,60): error TS7031: Binding element 'si' implicitly has an 'any' type.
+src/components/openmaic/edit/AgentPanel/AgentPanel.tsx(26,8): error TS2307: Cannot find module '@assistant-ui/react' or its corresponding type declarations.
+src/components/openmaic/edit/AgentPanel/AgentPanel.tsx(38,33): error TS2307: Cannot find module '@/lib/agent/client/use-agent-runtime' or its corresponding type declarations.
+src/components/openmaic/edit/AgentPanel/AgentPanel.tsx(88,34): error TS7006: Parameter 'm' implicitly has an 'any' type.
+src/components/openmaic/edit/AgentPanel/AgentPanel.tsx(90,8): error TS7006: Parameter 'p' implicitly has an 'any' type.
+src/components/openmaic/edit/AgentPanel/AgentPanel.tsx(101,35): error TS7006: Parameter 'm' implicitly has an 'any' type.
+src/components/openmaic/edit/AgentPanel/AgentPanel.tsx(114,31): error TS7006: Parameter 'm' implicitly has an 'any' type.
+src/components/openmaic/edit/AgentPanel/edit-interactive-html-tool-ui.tsx(10,37): error TS2307: Cannot find module '@assistant-ui/react' or its corresponding type declarations.
+src/components/openmaic/edit/AgentPanel/edit-interactive-html-tool-ui.tsx(63,14): error TS7031: Binding element 'args' implicitly has an 'any' type.
+src/components/openmaic/edit/AgentPanel/edit-interactive-html-tool-ui.tsx(63,20): error TS7031: Binding element 'status' implicitly has an 'any' type.
+src/components/openmaic/edit/AgentPanel/edit-interactive-html-tool-ui.tsx(63,28): error TS7031: Binding element 'result' implicitly has an 'any' type.
+src/components/openmaic/edit/AgentPanel/edit-interactive-html-tool-ui.tsx(63,36): error TS7031: Binding element 'isError' implicitly has an 'any' type.
+src/components/openmaic/edit/AgentPanel/edit-interactive-html-tool-ui.tsx(63,45): error TS7031: Binding element 'toolCallId' implicitly has an 'any' type.
+src/components/openmaic/edit/AgentPanel/markdown-text.tsx(14,41): error TS2307: Cannot find module '@assistant-ui/react-streamdown' or its corresponding type declarations.
+src/components/openmaic/edit/AgentPanel/markdown-text.tsx(15,22): error TS2307: Cannot find module '@streamdown/code' or its corresponding type declarations.
+src/components/openmaic/edit/AgentPanel/read-tool-ui.tsx(10,37): error TS2307: Cannot find module '@assistant-ui/react' or its corresponding type declarations.
+src/components/openmaic/edit/AgentPanel/read-tool-ui.tsx(49,16): error TS7031: Binding element 'args' implicitly has an 'any' type.
+src/components/openmaic/edit/AgentPanel/read-tool-ui.tsx(49,22): error TS7031: Binding element 'status' implicitly has an 'any' type.
+src/components/openmaic/edit/AgentPanel/read-tool-ui.tsx(49,30): error TS7031: Binding element 'result' implicitly has an 'any' type.
+src/components/openmaic/edit/AgentPanel/read-tool-ui.tsx(49,38): error TS7031: Binding element 'isError' implicitly has an 'any' type.
+src/components/openmaic/edit/AgentPanel/reasoning-part.tsx(17,28): error TS2307: Cannot find module '@assistant-ui/react' or its corresponding type declarations.
+src/components/openmaic/edit/AgentPanel/reasoning-part.tsx(21,56): error TS2307: Cannot find module '@/lib/agent/client/thinking-timers' or its corresponding type declarations.
+src/components/openmaic/edit/AgentPanel/reasoning-part.tsx(25,26): error TS7006: Parameter 'm' implicitly has an 'any' type.
+src/components/openmaic/edit/AgentPanel/reasoning-part.tsx(26,31): error TS7006: Parameter 'm' implicitly has an 'any' type.
+src/components/openmaic/edit/AgentPanel/reasoning-part.tsx(31,31): error TS7006: Parameter 'm' implicitly has an 'any' type.
+src/components/openmaic/edit/AgentPanel/reasoning-part.tsx(38,36): error TS7006: Parameter 's' implicitly has an 'any' type.
+src/components/openmaic/edit/AgentPanel/reasoning-part.tsx(45,35): error TS7006: Parameter 'm' implicitly has an 'any' type.
+src/components/openmaic/edit/AgentPanel/regenerate-scene-tool-ui.tsx(11,37): error TS2307: Cannot find module '@assistant-ui/react' or its corresponding type declarations.
+src/components/openmaic/edit/AgentPanel/regenerate-scene-tool-ui.tsx(68,14): error TS7031: Binding element 'args' implicitly has an 'any' type.
+src/components/openmaic/edit/AgentPanel/regenerate-scene-tool-ui.tsx(68,20): error TS7031: Binding element 'status' implicitly has an 'any' type.
+src/components/openmaic/edit/AgentPanel/regenerate-scene-tool-ui.tsx(68,28): error TS7031: Binding element 'result' implicitly has an 'any' type.
+src/components/openmaic/edit/AgentPanel/regenerate-scene-tool-ui.tsx(68,36): error TS7031: Binding element 'isError' implicitly has an 'any' type.
+src/components/openmaic/edit/AgentPanel/regenerate-scene-tool-ui.tsx(68,45): error TS7031: Binding element 'toolCallId' implicitly has an 'any' type.
+src/components/openmaic/edit/AgentPanel/regenerate-tool-ui.tsx(9,37): error TS2307: Cannot find module '@assistant-ui/react' or its corresponding type declarations.
+src/components/openmaic/edit/AgentPanel/regenerate-tool-ui.tsx(64,16): error TS7031: Binding element 'args' implicitly has an 'any' type.
+src/components/openmaic/edit/AgentPanel/regenerate-tool-ui.tsx(64,22): error TS7031: Binding element 'status' implicitly has an 'any' type.
+src/components/openmaic/edit/AgentPanel/regenerate-tool-ui.tsx(64,30): error TS7031: Binding element 'result' implicitly has an 'any' type.
+src/components/openmaic/edit/AgentPanel/regenerate-tool-ui.tsx(64,38): error TS7031: Binding element 'isError' implicitly has an 'any' type.
+src/components/openmaic/edit/AgentPanel/regenerate-tool-ui.tsx(64,47): error TS7031: Binding element 'toolCallId' implicitly has an 'any' type.
+src/components/openmaic/edit/AgentPanel/restore-button.tsx(12,35): error TS2307: Cannot find module '@/lib/agent/client/regen-snapshots' or its corresponding type declarations.
+src/components/openmaic/edit/AgentPanel/restore-button.tsx(13,39): error TS2307: Cannot find module '@/lib/agent/client/apply-slide-content' or its corresponding type declarations.
+src/components/openmaic/edit/AgentPanel/restore-button.tsx(17,35): error TS7006: Parameter 's' implicitly has an 'any' type.
+src/components/openmaic/edit/AgentPanel/restore-button.tsx(45,33): error TS7006: Parameter 'id' implicitly has an 'any' type.
+src/components/openmaic/edit/AgentPanel/restore-button.tsx(45,37): error TS7006: Parameter 'patch' implicitly has an 'any' type.
+src/components/openmaic/edit/PlaybackChromeRoot.tsx(21,53): error TS2307: Cannot find module '@/lib/playback' or its corresponding type declarations.
+src/components/openmaic/edit/PlaybackChromeRoot.tsx(22,55): error TS2307: Cannot find module '@/lib/playback' or its corresponding type declarations.
+src/components/openmaic/edit/PlaybackChromeRoot.tsx(23,30): error TS2307: Cannot find module '@/lib/action/engine' or its corresponding type declarations.
+src/components/openmaic/edit/PlaybackChromeRoot.tsx(462,24): error TS7006: Parameter 'mode' implicitly has an 'any' type.
+src/components/openmaic/edit/PlaybackChromeRoot.tsx(465,25): error TS7006: Parameter '_sceneId' implicitly has an 'any' type.
+src/components/openmaic/edit/PlaybackChromeRoot.tsx(468,25): error TS7006: Parameter 'text' implicitly has an 'any' type.
+src/components/openmaic/edit/PlaybackChromeRoot.tsx(509,27): error TS7006: Parameter 'trigger' implicitly has an 'any' type.
+src/components/openmaic/edit/PlaybackChromeRoot.tsx(520,33): error TS7006: Parameter 'topic' implicitly has an 'any' type.
+src/components/openmaic/edit/PlaybackChromeRoot.tsx(520,40): error TS7006: Parameter 'prompt' implicitly has an 'any' type.
+src/components/openmaic/edit/PlaybackChromeRoot.tsx(520,48): error TS7006: Parameter 'agentId' implicitly has an 'any' type.
+src/components/openmaic/edit/PlaybackChromeRoot.tsx(547,27): error TS7006: Parameter 'text' implicitly has an 'any' type.
+src/components/openmaic/edit/PlaybackChromeRoot.tsx(551,27): error TS7006: Parameter 'agentId' implicitly has an 'any' type.
+src/components/openmaic/edit/PlaybackChromeRoot.tsx(687,38): error TS7006: Parameter 'a' implicitly has an 'any' type.
+src/components/openmaic/edit/surfaces/quiz/QuestionCard.tsx(227,41): error TS7006: Parameter 'opt' implicitly has an 'any' type.
+src/components/openmaic/edit/surfaces/quiz/QuestionCard.tsx(227,46): error TS7006: Parameter 'i' implicitly has an 'any' type.
+src/components/openmaic/edit/surfaces/quiz/QuizForm.tsx(38,32): error TS7006: Parameter 'q' implicitly has an 'any' type.
+src/components/openmaic/edit/surfaces/quiz/QuizForm.tsx(43,31): error TS7006: Parameter 'id' implicitly has an 'any' type.
+src/components/openmaic/edit/surfaces/quiz/QuizForm.tsx(66,36): error TS7006: Parameter 'q' implicitly has an 'any' type.
+src/components/openmaic/edit/surfaces/quiz/QuizForm.tsx(70,29): error TS7006: Parameter 'q' implicitly has an 'any' type.
+src/components/openmaic/edit/surfaces/quiz/QuizForm.tsx(70,32): error TS7006: Parameter 'index' implicitly has an 'any' type.
+src/components/openmaic/edit/surfaces/quiz/quiz-edit-ops.ts(90,33): error TS7006: Parameter 'o' implicitly has an 'any' type.
+src/components/openmaic/edit/surfaces/quiz/quiz-edit-ops.ts(149,39): error TS7006: Parameter 'q' implicitly has an 'any' type.
+src/components/openmaic/edit/surfaces/quiz/quiz-edit-ops.ts(162,61): error TS7006: Parameter 'q' implicitly has an 'any' type.
+src/components/openmaic/edit/surfaces/quiz/quiz-edit-ops.ts(167,47): error TS7006: Parameter 'q' implicitly has an 'any' type.
+src/components/openmaic/edit/surfaces/quiz/use-quiz-surface.ts(122,30): error TS7006: Parameter 'q' implicitly has an 'any' type.
+src/components/openmaic/edit/surfaces/quiz/use-quiz-surface.ts(122,33): error TS7006: Parameter 'i' implicitly has an 'any' type.
+src/components/openmaic/edit/surfaces/quiz/use-quiz-surface.ts(131,50): error TS7006: Parameter 'o' implicitly has an 'any' type.
+src/components/openmaic/edit/surfaces/slide/ColorPicker.tsx(4,32): error TS2307: Cannot find module 'react-colorful' or its corresponding type declarations.
+src/components/openmaic/edit/surfaces/slide/ElementPickLayer.tsx(70,29): error TS7006: Parameter 'a' implicitly has an 'any' type.
+src/components/openmaic/edit/surfaces/slide/text-format-bar.tsx(15,23): error TS2307: Cannot find module '@/configs/font' or its corresponding type declarations.
+src/components/openmaic/edit/surfaces/slide/text-format-bar.tsx(158,23): error TS7006: Parameter 'f' implicitly has an 'any' type.
+src/components/openmaic/edit/surfaces/slide/text-format-bar.tsx(328,31): error TS7006: Parameter 'f' implicitly has an 'any' type.
+src/components/openmaic/edit/surfaces/slide/use-slide-surface.ts(133,44): error TS7006: Parameter 'el' implicitly has an 'any' type.
+src/components/openmaic/roundtable/index.tsx(41,31): error TS2307: Cannot find module '@/components/ui/avatar-display' or its corresponding type declarations.
+src/components/openmaic/roundtable/index.tsx(42,63): error TS2307: Cannot find module '@/components/ui/hover-card' or its corresponding type declarations.
+src/components/openmaic/roundtable/index.tsx(47,47): error TS2307: Cannot find module '@/lib/playback' or its corresponding type declarations.
+src/components/openmaic/roundtable/presentation-speech-overlay.tsx(16,31): error TS2307: Cannot find module '@/components/ui/avatar-display' or its corresponding type declarations.
+src/components/openmaic/roundtable/presentation-speech-overlay.tsx(18,35): error TS2307: Cannot find module '@/lib/playback' or its corresponding type declarations.
+src/components/openmaic/scene-renderers/classroom-complete.tsx(19,33): error TS2307: Cannot find module '@/lib/classroom/complete-summary' or its corresponding type declarations.
+src/components/openmaic/scene-renderers/pbl/guide.tsx(13,63): error TS2307: Cannot find module '@/components/ui/hover-card' or its corresponding type declarations.
+src/components/openmaic/scene-renderers/quiz-renderer.tsx(34,33): error TS7006: Parameter 'question' implicitly has an 'any' type.
+src/components/openmaic/scene-renderers/quiz-renderer.tsx(42,42): error TS7006: Parameter 'option' implicitly has an 'any' type.
+src/components/openmaic/scene-renderers/quiz-renderer.tsx(42,50): error TS7006: Parameter 'optIndex' implicitly has an 'any' type.
+src/components/openmaic/scene-renderers/quiz-view.tsx(210,33): error TS7006: Parameter 'opt' implicitly has an 'any' type.
+src/components/openmaic/scene-renderers/quiz-view.tsx(320,33): error TS7006: Parameter 'opt' implicitly has an 'any' type.
+src/components/openmaic/settings/index.tsx(170,7): error TS2741: Property 'zai' is missing in type '{ seedream: string; 'openai-image': string; 'qwen-image': string; 'nano-banana': string; 'minimax-image': string; 'grok-image': string; lemonade: string; }' but required in type 'Record<ImageProviderId, string>'.
+src/components/openmaic/settings/index.tsx(180,7): error TS2741: Property 'zai' is missing in type '{ seedream: string; 'openai-image': string; 'qwen-image': string; 'nano-banana': string; 'minimax-image': string; 'grok-image': string; lemonade: string; }' but required in type 'Record<ImageProviderId, string>'.
+src/components/openmaic/slide-renderer/Editor/Canvas/Operate/ShapeElementOperate.tsx(5,37): error TS2307: Cannot find module '@/configs/shapes' or its corresponding type declarations.
+src/components/openmaic/slide-renderer/Editor/Canvas/hooks/useMoveShapeKeypoint.ts(4,37): error TS2307: Cannot find module '@/configs/shapes' or its corresponding type declarations.
+src/components/openmaic/slide-renderer/Editor/Canvas/hooks/useScaleElement.ts(10,26): error TS2307: Cannot find module '@/configs/element' or its corresponding type declarations.
+src/components/openmaic/slide-renderer/Editor/Canvas/hooks/useScaleElement.ts(11,37): error TS2307: Cannot find module '@/configs/shapes' or its corresponding type declarations.
+src/components/openmaic/slide-renderer/components/element/ChartElement/Chart.tsx(4,23): error TS7016: Could not find a declaration file for module 'tinycolor2'. '/home/z/my-project/node_modules/tinycolor2/esm/tinycolor.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/tinycolor2` if it exists or add a new declaration (.d.ts) file containing `declare module 'tinycolor2';`
+src/components/openmaic/slide-renderer/components/element/ChartElement/Chart.tsx(55,15): error TS7006: Parameter 'color' implicitly has an 'any' type.
+src/components/openmaic/slide-renderer/components/element/ChartElement/Chart.tsx(60,15): error TS7006: Parameter 'color' implicitly has an 'any' type.
+src/components/openmaic/slide-renderer/components/element/ImageElement/ImageClipHandler.tsx(5,22): error TS2307: Cannot find module '@/configs/hotkey' or its corresponding type declarations.
+src/components/openmaic/slide-renderer/components/element/ImageElement/useClipImage.ts(3,42): error TS2307: Cannot find module '@/configs/image-clip' or its corresponding type declarations.
+src/components/openmaic/slide-renderer/components/element/ProsemirrorEditor.tsx(34,22): error TS2307: Cannot find module '@/configs/hotkey' or its corresponding type declarations.
+src/components/openmaic/stage/header-controls.tsx(96,11): error TS2339: Property 'isExporting' does not exist on type '{ exporting: boolean; exportPPTX: () => void; exportResourcePack: () => void; }'.
+src/components/openmaic/stage/header-controls.tsx(96,37): error TS2339: Property 'exportPptx' does not exist on type '{ exporting: boolean; exportPPTX: () => void; exportResourcePack: () => void; }'.
+src/components/openmaic/stage/header-controls.tsx(97,11): error TS2339: Property 'isExporting' does not exist on type '{ exporting: boolean; exportClassroomZip: () => Promise<void>; }'.
+src/components/openmaic/stage/header-controls.tsx(97,40): error TS2339: Property 'exportClassroom' does not exist on type '{ exporting: boolean; exportClassroomZip: () => Promise<void>; }'.
+src/components/openmaic/stage/scene-sidebar.tsx(113,12): error TS7053: Element implicitly has an 'any' type because expression of type 'SceneType' can't be used to index type '{ slide: LucideIcon; quiz: LucideIcon; interactive: LucideIcon; pbl: LucideIcon; }'.
+src/components/openmaic/ui/carousel.tsx(4,61): error TS2307: Cannot find module 'embla-carousel-react' or its corresponding type declarations.
+src/components/openmaic/ui/command.tsx(4,45): error TS2307: Cannot find module 'cmdk' or its corresponding type declarations.
+src/components/ui/dropdown-menu.tsx(25,7): error TS2698: Spread types may only be created from object types.
+src/components/ui/dropdown-menu.tsx(28,9): error TS18046: 'children.props' is of type 'unknown'.
+src/components/ui/dropdown-menu.tsx(29,25): error TS2345: Argument of type 'MouseEvent<HTMLElement, MouseEvent>' is not assignable to parameter of type 'BaseUIEvent<MouseEvent<HTMLButtonElement, MouseEvent>>'.
+  Type 'MouseEvent<HTMLElement, MouseEvent>' is not assignable to type 'MouseEvent<HTMLButtonElement, MouseEvent>'.
+    Type 'HTMLElement' is missing the following properties from type 'HTMLButtonElement': disabled, form, formAction, formEnctype, and 15 more.
+src/components/ui/dropdown-menu.tsx(32,9): error TS18046: 'children.props' is of type 'unknown'.
+src/components/ui/dropdown-menu.tsx(33,31): error TS2345: Argument of type 'PointerEvent<HTMLElement>' is not assignable to parameter of type 'BaseUIEvent<PointerEvent<HTMLButtonElement>>'.
+  Type 'PointerEvent<HTMLElement>' is not assignable to type 'PointerEvent<HTMLButtonElement>'.
+    Type 'HTMLElement' is missing the following properties from type 'HTMLButtonElement': disabled, form, formAction, formEnctype, and 15 more.
+src/components/ui/dropdown-menu.tsx(36,9): error TS18046: 'children.props' is of type 'unknown'.
+src/components/ui/dropdown-menu.tsx(37,27): error TS2345: Argument of type 'KeyboardEvent<HTMLElement>' is not assignable to parameter of type 'BaseUIEvent<KeyboardEvent<HTMLButtonElement>>'.
+  Type 'KeyboardEvent<HTMLElement>' is not assignable to type 'KeyboardEvent<HTMLButtonElement>'.
+    Type 'HTMLElement' is missing the following properties from type 'HTMLButtonElement': disabled, form, formAction, formEnctype, and 15 more.
+src/components/ui/dropdown-menu.tsx(40,9): error TS18046: 'children.props' is of type 'unknown'.
+src/components/ui/dropdown-menu.tsx(41,29): error TS2345: Argument of type 'MouseEvent<HTMLElement, MouseEvent>' is not assignable to parameter of type 'BaseUIEvent<MouseEvent<HTMLButtonElement, MouseEvent>>'.
+  Type 'MouseEvent<HTMLElement, MouseEvent>' is not assignable to type 'MouseEvent<HTMLButtonElement, MouseEvent>'.
+    Type 'HTMLElement' is missing the following properties from type 'HTMLButtonElement': disabled, form, formAction, formEnctype, and 15 more.
+src/components/ui/dropdown-menu.tsx(44,9): error TS18046: 'children.props' is of type 'unknown'.
+src/components/ui/dropdown-menu.tsx(45,25): error TS2345: Argument of type 'FocusEvent<HTMLElement, Element>' is not assignable to parameter of type 'BaseUIEvent<FocusEvent<HTMLButtonElement, Element>>'.
+  Type 'FocusEvent<HTMLElement, Element>' is not assignable to type 'FocusEvent<HTMLButtonElement, Element>'.
+    Type 'HTMLElement' is missing the following properties from type 'HTMLButtonElement': disabled, form, formAction, formEnctype, and 15 more.
+src/components/ui/dropdown-menu.tsx(48,9): error TS18046: 'children.props' is of type 'unknown'.
+src/components/ui/dropdown-menu.tsx(49,24): error TS2345: Argument of type 'FocusEvent<HTMLElement, Element>' is not assignable to parameter of type 'BaseUIEvent<FocusEvent<HTMLButtonElement, Element>>'.
+  Type 'FocusEvent<HTMLElement, Element>' is not assignable to type 'FocusEvent<HTMLButtonElement, Element>'.
+    Type 'HTMLElement' is missing the following properties from type 'HTMLButtonElement': disabled, form, formAction, formEnctype, and 15 more.
+src/components/ui/dropdown-menu.tsx(51,21): error TS18046: 'children.props' is of type 'unknown'.
+src/components/ui/popover.tsx(19,7): error TS2698: Spread types may only be created from object types.
+src/components/ui/popover.tsx(22,9): error TS18046: 'children.props' is of type 'unknown'.
+src/components/ui/popover.tsx(23,25): error TS2345: Argument of type 'MouseEvent<HTMLElement, MouseEvent>' is not assignable to parameter of type 'BaseUIEvent<MouseEvent<HTMLButtonElement, MouseEvent>>'.
+  Type 'MouseEvent<HTMLElement, MouseEvent>' is not assignable to type 'MouseEvent<HTMLButtonElement, MouseEvent>'.
+    Type 'HTMLElement' is missing the following properties from type 'HTMLButtonElement': disabled, form, formAction, formEnctype, and 15 more.
+src/components/ui/popover.tsx(26,9): error TS18046: 'children.props' is of type 'unknown'.
+src/components/ui/popover.tsx(27,31): error TS2345: Argument of type 'PointerEvent<HTMLElement>' is not assignable to parameter of type 'BaseUIEvent<PointerEvent<HTMLButtonElement>>'.
+  Type 'PointerEvent<HTMLElement>' is not assignable to type 'PointerEvent<HTMLButtonElement>'.
+    Type 'HTMLElement' is missing the following properties from type 'HTMLButtonElement': disabled, form, formAction, formEnctype, and 15 more.
+src/components/ui/popover.tsx(30,9): error TS18046: 'children.props' is of type 'unknown'.
+src/components/ui/popover.tsx(31,27): error TS2345: Argument of type 'KeyboardEvent<HTMLElement>' is not assignable to parameter of type 'BaseUIEvent<KeyboardEvent<HTMLButtonElement>>'.
+  Type 'KeyboardEvent<HTMLElement>' is not assignable to type 'KeyboardEvent<HTMLButtonElement>'.
+    Type 'HTMLElement' is missing the following properties from type 'HTMLButtonElement': disabled, form, formAction, formEnctype, and 15 more.
+src/components/ui/popover.tsx(34,9): error TS18046: 'children.props' is of type 'unknown'.
+src/components/ui/popover.tsx(35,29): error TS2345: Argument of type 'MouseEvent<HTMLElement, MouseEvent>' is not assignable to parameter of type 'BaseUIEvent<MouseEvent<HTMLButtonElement, MouseEvent>>'.
+  Type 'MouseEvent<HTMLElement, MouseEvent>' is not assignable to type 'MouseEvent<HTMLButtonElement, MouseEvent>'.
+    Type 'HTMLElement' is missing the following properties from type 'HTMLButtonElement': disabled, form, formAction, formEnctype, and 15 more.
+src/components/ui/popover.tsx(38,9): error TS18046: 'children.props' is of type 'unknown'.
+src/components/ui/popover.tsx(39,25): error TS2345: Argument of type 'FocusEvent<HTMLElement, Element>' is not assignable to parameter of type 'BaseUIEvent<FocusEvent<HTMLButtonElement, Element>>'.
+  Type 'FocusEvent<HTMLElement, Element>' is not assignable to type 'FocusEvent<HTMLButtonElement, Element>'.
+    Type 'HTMLElement' is missing the following properties from type 'HTMLButtonElement': disabled, form, formAction, formEnctype, and 15 more.
+src/components/ui/popover.tsx(42,9): error TS18046: 'children.props' is of type 'unknown'.
+src/components/ui/popover.tsx(43,24): error TS2345: Argument of type 'FocusEvent<HTMLElement, Element>' is not assignable to parameter of type 'BaseUIEvent<FocusEvent<HTMLButtonElement, Element>>'.
+  Type 'FocusEvent<HTMLElement, Element>' is not assignable to type 'FocusEvent<HTMLButtonElement, Element>'.
+    Type 'HTMLElement' is missing the following properties from type 'HTMLButtonElement': disabled, form, formAction, formEnctype, and 15 more.
+src/components/ui/popover.tsx(45,21): error TS18046: 'children.props' is of type 'unknown'.
+src/hooks/use-toast.ts(9,8): error TS2307: Cannot find module '@/components/ui/toast' or its corresponding type declarations.
+src/hooks/use-toast.ts(161,22): error TS7006: Parameter 'open' implicitly has an 'any' type.
+src/lib/agent/deep-agent-runtime.ts(952,5): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/lib/agent/knowledge/audio-pipeline.ts(292,55): error TS2322: Type 'string | false' is not assignable to type 'boolean'.
+  Type 'string' is not assignable to type 'boolean'.
+src/lib/agent/knowledge/semantic-chunking.ts(60,3): error TS2459: Module '"./text-quality"' declares 'isHeadingLine' locally, but it is not exported.
+src/lib/agent/knowledge/semantic-chunking.ts(61,3): error TS2459: Module '"./text-quality"' declares 'isStructuralLine' locally, but it is not exported.
+src/lib/agent/knowledge/semantic-chunking.ts(62,3): error TS2305: Module '"./text-quality"' has no exported member 'joinParagraphFragments'.
+src/lib/agent/knowledge/semantic-chunking.ts(156,46): error TS7006: Parameter 'l' implicitly has an 'any' type.
+src/lib/agent/memory/service.ts(119,86): error TS2322: Type '{ content?: string | undefined; importance?: number | undefined; embedding?: Uint8Array<ArrayBufferLike> | undefined; updatedAt: Date; }' is not assignable to type '((Without<AgentMemoryUpdateManyMutationInput, AgentMemoryUncheckedUpdateManyInput> & AgentMemoryUncheckedUpdateManyInput) | (Without<...> & AgentMemoryUpdateManyMutationInput)) & object'.
+  Type '{ content?: string | undefined; importance?: number | undefined; embedding?: Uint8Array<ArrayBufferLike> | undefined; updatedAt: Date; }' is not assignable to type 'Without<AgentMemoryUncheckedUpdateManyInput, AgentMemoryUpdateManyMutationInput> & AgentMemoryUpdateManyMutationInput & object'.
+    Type '{ content?: string | undefined; importance?: number | undefined; embedding?: Uint8Array<ArrayBufferLike> | undefined; updatedAt: Date; }' is not assignable to type 'AgentMemoryUpdateManyMutationInput'.
+      Types of property 'embedding' are incompatible.
+        Type 'Uint8Array<ArrayBufferLike> | undefined' is not assignable to type 'Uint8Array<ArrayBuffer> | NullableBytesFieldUpdateOperationsInput | null | undefined'.
+          Type 'Uint8Array<ArrayBufferLike>' is not assignable to type 'Uint8Array<ArrayBuffer> | NullableBytesFieldUpdateOperationsInput | null | undefined'.
+            Type 'Uint8Array<ArrayBufferLike>' is not assignable to type 'Uint8Array<ArrayBuffer>'.
+              Type 'ArrayBufferLike' is not assignable to type 'ArrayBuffer'.
+                Type 'SharedArrayBuffer' is missing the following properties from type 'ArrayBuffer': resizable, resize, detached, transfer, transferToFixedLength
+src/lib/agent/tools/messaging.ts(270,17): error TS2561: Object literal may only specify known properties, but 'chatRoomMemberships' does not exist in type 'UserWhereInput'. Did you mean to write 'chatRoomMembers'?
+src/lib/agent/tools/messaging.ts(380,19): error TS2561: Object literal may only specify known properties, but 'chatRoomMemberships' does not exist in type 'UserWhereInput'. Did you mean to write 'chatRoomMembers'?
+src/lib/agent/tools/messaging.ts(385,63): error TS2345: Argument of type '{ id: string; name: string | null; email: string | null; role: string; password: string | null; image: string | null; emailVerified: Date | null; bio: string | null; medicalSchool: string | null; ... 14 more ...; updatedAt: Date; }' is not assignable to parameter of type '{ id: string; name: string; }'.
+  Types of property 'name' are incompatible.
+    Type 'string | null' is not assignable to type 'string'.
+      Type 'null' is not assignable to type 'string'.
+src/lib/ai/llm.ts(255,12): error TS2314: Generic type 'GenerateTextResult<TOOLS, RUNTIME_CONTEXT, OUTPUT>' requires 3 type argument(s).
+src/lib/ai/llm.ts(260,19): error TS2314: Generic type 'GenerateTextResult<TOOLS, RUNTIME_CONTEXT, OUTPUT>' requires 3 type argument(s).
+src/lib/ai/llm.ts(315,4): error TS2314: Generic type 'StreamTextResult<TOOLS, RUNTIME_CONTEXT, OUTPUT>' requires 3 type argument(s).
+src/lib/ai/ollama-language-model.ts(328,17): error TS2353: Object literal may only specify known properties, and 'noCache' does not exist in type '{ total: number | undefined; text: number | undefined; reasoning: number | undefined; }'.
+src/lib/ai/ollama-language-model.ts(374,13): error TS2353: Object literal may only specify known properties, and 'noCache' does not exist in type '{ total: number | undefined; text: number | undefined; reasoning: number | undefined; }'.
+src/lib/ai/ollama-language-model.ts(458,56): error TS2353: Object literal may only specify known properties, and 'noCache' does not exist in type '{ total: number | undefined; text: number | undefined; reasoning: number | undefined; }'.
+src/lib/ai/ollama-language-model.ts(544,54): error TS2353: Object literal may only specify known properties, and 'noCache' does not exist in type '{ total: number | undefined; text: number | undefined; reasoning: number | undefined; }'.
+src/lib/ai/zai-language-model.ts(106,71): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'URL | Uint8Array<ArrayBufferLike>' is not assignable to parameter of type 'WithImplicitCoercion<string | ArrayLike<number>>'.
+      Type 'URL' is not assignable to type 'WithImplicitCoercion<string | ArrayLike<number>>'.
+src/lib/ai/zai-language-model.ts(189,15): error TS2353: Object literal may only specify known properties, and 'noCache' does not exist in type '{ total: number | undefined; text: number | undefined; reasoning: number | undefined; }'.
+src/lib/ai/zai-language-model.ts(335,19): error TS2353: Object literal may only specify known properties, and 'noCache' does not exist in type '{ total: number | undefined; text: number | undefined; reasoning: number | undefined; }'.
+src/lib/api/stage-api-canvas.ts(14,50): error TS2307: Cannot find module '@/lib/dsl' or its corresponding type declarations.
+src/lib/api/stage-api-element.ts(13,33): error TS2307: Cannot find module '@/lib/dsl' or its corresponding type declarations.
+src/lib/api/stage-api-element.ts(169,61): error TS7006: Parameter 'el' implicitly has an 'any' type.
+src/lib/api/stage-api-element.ts(218,61): error TS7006: Parameter 'el' implicitly has an 'any' type.
+src/lib/api/stage-api-element.ts(266,58): error TS7006: Parameter 'el' implicitly has an 'any' type.
+src/lib/api/stage-api-element.ts(306,55): error TS7006: Parameter 'el' implicitly has an 'any' type.
+src/lib/api/stage-api-element.ts(377,58): error TS7006: Parameter 'el' implicitly has an 'any' type.
+src/lib/api/stage-api-types.ts(12,33): error TS2307: Cannot find module '@/lib/dsl' or its corresponding type declarations.
+src/lib/api/stage-api-whiteboard.ts(13,33): error TS2307: Cannot find module '@/lib/dsl' or its corresponding type declarations.
+src/lib/api/stage-api-whiteboard.ts(83,59): error TS7006: Parameter 'wb' implicitly has an 'any' type.
+src/lib/api/stage-api-whiteboard.ts(86,62): error TS7006: Parameter 'wb' implicitly has an 'any' type.
+src/lib/api/stage-api-whiteboard.ts(107,65): error TS7006: Parameter 'wb' implicitly has an 'any' type.
+src/lib/api/stage-api-whiteboard.ts(141,59): error TS7006: Parameter 'wb' implicitly has an 'any' type.
+src/lib/api/stage-api-whiteboard.ts(145,43): error TS7006: Parameter 'el' implicitly has an 'any' type.
+src/lib/api/stage-api-whiteboard.ts(162,59): error TS7006: Parameter 'wb' implicitly has an 'any' type.
+src/lib/api/stage-api-whiteboard.ts(172,62): error TS7006: Parameter 'wb' implicitly has an 'any' type.
+src/lib/api/stage-api-whiteboard.ts(194,59): error TS7006: Parameter 'wb' implicitly has an 'any' type.
+src/lib/api/stage-api-whiteboard.ts(198,49): error TS7006: Parameter 'el' implicitly has an 'any' type.
+src/lib/api/stage-api-whiteboard.ts(200,62): error TS7006: Parameter 'wb' implicitly has an 'any' type.
+src/lib/api/stage-api-whiteboard.ts(222,59): error TS7006: Parameter 'wb' implicitly has an 'any' type.
+src/lib/api/stage-api-whiteboard.ts(226,46): error TS7006: Parameter 'el' implicitly has an 'any' type.
+src/lib/api/stage-api-whiteboard.ts(228,62): error TS7006: Parameter 'wb' implicitly has an 'any' type.
+src/lib/api/stage-api-whiteboard.ts(249,59): error TS7006: Parameter 'wb' implicitly has an 'any' type.
+src/lib/diagram-renderer.ts(115,27): error TS2344: Type 'string | undefined' does not satisfy the constraint 'string | number | symbol'.
+  Type 'undefined' is not assignable to type 'string | number | symbol'.
+src/lib/diagram-renderer.ts(900,46): error TS2538: Type 'undefined' cannot be used as an index type.
+src/lib/diagram-renderer.ts(901,42): error TS2538: Type 'undefined' cannot be used as an index type.
+src/lib/download-utils.ts(530,73): error TS2367: This comparison appears to be unintentional because the types '"Easy" | "Basic" | "Hard" | "Expert"' and '"Medium"' have no overlap.
+src/lib/download-utils.ts(595,39): error TS2345: Argument of type 'readonly [22, 163, 74] | readonly [146, 64, 14] | readonly [91, 33, 182]' is not assignable to parameter of type 'number[]'.
+  The type 'readonly [22, 163, 74]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
+src/lib/download-utils.ts(598,131): error TS2367: This comparison appears to be unintentional because the types '"Hard" | "Expert"' and '"Medium"' have no overlap.
+src/lib/download-utils.ts(599,41): error TS2345: Argument of type 'readonly [22, 163, 74] | readonly [146, 64, 14] | readonly [153, 27, 27]' is not assignable to parameter of type 'number[]'.
+  The type 'readonly [22, 163, 74]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
+src/lib/download-utils.ts(603,39): error TS2345: Argument of type 'readonly [241, 245, 249]' is not assignable to parameter of type 'number[]'.
+  The type 'readonly [241, 245, 249]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
+src/lib/download-utils.ts(608,38): error TS2345: Argument of type 'readonly [241, 245, 249]' is not assignable to parameter of type 'number[]'.
+  The type 'readonly [241, 245, 249]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
+src/lib/download-utils.ts(832,34): error TS2345: Argument of type 'readonly [22, 163, 74]' is not assignable to parameter of type 'number[]'.
+  The type 'readonly [22, 163, 74]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
+src/lib/download-utils.ts(835,31): error TS2345: Argument of type 'readonly [91, 33, 182]' is not assignable to parameter of type 'number[]'.
+  The type 'readonly [91, 33, 182]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
+src/lib/download-utils.ts(838,37): error TS2345: Argument of type 'readonly [17, 120, 55]' is not assignable to parameter of type 'number[]'.
+  The type 'readonly [17, 120, 55]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
+src/lib/download-utils.ts(841,42): error TS2345: Argument of type 'readonly [146, 64, 14]' is not assignable to parameter of type 'number[]'.
+  The type 'readonly [146, 64, 14]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
+src/lib/download-utils.ts(1052,73): error TS2367: This comparison appears to be unintentional because the types '"Easy" | "Basic" | "Hard" | "Expert"' and '"Medium"' have no overlap.
+src/lib/download-utils.ts(1107,157): error TS2367: This comparison appears to be unintentional because the types '"Hard" | "Expert"' and '"Medium"' have no overlap.
+src/lib/download-utils.ts(1445,151): error TS2367: This comparison appears to be unintentional because the types '"Hard" | "Expert"' and '"Medium"' have no overlap.
+src/lib/edit/preload-editor.ts(22,14): error TS2307: Cannot find module '@/app/editor-fonts' or its corresponding type declarations.
+src/lib/edit/scene-edit-bridge.ts(25,33): error TS2307: Cannot find module '@/lib/dsl' or its corresponding type declarations.
+src/lib/edit/scene-edit-bridge.ts(60,54): error TS7006: Parameter 'el' implicitly has an 'any' type.
+src/lib/edit/scene-edit-bridge.ts(61,54): error TS7006: Parameter 'el' implicitly has an 'any' type.
+src/lib/edit/scene-edit-bridge.ts(67,33): error TS7006: Parameter 'el' implicitly has an 'any' type.
+src/lib/edit/scene-edit-bridge.ts(67,37): error TS7006: Parameter 'index' implicitly has an 'any' type.
+src/lib/edit/scene-edit-bridge.ts(74,16): error TS2339: Property 'type' does not exist on type '{}'.
+src/lib/edit/slide-defaults.ts(11,52): error TS2307: Cannot find module '@/lib/dsl' or its corresponding type declarations.
+src/lib/edit/slide-defaults.ts(75,75): error TS7006: Parameter 'element' implicitly has an 'any' type.
+src/lib/edit/slide-defaults.ts(97,46): error TS7006: Parameter 'action' implicitly has an 'any' type.
+src/lib/edit/slide-edit-elements.ts(15,8): error TS2307: Cannot find module '@/lib/dsl' or its corresponding type declarations.
+src/lib/edit/slide-ops.ts(12,40): error TS2307: Cannot find module '@/lib/dsl' or its corresponding type declarations.
+src/lib/edit/slide-ops.ts(164,28): error TS7006: Parameter 'draft' implicitly has an 'any' type.
+src/lib/edit/slide-ops.ts(180,41): error TS7006: Parameter 'el' implicitly has an 'any' type.
+src/lib/edit/slide-ops.ts(191,53): error TS7006: Parameter 'item' implicitly has an 'any' type.
+src/lib/edit/slide-ops.ts(198,40): error TS7006: Parameter 'element' implicitly has an 'any' type.
+src/lib/edit/slide-ops.ts(205,42): error TS7006: Parameter 'el' implicitly has an 'any' type.
+src/lib/edit/slide-ops.ts(207,12): error TS7006: Parameter 'element' implicitly has an 'any' type.
+src/lib/edit/slide-ops.ts(211,14): error TS7006: Parameter 'animation' implicitly has an 'any' type.
+src/lib/edit/slide-ops.ts(218,42): error TS7006: Parameter 'el' implicitly has an 'any' type.
+src/lib/edit/slide-ops.ts(220,12): error TS7006: Parameter 'element' implicitly has an 'any' type.
+src/lib/edit/slide-ops.ts(224,14): error TS7006: Parameter 'animation' implicitly has an 'any' type.
+src/lib/edit/slide-ops.ts(231,12): error TS7006: Parameter 'element' implicitly has an 'any' type.
+src/lib/edit/slide-ops.ts(245,61): error TS7006: Parameter 'el' implicitly has an 'any' type.
+src/lib/edit/slide-ops.ts(258,20): error TS7006: Parameter 'element' implicitly has an 'any' type.
+src/lib/edit/slide-ops.ts(259,17): error TS7006: Parameter 'element' implicitly has an 'any' type.
+src/lib/edit/slide-ops.ts(277,53): error TS7006: Parameter 'item' implicitly has an 'any' type.
+src/lib/edit/slide-ops.ts(285,53): error TS7006: Parameter 'item' implicitly has an 'any' type.
+src/lib/edit/slide-ops.ts(316,51): error TS7006: Parameter 'element' implicitly has an 'any' type.
+src/lib/edit/slide-ops.ts(353,27): error TS7006: Parameter 'element' implicitly has an 'any' type.
+src/lib/export/classroom-zip-types.ts(4,28): error TS2307: Cannot find module '@/lib/dsl' or its corresponding type declarations.
+src/lib/export/latex-to-omml.ts(1,19): error TS2307: Cannot find module 'temml' or its corresponding type declarations.
+src/lib/export/latex-to-omml.ts(2,26): error TS2307: Cannot find module 'mathml2omml' or its corresponding type declarations.
+src/lib/export/svg-path-parser.ts(1,29): error TS7016: Could not find a declaration file for module 'svg-pathdata'. '/home/z/my-project/node_modules/svg-pathdata/lib/SVGPathData.module.js' implicitly has an 'any' type.
+  There are types at '/home/z/my-project/node_modules/svg-pathdata/lib/SVGPathData.d.ts', but this result could not be resolved when respecting package.json "exports". The 'svg-pathdata' library may need to update its package.json or typings.
+src/lib/export/svg-path-parser.ts(27,38): error TS7006: Parameter 'item' implicitly has an 'any' type.
+src/lib/export/svg-path-parser.ts(28,29): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ 1: string; 2: string; 4: string; 8: string; 16: string; 32: string; 64: string; 128: string; 256: string; 512: string; }'.
+src/lib/export/svg-path-parser.ts(55,18): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ 1: string; 2: string; 4: string; 8: string; 16: string; 32: string; 64: string; 128: string; 256: string; 512: string; }'.
+src/lib/export/use-export-classroom.ts(4,24): error TS2307: Cannot find module 'file-saver' or its corresponding type declarations.
+src/lib/export/use-export-classroom.ts(114,46): error TS7006: Parameter 'a' implicitly has an 'any' type.
+src/lib/export/use-export-classroom.ts(114,49): error TS7006: Parameter 'i' implicitly has an 'any' type.
+src/lib/export/use-export-classroom.ts(143,29): error TS7006: Parameter 'id' implicitly has an 'any' type.
+src/lib/export/use-export-classroom.ts(144,32): error TS7006: Parameter 'i' implicitly has an 'any' type.
+src/lib/export/use-export-pptx.ts(5,23): error TS7016: Could not find a declaration file for module 'tinycolor2'. '/home/z/my-project/node_modules/tinycolor2/esm/tinycolor.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/tinycolor2` if it exists or add a new declaration (.d.ts) file containing `declare module 'tinycolor2';`
+src/lib/export/use-export-pptx.ts(6,24): error TS2307: Cannot find module 'file-saver' or its corresponding type declarations.
+src/lib/export/use-export-pptx.ts(717,19): error TS7006: Parameter 'c' implicitly has an 'any' type.
+src/lib/export/use-export-pptx.ts(722,19): error TS7006: Parameter 'c' implicitly has an 'any' type.
+src/lib/export/use-export-pptx.ts(905,21): error TS2339: Property 'addFormula' does not exist on type 'Slide'.
+src/lib/file-extract.ts(178,5): error TS2353: Object literal may only specify known properties, and 'isEvalSupported' does not exist in type 'DocumentInitParameters'.
+src/lib/file-extract.ts(202,12): error TS2345: Argument of type '(item: { str?: string; hasEOL?: boolean; }) => string' is not assignable to parameter of type '(value: TextItem | TextMarkedContent, index: number, array: (TextItem | TextMarkedContent)[]) => string'.
+  Types of parameters 'item' and 'value' are incompatible.
+    Type 'TextItem | TextMarkedContent' is not assignable to type '{ str?: string | undefined; hasEOL?: boolean | undefined; }'.
+      Type 'TextMarkedContent' has no properties in common with type '{ str?: string | undefined; hasEOL?: boolean | undefined; }'.
+src/lib/file-extract.ts(225,29): error TS2345: Argument of type '{ canvasContext: CanvasRenderingContext2D; viewport: PageViewport; }' is not assignable to parameter of type 'RenderParameters'.
+  Property 'canvas' is missing in type '{ canvasContext: CanvasRenderingContext2D; viewport: PageViewport; }' but required in type 'RenderParameters'.
+src/lib/generation/scene-builder.ts(21,40): error TS2307: Cannot find module '@/lib/dsl' or its corresponding type declarations.
+src/lib/generation/scene-generator.ts(43,69): error TS2307: Cannot find module '@/lib/dsl' or its corresponding type declarations.
+src/lib/generation/scene-generator.ts(1482,38): error TS7006: Parameter 'o' implicitly has an 'any' type.
+src/lib/hooks/use-canvas-operations.ts(28,40): error TS2307: Cannot find module '@/lib/dsl' or its corresponding type declarations.
+src/lib/hooks/use-canvas-operations.ts(56,41): error TS7006: Parameter 'el' implicitly has an 'any' type.
+src/lib/hooks/use-canvas-operations.ts(102,54): error TS7006: Parameter 'el' implicitly has an 'any' type.
+src/lib/hooks/use-canvas-operations.ts(109,56): error TS7006: Parameter 'el' implicitly has an 'any' type.
+src/lib/hooks/use-canvas-operations.ts(111,56): error TS7006: Parameter 'el' implicitly has an 'any' type.
+src/lib/hooks/use-canvas-operations.ts(138,40): error TS7006: Parameter 'el' implicitly has an 'any' type.
+src/lib/hooks/use-canvas-operations.ts(170,40): error TS7006: Parameter 'el' implicitly has an 'any' type.
+src/lib/hooks/use-canvas-operations.ts(263,8): error TS7006: Parameter 'el' implicitly has an 'any' type.
+src/lib/hooks/use-canvas-operations.ts(265,58): error TS7006: Parameter 'el' implicitly has an 'any' type.
+src/lib/hooks/use-canvas-operations.ts(274,58): error TS7006: Parameter 'el' implicitly has an 'any' type.
+src/lib/hooks/use-canvas-operations.ts(275,30): error TS7006: Parameter 'el' implicitly has an 'any' type.
+src/lib/hooks/use-canvas-operations.ts(374,50): error TS7006: Parameter 'el' implicitly has an 'any' type.
+src/lib/hooks/use-canvas-operations.ts(422,55): error TS7006: Parameter 'item' implicitly has an 'any' type.
+src/lib/hooks/use-order-element.ts(2,33): error TS2307: Cannot find module '@/lib/dsl' or its corresponding type declarations.
+src/lib/hooks/use-scene-generator.ts(216,6): error TS7006: Parameter 'a' implicitly has an 'any' type.
+src/lib/hooks/use-scene-generator.ts(340,20): error TS7006: Parameter 'a' implicitly has an 'any' type.
+src/lib/hooks/use-scene-generator.ts(341,17): error TS7006: Parameter 'a' implicitly has an 'any' type.
+src/lib/hooks/use-scene-generator.ts(637,24): error TS7006: Parameter 'a' implicitly has an 'any' type.
+src/lib/hooks/use-scene-generator.ts(638,21): error TS7006: Parameter 'a' implicitly has an 'any' type.
+src/lib/hooks/use-slide-background-style.ts(3,38): error TS2307: Cannot find module '@/lib/dsl' or its corresponding type declarations.
+src/lib/hooks/use-slide-background-style.ts(39,32): error TS7006: Parameter 'item' implicitly has an 'any' type.
+src/lib/import/use-import-pptx.ts(12,34): error TS2307: Cannot find module '@openmaic/importer' or its corresponding type declarations.
+src/lib/media/video-manifest.ts(17,38): error TS2307: Cannot find module '@/lib/dsl' or its corresponding type declarations.
+src/lib/molecular-illustrator.ts(503,39): error TS2339: Property 'label' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(503,87): error TS2339: Property 'color' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(503,110): error TS2339: Property 'stroke' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(503,131): error TS2339: Property 'isGPCR' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(509,11): error TS2339: Property 'label' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(510,38): error TS2339: Property 'label' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(510,47): error TS2339: Property 'color' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(512,53): error TS2339: Property 'color' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(525,13): error TS2339: Property 'active' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(526,93): error TS2339: Property 'color' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(527,45): error TS2339: Property 'text' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(527,68): error TS2339: Property 'textColor' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(532,11): error TS2339: Property 'type' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(533,32): error TS2339: Property 'type' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(533,40): error TS2339: Property 'x' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(533,51): error TS2339: Property 'y' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(533,72): error TS2339: Property 'color' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(533,81): error TS2339: Property 'extra' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(535,18): error TS2339: Property 'type' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(536,32): error TS2339: Property 'type' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(536,40): error TS2339: Property 'x' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(536,51): error TS2339: Property 'y' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(536,72): error TS2339: Property 'color' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(536,81): error TS2339: Property 'extra' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(558,44): error TS2339: Property 'color' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(566,45): error TS2339: Property 'label' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(566,93): error TS2339: Property 'color' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(566,116): error TS2339: Property 'stroke' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(566,137): error TS2339: Property 'isGPCR' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(572,11): error TS2339: Property 'label' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(573,38): error TS2339: Property 'label' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(573,47): error TS2339: Property 'color' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(574,72): error TS2339: Property 'color' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(584,85): error TS2339: Property 'stroke' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(594,85): error TS2339: Property 'stroke' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(607,15): error TS2339: Property 'label' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(608,24): error TS2339: Property 'color' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(609,123): error TS2339: Property 'stroke' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(610,103): error TS2339: Property 'label' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(610,191): error TS2339: Property 'label' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(618,14): error TS2339: Property 'label' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(619,95): error TS2339: Property 'color' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(619,182): error TS2339: Property 'color' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(620,152): error TS2339: Property 'label' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(622,69): error TS2339: Property 'color' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(623,43): error TS2339: Property 'description' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(623,65): error TS2339: Property 'color' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(627,91): error TS2339: Property 'stroke' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(628,153): error TS2339: Property 'type' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(644,11): error TS2339: Property 'type' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(644,42): error TS2339: Property 'type' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(644,50): error TS2339: Property 'x' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(644,61): error TS2339: Property 'y' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(644,78): error TS2339: Property 'color' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(644,87): error TS2339: Property 'extra' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(657,21): error TS2339: Property 'isVoltageGated' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(662,44): error TS2339: Property 'color' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(671,107): error TS2339: Property 'stroke' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(673,123): error TS2339: Property 'stroke' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(694,169): error TS2339: Property 'label' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(698,119): error TS2339: Property 'stroke' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(705,37): error TS2339: Property 'voltageLabel' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(744,11): error TS2339: Property 'type' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(745,32): error TS2339: Property 'type' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(745,40): error TS2339: Property 'x' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(745,51): error TS2339: Property 'y' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(745,67): error TS2339: Property 'color' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(745,76): error TS2339: Property 'extra' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(764,44): error TS2339: Property 'color' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(766,22): error TS2339: Property 'state' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(773,131): error TS2339: Property 'stroke' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(775,108): error TS2339: Property 'label' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(775,201): error TS2339: Property 'label' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(789,147): error TS2339: Property 'stroke' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(809,13): error TS2339: Property 'label' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(810,22): error TS2339: Property 'color' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(811,44): error TS2339: Property 'label' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(816,51): error TS2339: Property 'label' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(833,11): error TS2339: Property 'type' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(833,42): error TS2339: Property 'type' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(833,50): error TS2339: Property 'x' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(833,61): error TS2339: Property 'y' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(833,77): error TS2339: Property 'color' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(833,86): error TS2339: Property 'extra' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(847,20): error TS2339: Property 'x' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(849,20): error TS2339: Property 'w' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(850,20): error TS2339: Property 'h' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(851,45): error TS2339: Property 'color' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(859,123): error TS2339: Property 'stroke' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(863,13): error TS2339: Property 'activeSite' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(865,150): error TS2339: Property 'stroke' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(871,118): error TS2339: Property 'label' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(871,213): error TS2339: Property 'label' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(937,11): error TS2339: Property 'type' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(937,42): error TS2339: Property 'type' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(937,50): error TS2339: Property 'x' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(937,61): error TS2339: Property 'y' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(937,77): error TS2339: Property 'color' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(937,86): error TS2339: Property 'extra' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(986,14): error TS2339: Property 'label' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(989,42): error TS2339: Property 'label' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(989,54): error TS2339: Property 'color' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(992,76): error TS2339: Property 'color' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(993,72): error TS2339: Property 'color' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(1027,11): error TS2339: Property 'type' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(1027,42): error TS2339: Property 'type' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(1027,50): error TS2339: Property 'x' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(1027,62): error TS2339: Property 'y' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(1027,74): error TS2339: Property 'color' does not exist on type '{}'.
+src/lib/molecular-illustrator.ts(1027,83): error TS2339: Property 'extra' does not exist on type '{}'.
+src/lib/offline-ai/engine.ts(357,5): error TS2322: Type 'Promise<WllamaInstance | undefined>' is not assignable to type 'Promise<WllamaInstance>'.
+  Type 'WllamaInstance | undefined' is not assignable to type 'WllamaInstance'.
+    Type 'undefined' is not assignable to type 'WllamaInstance'.
+src/lib/offline-ai/engine.ts(392,3): error TS2322: Type 'WllamaInstance | null' is not assignable to type 'WllamaInstance'.
+  Type 'null' is not assignable to type 'WllamaInstance'.
+src/lib/offline-ai/engine.ts(511,13): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+src/lib/offline-ai/engine.ts(511,38): error TS2345: Argument of type 'WllamaAdvancedModelConfig' is not assignable to parameter of type 'WllamaAdvancedModelConfig & Record<string, unknown>'.
+  Type 'WllamaAdvancedModelConfig' is not assignable to type 'Record<string, unknown>'.
+    Index signature for type 'string' is missing in type 'WllamaAdvancedModelConfig'.
+src/lib/offline-ai/engine.ts(594,19): error TS2345: Argument of type 'Uint8Array<ArrayBufferLike>[]' is not assignable to parameter of type 'BlobPart[]'.
+  Type 'Uint8Array<ArrayBufferLike>' is not assignable to type 'BlobPart'.
+    Type 'Uint8Array<ArrayBufferLike>' is not assignable to type 'ArrayBufferView<ArrayBuffer>'.
+      Types of property 'buffer' are incompatible.
+        Type 'ArrayBufferLike' is not assignable to type 'ArrayBuffer'.
+          Type 'SharedArrayBuffer' is missing the following properties from type 'ArrayBuffer': resizable, resize, detached, transfer, transferToFixedLength
+src/lib/orchestration/director-graph.ts(239,5): error TS2345: Argument of type 'LanguageModel | OrchestrationAICallFn' is not assignable to parameter of type 'LanguageModel'.
+  Type 'OrchestrationAICallFn' is not assignable to type 'LanguageModel'.
+src/lib/orchestration/director-graph.ts(339,5): error TS2345: Argument of type 'LanguageModel | OrchestrationAICallFn' is not assignable to parameter of type 'LanguageModel'.
+  Type 'OrchestrationAICallFn' is not assignable to type 'LanguageModel'.
+src/lib/orchestration/registry/store.ts(424,13): error TS2739: Type '{ id: string; name: string; role: string; persona: string; avatar: string; color: string; priority: number; isGenerated: true; voiceConfig: any; voiceDesign: VoiceDesign | undefined; }' is missing the following properties from type 'AgentConfig': allowedActions, createdAt, updatedAt, isDefault
+src/lib/orchestration/registry/store.ts(433,29): error TS2339: Property 'voiceConfig' does not exist on type 'GeneratedAgentRecord'.
+src/lib/orchestration/registry/store.ts(486,9): error TS2322: Type 'Date' is not assignable to type 'number'.
+src/lib/orchestration/summarizers/state-context.ts(144,17): error TS7006: Parameter 'q' implicitly has an 'any' type.
+src/lib/orchestration/summarizers/state-context.ts(144,20): error TS7006: Parameter 'i' implicitly has an 'any' type.
+src/lib/permissions.ts(20,23): error TS18048: 'session.user' is possibly 'undefined'.
+src/lib/permissions.ts(20,36): error TS2339: Property 'role' does not exist on type 'User'.
+src/lib/precache-tabs.ts(89,16): error TS2307: Cannot find module '@/components/medq/tabs copy/group-study' or its corresponding type declarations.
+src/lib/prosemirror/schema/marks.ts(1,23): error TS2307: Cannot find module 'prosemirror-schema-basic' or its corresponding type declarations.
+src/lib/prosemirror/schema/nodes.ts(1,23): error TS2307: Cannot find module 'prosemirror-schema-basic' or its corresponding type declarations.
+src/lib/server/catalog.ts(106,28): error TS2345: Argument of type 'ByokModelConfig[]' is not assignable to parameter of type '{ [k: string]: unknown; id: string; }[]'.
+  Type 'ByokModelConfig' is not assignable to type '{ [k: string]: unknown; id: string; }'.
+    Index signature for type 'string' is missing in type 'ByokModelConfig'.
+src/lib/server/catalog.ts(127,41): error TS2345: Argument of type 'ByokModelConfig[]' is not assignable to parameter of type '{ [k: string]: unknown; id: string; }[]'.
+  Type 'ByokModelConfig' is not assignable to type '{ [k: string]: unknown; id: string; }'.
+    Index signature for type 'string' is missing in type 'ByokModelConfig'.
+src/lib/server/catalog.ts(263,10): error TS2352: Conversion of type '{ [k: string]: unknown; id: string; }[]' to type 'ByokModelConfig[]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Property 'name' is missing in type '{ [k: string]: unknown; id: string; }' but required in type 'ByokModelConfig'.
+src/lib/server/resolve-model.ts(279,7): error TS2322: Type 'ModelInfo | undefined' is not assignable to type 'ModelInfo | null'.
+  Type 'undefined' is not assignable to type 'ModelInfo | null'.
+src/lib/server/resolve-model.ts(320,7): error TS2322: Type 'ModelInfo | undefined' is not assignable to type 'ModelInfo | null'.
+  Type 'undefined' is not assignable to type 'ModelInfo | null'.
+src/lib/store/settings.ts(404,23): error TS2352: Conversion of type '{ 'openai-tts': { apiKey: string; baseUrl: string; enabled: true; }; 'azure-tts': { apiKey: string; baseUrl: string; enabled: true; }; 'glm-tts': { apiKey: string; baseUrl: string; enabled: true; }; 'qwen-tts': { ...; }; ... 5 more ...; 'browser-native-tts': { ...; }; }' to type 'Record<TTSProviderId, { apiKey: string; baseUrl: string; modelId?: string | undefined; enabled: boolean; }>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Property 'zai' is missing in type '{ 'openai-tts': { apiKey: string; baseUrl: string; enabled: true; }; 'azure-tts': { apiKey: string; baseUrl: string; enabled: true; }; 'glm-tts': { apiKey: string; baseUrl: string; enabled: true; }; 'qwen-tts': { ...; }; ... 5 more ...; 'browser-native-tts': { ...; }; }' but required in type 'Record<TTSProviderId, { apiKey: string; baseUrl: string; modelId?: string | undefined; enabled: boolean; }>'.
+src/lib/types/edit.ts(7,36): error TS2307: Cannot find module '@/configs/shapes' or its corresponding type declarations.
+src/lib/types/edit.ts(8,35): error TS2307: Cannot find module '@/configs/lines' or its corresponding type declarations.
+src/lib/types/edit.ts(14,8): error TS2307: Cannot find module '@/lib/dsl' or its corresponding type declarations.
+src/lib/types/generation.ts(26,50): error TS2307: Cannot find module '@/lib/dsl' or its corresponding type declarations.
+src/lib/types/stage.ts(19,73): error TS2307: Cannot find module '@/lib/dsl' or its corresponding type declarations.
+src/lib/types/stage.ts(37,8): error TS2307: Cannot find module '@/lib/dsl' or its corresponding type declarations.
+src/lib/types/stage.ts(42,47): error TS2307: Cannot find module '@/lib/dsl' or its corresponding type declarations.
+src/lib/types/stage.ts(47,39): error TS2307: Cannot find module '@/lib/dsl' or its corresponding type declarations.
+src/lib/types/stage.ts(53,55): error TS2307: Cannot find module '@/lib/dsl' or its corresponding type declarations.
+src/lib/types/stage.ts(57,42): error TS2307: Cannot find module '@/lib/dsl' or its corresponding type declarations.
+src/lib/utils/app-events.ts(27,24): error TS2344: Type 'AppEvents' does not satisfy the constraint 'Record<EventType, unknown>'.
+  Index signature for type 'string' is missing in type 'AppEvents'.
+src/lib/utils/app-events.ts(27,42): error TS2344: Type 'AppEvents' does not satisfy the constraint 'Record<EventType, unknown>'.
+  Index signature for type 'string' is missing in type 'AppEvents'.
+src/lib/utils/element-fingerprint.ts(9,33): error TS2307: Cannot find module '@/lib/dsl' or its corresponding type declarations.
+src/lib/utils/element-fingerprint.ts(46,27): error TS7006: Parameter 'row' implicitly has an 'any' type.
+src/lib/utils/element-fingerprint.ts(46,44): error TS7006: Parameter 'c' implicitly has an 'any' type.
+src/lib/utils/element-fingerprint.ts(59,13): error TS2322: Type 'PPTElement' is not assignable to type 'never'.
+src/lib/utils/element.ts(9,23): error TS7016: Could not find a declaration file for module 'tinycolor2'. '/home/z/my-project/node_modules/tinycolor2/esm/tinycolor.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/tinycolor2` if it exists or add a new declaration (.d.ts) file containing `declare module 'tinycolor2';`
+src/lib/utils/element.ts(11,56): error TS2307: Cannot find module '@/lib/dsl' or its corresponding type declarations.
+src/lib/utils/geometry.ts(9,33): error TS2307: Cannot find module '@/lib/dsl' or its corresponding type declarations.
+src/lib/utils/stage-storage.ts(191,30): error TS2307: Cannot find module '@/lib/dsl' or its corresponding type declarations.
+src/lib/utils/stage-storage.ts(256,56): error TS7006: Parameter 'el' implicitly has an 'any' type.
+src/lib/web-search/index.ts(33,13): error TS2322: Type '"zai"' is not assignable to type 'never'.

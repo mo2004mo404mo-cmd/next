@@ -1,0 +1,39 @@
+services:
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: nextapp
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # prisma-studio:
+  #   image: node:24-bookworm
+  #   restart: unless-stopped
+  #   network_mode: host
+  #   working_dir: /workspace
+  #   depends_on:
+  #     - postgres
+  #   env_file:
+  #     - ./my-app/.env
+  #   volumes:
+  #     - ./my-app:/workspace
+  #   command: ["./node_modules/.bin/prisma", "studio", "--port", "5556", "--browser", "none"]
+
+  # prisma-studio-proxy:
+  #   image: nginx:alpine
+  #   restart: unless-stopped
+  #   network_mode: host
+  #   depends_on:
+  #     - prisma-studio
+  #   extra_hosts:
+  #     - "host.docker.internal:host-gateway"
+  #   volumes:
+  #     - ./prisma-studio-proxy.conf:/etc/nginx/nginx.conf:ro
+
+volumes:
+  postgres_data:

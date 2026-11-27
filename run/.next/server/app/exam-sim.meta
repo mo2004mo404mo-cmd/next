@@ -1,0 +1,37 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/(app)/layout,_N_T_/(app)/exam-sim/layout,_N_T_/(app)/exam-sim/page,_N_T_/exam-sim"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/_index",
+    "/!KGFwcCk/exam-sim/__PAGE__",
+    "/!KGFwcCk/@modal/__DEFAULT__"
+  ],
+  "prefetchHints": {
+    "hints": 0,
+    "slots": {
+      "children": {
+        "hints": 64,
+        "slots": {
+          "children": {
+            "hints": 96,
+            "slots": {
+              "children": {
+                "hints": 160,
+                "slots": null
+              }
+            }
+          },
+          "modal": {
+            "hints": 0,
+            "slots": null
+          }
+        }
+      }
+    }
+  }
+}

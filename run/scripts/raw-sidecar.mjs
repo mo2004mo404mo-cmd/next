@@ -1,0 +1,17 @@
+import { $ } from 'bun';
+const JAR = '/tmp/medq-raw.jar';
+const B = 'http://127.0.0.1:3000';
+const csrfToken = JSON.parse(await $`curl -s -c ${JAR} ${B}/api/auth/csrf`.text()).csrfToken;
+await $`curl -s -b ${JAR} -c ${JAR} -X POST ${B}/api/auth/callback/credentials -H 'Content-Type: application/x-www-form-urlencoded' --data-urlencode csrfToken=${csrfToken} --data-urlencode email=admin@medq.com --data-urlencode password=test123 --data-urlencode callbackUrl=${B}/ -o /dev/null`.quiet();
+const bridge = JSON.parse(await $`curl -s -b ${JAR} -X POST ${B}/api/freellmapi-bridge`.text());
+const T = 'Authorization: Bearer ' + bridge.token;
+console.log('=== /api/keys (first 900) ===');
+console.log((await $`curl -s ${B}/freellmapi/api/keys -H ${T}`.text()).slice(0, 900));
+console.log('\n=== /api/models keys shape ===');
+const mraw = await $`curl -s ${B}/freellmapi/api/models -H ${T}`.text();
+const mj = JSON.parse(mraw);
+console.log('top-level keys:', Object.keys(mj).join(', '));
+const arr = mj.models ?? mj.data ?? [];
+console.log('count:', Array.isArray(arr) ? arr.length : 'n/a');
+if (Array.isArray(arr) && arr.length) console.log('sample:', JSON.stringify(arr.find((x) => JSON.stringify(x).includes('zai')) ?? arr[0]).slice(0, 300));
+process.exit(0);

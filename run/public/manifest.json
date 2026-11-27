@@ -1,0 +1,88 @@
+{
+  "name": "MedQ — Medical Question Generator",
+  "short_name": "MedQ",
+  "description": "Generate visually rich, exam-ready medical questions powered by AI",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "background_color": "#0c0e14",
+  "theme_color": "#00e5a0",
+  "orientation": "portrait-primary",
+  "categories": ["education", "medical", "productivity"],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/mobile.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "MedQ home screen with daily challenge"
+    },
+    {
+      "src": "/screenshots/desktop.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "MedQ dashboard with weekly progress chart"
+    }
+  ],
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "Daily Challenge",
+      "short_name": "Challenge",
+      "description": "Today's medical challenge — keep your streak alive",
+      "url": "/daily-challenge",
+      "icons": [
+        { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }
+      ]
+    },
+    {
+      "name": "Flashcards",
+      "short_name": "Cards",
+      "description": "Review your flashcards",
+      "url": "/flashcards",
+      "icons": [
+        { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }
+      ]
+    },
+    {
+      "name": "Question Bank",
+      "short_name": "Bank",
+      "description": "Browse the medical question bank",
+      "url": "/bank",
+      "icons": [
+        { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }
+      ]
+    },
+    {
+      "name": "Study Groups",
+      "short_name": "Groups",
+      "description": "Your study groups",
+      "url": "/groups",
+      "icons": [
+        { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }
+      ]
+    }
+  ]
+}

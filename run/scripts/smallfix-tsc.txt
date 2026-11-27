@@ -1,0 +1,20 @@
+src/lib/ai/llm.ts(255,12): error TS2314: Generic type 'GenerateTextResult<TOOLS, RUNTIME_CONTEXT, OUTPUT>' requires 3 type argument(s).
+src/lib/ai/llm.ts(260,19): error TS2314: Generic type 'GenerateTextResult<TOOLS, RUNTIME_CONTEXT, OUTPUT>' requires 3 type argument(s).
+src/lib/ai/llm.ts(315,4): error TS2314: Generic type 'StreamTextResult<TOOLS, RUNTIME_CONTEXT, OUTPUT>' requires 3 type argument(s).
+src/lib/ai/ollama-language-model.ts(328,17): error TS2353: Object literal may only specify known properties, and 'noCache' does not exist in type '{ total: number | undefined; text: number | undefined; reasoning: number | undefined; }'.
+src/lib/ai/ollama-language-model.ts(374,13): error TS2353: Object literal may only specify known properties, and 'noCache' does not exist in type '{ total: number | undefined; text: number | undefined; reasoning: number | undefined; }'.
+src/lib/ai/ollama-language-model.ts(458,56): error TS2353: Object literal may only specify known properties, and 'noCache' does not exist in type '{ total: number | undefined; text: number | undefined; reasoning: number | undefined; }'.
+src/lib/ai/ollama-language-model.ts(544,54): error TS2353: Object literal may only specify known properties, and 'noCache' does not exist in type '{ total: number | undefined; text: number | undefined; reasoning: number | undefined; }'.
+src/lib/ai/zai-language-model.ts(106,71): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'URL | Uint8Array<ArrayBufferLike>' is not assignable to parameter of type 'WithImplicitCoercion<string | ArrayLike<number>>'.
+      Type 'URL' is not assignable to type 'WithImplicitCoercion<string | ArrayLike<number>>'.
+src/lib/ai/zai-language-model.ts(189,15): error TS2353: Object literal may only specify known properties, and 'noCache' does not exist in type '{ total: number | undefined; text: number | undefined; reasoning: number | undefined; }'.
+src/lib/ai/zai-language-model.ts(335,19): error TS2353: Object literal may only specify known properties, and 'noCache' does not exist in type '{ total: number | undefined; text: number | undefined; reasoning: number | undefined; }'.
+src/lib/server/resolve-model.ts(279,7): error TS2322: Type 'ModelInfo | undefined' is not assignable to type 'ModelInfo | null'.
+  Type 'undefined' is not assignable to type 'ModelInfo | null'.
+src/lib/server/resolve-model.ts(320,7): error TS2322: Type 'ModelInfo | undefined' is not assignable to type 'ModelInfo | null'.
+  Type 'undefined' is not assignable to type 'ModelInfo | null'.
+src/lib/store/settings.ts(404,23): error TS2352: Conversion of type '{ 'openai-tts': { apiKey: string; baseUrl: string; enabled: true; }; 'azure-tts': { apiKey: string; baseUrl: string; enabled: true; }; 'glm-tts': { apiKey: string; baseUrl: string; enabled: true; }; 'qwen-tts': { ...; }; ... 5 more ...; 'browser-native-tts': { ...; }; }' to type 'Record<TTSProviderId, { apiKey: string; baseUrl: string; modelId?: string | undefined; enabled: boolean; }>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Property 'zai' is missing in type '{ 'openai-tts': { apiKey: string; baseUrl: string; enabled: true; }; 'azure-tts': { apiKey: string; baseUrl: string; enabled: true; }; 'glm-tts': { apiKey: string; baseUrl: string; enabled: true; }; 'qwen-tts': { ...; }; ... 5 more ...; 'browser-native-tts': { ...; }; }' but required in type 'Record<TTSProviderId, { apiKey: string; baseUrl: string; modelId?: string | undefined; enabled: boolean; }>'.
+src/lib/web-search/index.ts(33,13): error TS2322: Type '"zai"' is not assignable to type 'never'.

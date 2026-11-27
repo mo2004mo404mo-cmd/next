@@ -1,0 +1,24 @@
+1:"$Sreact.fragment"
+2:I[61304,[],"ClientPageRoot"]
+3:I[7038,["18409","static/chunks/18409-561e9c4d6f4390a3.js","68298","static/chunks/68298-d599790162114ddc.js","2595","static/chunks/2595-30449bbfa3600518.js","52968","static/chunks/52968-b7927e8671ddb872.js","17933","static/chunks/17933-91d6d8a32145babd.js","24142","static/chunks/app/(app)/osce/page-849deac2711b7d57.js"],"default"]
+6:I[90484,[],"OutletBoundary"]
+7:"$Sreact.suspense"
+b:I[90484,[],"ViewportBoundary"]
+c:I[90484,[],"MetadataBoundary"]
+d:I[86869,[],"IconMark"]
+f:I[57121,[],""]
+10:I[74581,[],""]
+12:I[26883,["18409","static/chunks/18409-561e9c4d6f4390a3.js","68298","static/chunks/68298-d599790162114ddc.js","27173","static/chunks/27173-f8918f7bea74005e.js","2595","static/chunks/2595-30449bbfa3600518.js","31573","static/chunks/31573-0b8d8bd1c1521470.js","53686","static/chunks/53686-63f3aa4a03c0667e.js","98500","static/chunks/98500-66e9d398b7d3a686.js","57932","static/chunks/57932-5846dc303c301ea8.js","81147","static/chunks/81147-5860277bed7ccfc7.js","2040","static/chunks/2040-0357ec8935b38b66.js","2760","static/chunks/2760-fe3ad97ff69ee96f.js","62278","static/chunks/62278-c9b9c1a331500de2.js","13706","static/chunks/13706-0f86547d0b2561b0.js","45738","static/chunks/45738-03380ba5bfbead6a.js","4944","static/chunks/app/(app)/layout-4461651697ef7eb8.js"],"default"]
+a:X
+0:{"buildId":"1qBpmi4JFMxBVgXRipMsz","data":[{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"Component":"$3","serverProvidedParams":{"searchParams":{},"params":{},"promises":["$@4","$@5"]}}],null,["$","$L6",null,{"children":["$","$7",null,{"name":"Next.MetadataOutlet","children":"$@8"}]}]]}],"isPartial":"$@9","staleTime":"$a","varyParams":null},{"rsc":["$","$1","h",{"children":[null,["$","$Lb",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","2",{"name":"theme-color","content":"#00e5a0"}]]}],["$","div",null,{"hidden":true,"children":["$","$Lc",null,{"children":["$","$7",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"OSCE Trainer — MedQ"}],["$","meta","1",{"name":"description","content":"Practice standardized-patient encounters by voice. Take the history, get graded."}],["$","link","2",{"rel":"manifest","href":"/manifest.json"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"MedQ"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","meta","6",{"property":"og:title","content":"OSCE Trainer — MedQ"}],["$","meta","7",{"property":"og:description","content":"Practice standardized-patient encounters by voice. Take the history, get graded."}],["$","meta","8",{"property":"og:image","content":"http://localhost:3000/opengraph-image.jpg?f6a9d396c00f4060"}],["$","meta","9",{"property":"og:image:type","content":"image/jpeg"}],["$","meta","10",{"property":"og:image:width","content":"1024"}],["$","meta","11",{"property":"og:image:height","content":"1024"}],["$","meta","12",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","13",{"name":"twitter:title","content":"OSCE Trainer — MedQ"}],["$","meta","14",{"name":"twitter:description","content":"Practice standardized-patient encounters by voice. Take the history, get graded."}],["$","meta","15",{"name":"twitter:image","content":"http://localhost:3000/opengraph-image.jpg?f6a9d396c00f4060"}],["$","meta","16",{"name":"twitter:image:type","content":"image/jpeg"}],["$","meta","17",{"name":"twitter:image:width","content":"1024"}],["$","meta","18",{"name":"twitter:image:height","content":"1024"}],["$","link","19",{"rel":"icon","href":"/favicon.ico?bfdba65b84bfc68d","type":"image/x-icon","sizes":"192x192"}],["$","link","20",{"rel":"icon","href":"/favicon.ico","sizes":"32x32"}],["$","link","21",{"rel":"icon","href":"/icon.png","sizes":"512x512","type":"image/png"}],["$","link","22",{"rel":"apple-touch-icon","href":"/apple-icon.png","sizes":"180x180","type":"image/png"}],["$","$Ld","23",{}]]}]}]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"isPartial":"$@e","staleTime":"$a","varyParams":null},{"rsc":["$","$1","c",{"children":[null,["$","$Lf",null,{"parallelRouterKey":"children","template":["$","$L10",null,{}]}]]}],"isPartial":"$@11","staleTime":"$a","varyParams":null},{"rsc":["$","$1","c",{"children":[null,["$","$L12",null,{"modal":["$","$Lf",null,{"parallelRouterKey":"modal","template":["$","$L10",null,{}]}],"children":["$","$Lf",null,{"parallelRouterKey":"children","template":["$","$L10",null,{}]}]}]]}],"isPartial":"$@13","staleTime":"$a","varyParams":null}],"isUpgradeableISRFallback":false,"a":"$@14","rootVaryParams":null,"needsRuntimeRequest":"$@15"}
+4:{}
+5:"$0:data:0:rsc:props:children:0:props:serverProvidedParams:params"
+8:null
+15:true
+a:300
+a:C
+14:0
+e:"$undefined"
+11:"$undefined"
+13:"$undefined"
+9:"$undefined"

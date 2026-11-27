@@ -1,0 +1,170 @@
+▲ Next.js 16.3.3
+- Local:         http://localhost:3000
+- Network:       http://10.0.1.225:3000
+✓ Ready in 169ms
+✓ Running next.config.ts took 54ms
+◇ injected env (13) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (13) from .env.local // tip: ◈ secrets for agents [www.dotenvx.com]
+[db.ts] DATABASE_URL resolution: {
+  envUrl_type: 'string',
+  envUrl_starts_postgres: true,
+  fileUrl_set: true,
+  fileUrl_starts_postgres: true,
+  resolved_starts_postgres: true,
+  resolved_preview: 'postgresql://postgres:***@127.0.0.1:5432/nextapp?schema=public'
+}
+◇ injected env (13) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (13) from .env.local // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[2026-11-18T16:07:11.071Z] [INFO] [AgentWorker] Agent worker started (worker-81257-5ae9h4) — job loop 2000ms, scheduler tick 15000ms
+◇ injected env (2) from freellmapi/.env // tip: ⌁ auth for agents [www.vestauth.com]
+Database initialized at /workspaces/next/run/freellmapi/server/data/freeapi.db
+No schemas installed
+[proxy] Not configured — outbound requests go direct.
+[proxy] Bypass for: parallel
+Server running on http://127.0.0.1:38795
+Proxy endpoint: http://127.0.0.1:38795/v1/chat/completions
+[Health] Starting health checker (every ~300s ±20%)
+[catalog-sync] re-applied cached monthly v2026.11.17.f46048 after boot
+[catalog-sync] polling https://api.freellmapi.co every 12h
+[CooldownProbe] starting cooldown-probe recovery (scan every 60s)
+[freellmapi] embedded AI Router listening on 127.0.0.1:38795 (in-process, no separate app — served through the MedQ origin on port 3000)
+◇ injected env (13) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (13) from .env.local // tip: ⌘ enable debugging { debug: true }
+◇ injected env (13) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (13) from .env.local // tip: ◈ secrets for agents [www.dotenvx.com]
+[db.ts] DATABASE_URL resolution: {
+  envUrl_type: 'string',
+  envUrl_starts_postgres: true,
+  fileUrl_set: true,
+  fileUrl_starts_postgres: true,
+  resolved_starts_postgres: true,
+  resolved_preview: 'postgresql://postgres:***@127.0.0.1:5432/nextapp?schema=public'
+}
+⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[Proxy] 16:07:32 start e459f6 a0 custom - gpt-4.1 req=gpt-4.1
+[Proxy] 16:07:34 ok e459f6 a0 custom - gpt-4.1 lat=1619ms in=242 out=31
+[ServedModel] platform=custom requested=gpt-4.1 served=glm-4-plus — upstream reported a different model than the routed id (#534). Response contract unchanged (clients still see the routed model); drift recorded in requests.served_model.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Proxy] 16:31:35 start ffc65a a0 custom - gpt-4.1 req=gpt-4.1
+[Proxy] 16:31:37 ok ffc65a a0 custom - gpt-4.1 lat=1480ms in=242 out=25
+[Health] Checking 26 keys...
+[2026-11-18T16:31:40.727Z] [ERROR] [api] uncaught error in /api/osce/voice: fetch failed TypeError: fetch failed
+[Health] Check complete.
+[2026-11-18T16:31:43.866Z] [ERROR] [api] uncaught error in /api/osce/voice: fetch failed TypeError: fetch failed
+[2026-11-18T16:31:47.179Z] [ERROR] [api] uncaught error in /api/osce/voice: fetch failed TypeError: fetch failed
+[2026-11-18T16:31:48.012Z] [ERROR] [api] uncaught error in /api/osce/voice: fetch failed TypeError: fetch failed
+[2026-11-18T16:32:41.251Z] [ERROR] [api] uncaught error in /api/osce/voice: fetch failed TypeError: fetch failed
+[2026-11-18T16:34:31.311Z] [ERROR] [api] uncaught error in /api/osce/voice: fetch failed TypeError: fetch failed
+[Proxy] 16:34:35 start 87efac a0 custom - gpt-4.1 req=gpt-4.1
+[Proxy] 16:34:36 ok 87efac a0 custom - gpt-4.1 lat=1435ms in=242 out=25
+[2026-11-18T16:34:38.004Z] [ERROR] [api] uncaught error in /api/osce/voice: fetch failed TypeError: fetch failed
+[2026-11-18T16:34:51.125Z] [INFO] [ServerProviderConfig] [ServerProviderConfig] Loaded (server-providers.yml): 1 LLM, 0 TTS, 0 ASR, 0 PDF, 1 Image, 0 Video, 0 WebSearch providers
+[2026-11-18T16:34:52.620Z] [ERROR] [api] uncaught error in /api/livekit/voice-assistant: fetch failed TypeError: fetch failed
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[2026-11-18T16:45:36.971Z] [ERROR] [api] uncaught error in /api/osce/voice: fetch failed TypeError: fetch failed
+[Health] Checking 26 keys...
+[Health] Check complete.
+[2026-11-18T16:48:15.312Z] [ERROR] [api] uncaught error in /api/osce/voice: fetch failed TypeError: fetch failed
+[2026-11-18T16:50:06.906Z] [ERROR] [api] uncaught error in /api/osce/voice: fetch failed TypeError: fetch failed
+[2026-11-18T16:50:08.548Z] [ERROR] [api] uncaught error in /api/osce/voice: fetch failed TypeError: fetch failed
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[2026-11-18T16:57:23.688Z] [ERROR] [api] uncaught error in /api/osce/voice: fetch failed TypeError: fetch failed
+[Proxy] 16:57:36 start d1e31e a0 custom - gpt-4.1 req=gpt-4.1
+[Proxy] 16:57:37 ok d1e31e a0 custom - gpt-4.1 lat=1467ms in=242 out=25
+[2026-11-18T16:57:51.704Z] [ERROR] [api] uncaught error in /api/osce/voice: fetch failed TypeError: fetch failed
+[2026-11-18T16:57:53.272Z] [ERROR] [api] uncaught error in /api/osce/voice: fetch failed TypeError: fetch failed
+[Proxy] 16:58:03 start d69818 a0 custom - gpt-4.1 req=gpt-4.1
+[Proxy] 16:58:04 ok d69818 a0 custom - gpt-4.1 lat=1303ms in=242 out=25
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.
+[Health] Checking 26 keys...
+[Health] Check complete.

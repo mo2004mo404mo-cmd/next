@@ -1,0 +1,11 @@
+1:"$Sreact.fragment"
+2:I[90484,[],"OutletBoundary"]
+3:"$Sreact.suspense"
+6:X
+0:{"buildId":"1qBpmi4JFMxBVgXRipMsz","data":[{"rsc":["$","$1","c",{"children":[null,null,["$","$L2",null,{"children":["$","$3",null,{"name":"Next.MetadataOutlet","children":"$@4"}]}]]}],"isPartial":"$@5","staleTime":"$6","varyParams":null}],"isUpgradeableISRFallback":false,"a":"$@7","rootVaryParams":null,"needsRuntimeRequest":"$@8"}
+4:null
+8:true
+6:300
+6:C
+7:0
+5:"$undefined"

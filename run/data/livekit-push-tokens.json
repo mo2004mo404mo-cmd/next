@@ -1,0 +1,14 @@
+[
+  {
+    "token": "test-push-token-abc123",
+    "platform": "fcm",
+    "userId": "cmvtukkit0000paqwg6wiri0m",
+    "createdAt": "2026-11-07T07:37:32.373Z"
+  },
+  {
+    "token": "test-token-abc",
+    "platform": "fcm",
+    "userId": "cmvtukkit0000paqwg6wiri0m",
+    "createdAt": "2026-11-07T07:47:22.163Z"
+  }
+]

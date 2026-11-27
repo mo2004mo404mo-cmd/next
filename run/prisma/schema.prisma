@@ -1,0 +1,2792 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated"
+}
+
+
+datasource db {
+  provider = "postgresql"
+}
+enum Role {
+  USER
+  MANAGER
+  ADMIN
+}
+
+
+// ── Authentication & User System ──
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  password      String?   // hashed with bcryptjs
+  image         String?
+  bio           String?   @default("")
+  role          String    @default("student") // student, educator, admin
+  medicalSchool String?   @default("")
+  graduationYear Int?
+  specialty     String?   @default("")
+  country       String?   @default("")
+  onboardingCompleted Boolean @default(false)
+  lastActiveAt  DateTime? @default(now())
+  isOnline      Boolean   @default(false)
+  // ── Per-user default AI model ──
+  // Model string in "providerId:modelId" format (e.g. "openai:gpt-4o", "ollama:llama3.3").
+  // When null, falls back to DEFAULT_MODEL env var → auto-detect (Ollama → env keys → ZAI).
+  // Set via the ModelPicker UI. See /api/user/default-model.
+  defaultModel  String?
+  // ── Admin moderation fields ──
+  // status: "active" | "suspended" | "banned"
+  // - active: normal account
+  // - suspended: temporary lock, reinstated automatically when suspendedUntil passes
+  // - banned: permanent lock, requires admin action to lift
+  status          String    @default("active")
+  suspendedUntil  DateTime?
+  suspendedReason String?
+  bannedAt        DateTime?
+  bannedReason    String?
+  passwordResetAt DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts       Account[]
+  sessions       Session[]
+  subscription   Subscription?
+  creditWallet   CreditWallet?
+  usageRecords   UsageRecord[]
+  paymentOrders  PaymentOrder[]
+  bookmarks      Bookmark[]
+  notes          QuestionNote[]
+  studySessions  StudySession[]
+  streaks        StudyStreak[]
+  achievements   UserAchievement[]
+  flashcardProgress FlashcardProgress[]
+  tutorMessages  TutorMessage[]
+  collections    Collection[]
+  examAttempts   ExamAttempt[]
+  questionAttempts QuestionAttempt[]
+  dailyChallenges DailyChallengeAttempt[]
+  studyPlans     StudyPlan[]
+  caseAttempts   CaseAttempt[]
+  boardPrepProfiles BoardPrepProfile[]
+  adImpressions  AdImpression[]
+  adRewards      AdReward[]
+  sentFriendRequests     Friendship[]   @relation("SentRequests")
+  receivedFriendRequests Friendship[]   @relation("ReceivedRequests")
+  blockedUsers           BlockedUser[]  @relation("BlockedUsers")
+  blockedBy              BlockedUser[]  @relation("BlockedBy")
+  challengeChallenger    UserChallenge[] @relation("Challenger")
+  challengeChallenged    UserChallenge[] @relation("Challenged")
+  chatRoomMembers        ChatRoomMember[]
+  chatMessages           ChatMessage[]
+  groupMemberships       GroupMember[]
+  posts                  Post[]
+  comments               Comment[]
+  postLikes              PostLike[]
+  notifications          Notification[]
+  pushSubscriptions      PushSubscription[]
+  osceSessions           OsceSession[]
+  discussions            QuestionDiscussion[]
+  questionReports        QuestionReport[]
+  qotdAttempts           QOTDAttempt[]
+  speedQuizSessions      SpeedQuizSession[]
+  vignetteAttempts       VignetteAttempt[]
+  quickNotes             QuickNote[]
+  guidelineBookmarks     GuidelineBookmark[]
+  procedureProgress      ProcedureProgress[]
+  procedureNotes         ProcedureNote[]
+  procedureBookmarks     ProcedureBookmark[]
+  cmeCredits             CMECredit[]
+  apiKeys                UserApiKey[]
+  groupLectures          GroupLecture[]
+  groupQuestions         GroupQuestion[]
+  groupQuizAttempts      GroupQuizAttempt[]
+  groupAdPolls           GroupAdPoll[]
+  groupAdPollVotes       GroupAdPollVote[]
+  groupAdRevenueShares   GroupAdRevenueShare[]
+  groupLectureProgress   GroupLectureProgress[]
+  groupQuestionBookmarks GroupQuestionBookmark[]
+  groupQuestionComments  GroupQuestionComment[]
+  groupAdPollComments    GroupAdPollComment[]
+  groupFlashcardDecks    GroupFlashcardDeck[]
+  groupFlashcards        GroupFlashcard[]
+  groupFlashcardReviews  GroupFlashcardReview[]
+  // Agent v2 hybrid memory
+  episodicMemories       EpisodicMemory[]
+  conversationSummaries  ConversationSummary[]
+  // Mock-backend wiring: trivia + ECG attempts
+  triviaAttempts         TriviaAttempt[]
+  ecgAttempts            EcgAttempt[]
+  flashcardArenaResults  FlashcardArenaResult[]
+  // Whiteboard Studio — saved drawings/canvases
+  whiteboardDocuments    WhiteboardDocument[]
+  // Admin audit log entries authored by this user (admin actions)
+  auditLogs              AuditLog[]
+  // ── Security: device fingerprints + security events ──
+  // Each login records a DeviceFingerprint; anomalous activity writes
+  // to SecurityEvent. See src/lib/security/* and Settings → Security.
+  deviceFingerprints     DeviceFingerprint[]
+  securityEvents         SecurityEvent[]
+  // Realtime voice-to-voice keys (OpenAI Realtime / Gemini Live)
+  realtimeVoiceKeys      RealtimeVoiceKey[]
+}
+
+// ── BYOK (Bring Your Own Key) — app-wide, server-side encrypted ──
+// User-supplied AI provider API keys. Stored AES-256-GCM encrypted server-side
+// (see src/lib/server/byok-crypto.ts) so they:
+//   - Sync across the user's devices (server-side storage, NOT localStorage).
+//   - Never appear in the browser's localStorage/IndexedDB (XSS-safe).
+//   - Are scoped per user (one key per provider per user).
+// Resolution priority at AI request time (see src/lib/server/resolve-model.ts):
+//   1. Server-managed provider (operator's key in env/YAML) — wins.
+//   2. Client-sent key (x-api-key header) — legacy classroom BYOK.
+//   3. User-saved BYOK key (this table) — syncs across devices.
+//   4. Nothing → 401/error.
+model UserApiKey {
+  id             String   @id @default(cuid())
+  userId         String
+  // Provider identifier matching `PROVIDERS` in src/lib/ai/providers.ts
+  // (e.g. "openai", "anthropic", "google", "glm", "deepseek", "qwen", …).
+  providerId     String
+  // AES-256-GCM ciphertext (base64). Plaintext key NEVER stored.
+  encryptedKey   String
+  // GCM initialization vector (base64, 12 bytes).
+  iv             String
+  // GCM auth tag (base64, 16 bytes).
+  authTag        String
+  // Optional per-provider override (e.g. for OpenAI-compatible proxies).
+  baseUrl        String?
+  // Optional user-facing label ("Work key", "Personal key"…).
+  label          String?
+  // JSON-encoded per-provider model catalog overrides. Shape:
+  //   Array<{ id: string; name: string;
+  //           capabilities?: { vision?: boolean; tools?: boolean; streaming?: boolean };
+  //           contextWindow?: number; outputWindow?: number }>
+  // When null/empty, the UI falls back to auto-discovered models from /models.
+  // Stored as a JSON string because SQLite has no native JSON column type.
+  modelsConfig   String?
+  // Soft toggle so users can keep a key on file without using it.
+  enabled        Boolean  @default(true)
+  // ── Multi-endpoint BYOK ──
+  // A user may save SEVERAL endpoints for the SAME provider (e.g. an
+  // OpenAI key plus a corporate-gateway key, or a remote Ollama plus a
+  // local Ollama). Each row is one endpoint = (key?, baseUrl?, label,
+  // enabled, priority). The resolver picks one endpoint per request
+  // (round-robin across enabled rows ordered by priority) and callChat
+  // fails over to the next endpoint when one fails. Lower priority
+  // value = tried first.
+  priority       Int      @default(0)
+  lastUsedAt     DateTime?
+  lastVerifiedAt DateTime?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // NOTE: the old @@unique([userId, providerId]) was REMOVED so multiple
+  // endpoints per provider can coexist. Rows are addressed by row `id`.
+  @@index([userId, providerId])
+  @@index([userId])
+}
+
+// Retained legacy credentials from the retired realtime voice-call feature.
+// The app no longer reads or writes these rows; keep the model to avoid
+// dropping user data as part of the call-provider migration.
+model RealtimeVoiceKey {
+  id         String   @id @default(cuid())
+  userId     String
+  // 'openai' | 'google'
+  provider   String
+  // AES-256-GCM ciphertext (base64). Plaintext key NEVER stored.
+  ciphertext String
+  // GCM initialization vector (base64, 12 bytes).
+  iv         String
+  // GCM auth tag (base64, 16 bytes).
+  authTag    String
+  // Optional user-facing label ("Work key"…).
+  label      String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, provider])
+  @@index([userId])
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String  @id @default(cuid())
+  sessionToken String  @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ── Questions & Exams ──
+
+model Question {
+  id                     String   @id @default(cuid())
+  type                   String   @default("mcq")     // mcq, tf, short
+  text                   String   @default("")
+  options                String   @default("[]")       // JSON array of strings
+  answer                 String   @default("")
+  explanation            String   @default("")
+  mnemonic               String   @default("")
+  clinicalPearl          String   @default("")
+  distractorAnalysis     String   @default("")
+  difficulty             String   @default("Moderate")   // Easy(1), Basic(2), Moderate(3), Hard(4), Expert(5) — legacy: Medium→Moderate
+  system                 String   @default("")
+  topic                  String   @default("")
+  tags                   String   @default("[]")       // JSON array of strings
+  isAIGenerated          Boolean  @default(false)
+  illustrationDescription String  @default("")        // AI-generated description of what the illustration should show
+  organInvolvement       String  @default("")        // HTML: organs/structures involved with roles
+  mechanismDiagram       String  @default("")        // HTML: mechanism of action flow diagram
+  visualSummary          String  @default("")        // HTML: compact visual summary card
+  diagramSpec            String  @default("")        // JSON: DiagramRenderer spec for interactive pathway diagrams
+  molecularScenes        String  @default("")        // JSON: MolecularIllustrator spec for molecular mechanism scenes
+  sources                String  @default("[]")      // JSON: array of {type, title} for source citations
+  imageUrl               String   @default("")
+  audioUrl               String   @default("")
+  videoUrl               String   @default("")
+  modelUrl               String   @default("")     // 3D model embed URL (e.g. Sketchfab) — "explore the model" questions
+  videoTaskId            String   @default("")
+  // ── Stage 3: timestamped video citation (mediaTimeSec deep-link) ──
+  videoSourceId          String   @default("")   // KnowledgeSource id of the cited video
+  videoSceneStart        Float    @default(0)    // cited scene span start (seconds)
+  videoSceneEnd          Float    @default(0)    // cited scene span end (seconds)
+  // ── Enhanced media metadata (agent pipeline) ──
+  labPanel               String   @default("[]")    // JSON: [{name, rows:[{test, value, unit, flag}]}] — rendered as styled table
+  pcgSpec                String   @default("")     // JSON: {phase, shape} phonocardiogram spec synced to the audio player
+  hotspots               String   @default("[]")    // JSON: [{label, x, y}] percentage pins on the image — clicking selects the option
+  structureTags          String   @default("[]")    // JSON: [{letter, name}] clickable structure chips beside the 3D model
+  // ── USMLE-style blueprint tagging ──
+  blueprintOrgan         String   @default("")     // organ system (Cardiovascular, Respiratory...)
+  blueprintTask          String   @default("")     // task/competency (Diagnosis, Mechanism, Management...)
+  // ── RAG provenance: which knowledge-library sources grounded this question ──
+  knowledgeSourceIds     String   @default("[]")   // JSON array of KnowledgeSource ids used for grounding
+  // ── Advanced citations: chunk-level provenance for "highlight in the source" ──
+  // JSON array of {sourceId, chunkId, documentId, title, fileKind, quote} —
+  // each entry links the question to the EXACT passage that grounded it, so
+  // the UI can open the source viewer scrolled to + highlighting that passage.
+  citations              String   @default("[]")
+  // ── Medical accuracy review pass ──
+  reviewStatus           String   @default("pending") // pending | approved | flagged
+  reviewNotes            String   @default("")     // JSON: reviewer verdict details
+  // ── Adaptive difficulty calibration (computed from real attempts) ──
+  difficultyP            Float    @default(-1)     // p-value: proportion of users answering correctly (-1 = uncalibrated)
+  discrimination         Float    @default(-1)     // point-biserial discrimination (-1 = uncalibrated)
+  attemptsCount          Int      @default(0)
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  examQuestions          ExamQuestion[]
+  bookmarks              Bookmark[]
+  notes                  QuestionNote[]
+  flashcardProgress      FlashcardProgress[]
+  collectionItems        CollectionItem[]
+  discussions            QuestionDiscussion[]
+  reports                QuestionReport[]
+  questionAttempts       QuestionAttempt[]
+
+  @@index([system])
+  @@index([difficulty])
+  @@index([createdAt])
+  @@index([system, difficulty])
+  @@index([blueprintOrgan])
+  @@index([reviewStatus])
+}
+
+model Exam {
+  id          String   @id @default(cuid())
+  title       String   @default("")
+  description String   @default("")
+  duration    Int      @default(30)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  questions ExamQuestion[]
+  attempts  ExamAttempt[]
+}
+
+model ExamQuestion {
+  id         String  @id @default(cuid())
+  examId     String
+  questionId String
+  order      Int     @default(0)
+
+  exam     Exam     @relation(fields: [examId], references: [id], onDelete: Cascade)
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([examId, questionId])
+}
+
+model ExamAttempt {
+  id             String   @id @default(cuid())
+  userId         String
+  examId         String
+  score          Int      @default(0)
+  totalQuestions Int      @default(0)
+  answers        String   @default("{}")  // JSON object
+  completedAt    DateTime @default(now())
+
+  exam  Exam @relation(fields: [examId], references: [id], onDelete: Cascade)
+  user  User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, completedAt])
+  @@index([examId])
+}
+
+model MediaSearchCache {
+  id          String   @id @default(cuid())
+  cacheKey    String   @unique // "<kind>:<normalized query>"
+  kind        String   @default("sound") // sound | model | image | video
+  resultJson  String   @default("null") // JSON of the found asset (or null = known-miss)
+  hits        Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  expiresAt   DateTime
+
+  @@index([kind])
+  @@index([expiresAt])
+}
+
+model QuestionAttempt {
+  id             String   @id @default(cuid())
+  userId         String
+  questionId     String
+  selectedAnswer String   @default("")
+  isCorrect      Boolean  @default(false)
+  confidence     String   @default("")   // sure | probably | guessing
+  timeSpent      Int      @default(0)   // seconds
+  mode           String   @default("bank") // bank | exam | review | weakness | smart
+  createdAt      DateTime @default(now())
+
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([questionId])
+  @@index([userId, isCorrect])
+  @@index([mode])
+}
+
+model Content {
+  id          String   @id @default(cuid())
+  title       String   @default("")
+  topic       String   @default("")
+  type        String   @default("story")   // story, article, poem, quote, presentation, question
+  tone        String   @default("inspirational") // inspirational, educational, dramatic, humorous, reflective
+  body        String   @default("")
+  summary     String   @default("")
+  metadata    String   @default("{}")      // JSON: question-specific data
+  imageUrl    String   @default("")
+  videoUrl    String   @default("")
+  audioUrl    String   @default("")
+  videoTaskId String   @default("")
+  hasImage    Boolean  @default(false)
+  hasVideo    Boolean  @default(false)
+  hasAudio    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Bookmark {
+  id         String   @id @default(cuid())
+  userId     String
+  questionId String
+  createdAt  DateTime @default(now())
+
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, questionId])
+}
+
+model QuestionNote {
+  id         String   @id @default(cuid())
+  userId     String
+  questionId String
+  note       String   @default("")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, questionId])
+}
+
+model StudySession {
+  id           String   @id @default(cuid())
+  userId       String
+  type         String   @default("flashcard") // flashcard, exam, quiz, bank-review, tutor
+  questionsStudied Int  @default(0)
+  correctAnswers  Int  @default(0)
+  totalTimeSpent  Int  @default(0) // seconds
+  metadata     String   @default("{}") // JSON: additional data
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+model StudyStreak {
+  id          String   @id @default(cuid())
+  userId      String
+  date        String   @default("") // YYYY-MM-DD
+  questionsStudied Int @default(0)
+  timeSpent   Int      @default(0) // seconds
+  xpEarned    Int      @default(0)
+  streakFreezes Int    @default(0) // number of streak freezes available
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+}
+
+model Achievement {
+  id          String   @id @default(cuid())
+  type        String   @default("") // first_question, streak_7, streak_30, quiz_master, etc.
+  title       String   @default("")
+  description String   @default("")
+  icon        String   @default("") // emoji or icon name
+
+  userAchievements UserAchievement[]
+
+  @@unique([type])
+}
+
+model UserAchievement {
+  id          String   @id @default(cuid())
+  userId      String
+  achievementType String
+  unlockedAt  DateTime @default(now())
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement Achievement @relation(fields: [achievementType], references: [type], onDelete: Cascade)
+
+  @@unique([userId, achievementType])
+}
+
+model FlashcardProgress {
+  id              String   @id @default(cuid())
+  userId          String
+  questionId      String
+  interval        Int      @default(1)  // days until next review
+  repetition      Int      @default(0)  // number of successful reviews
+  efactor         Float    @default(2.5) // easiness factor (SM-2 algorithm)
+  nextReview      DateTime @default(now())
+  lastReview      DateTime @default(now())
+  // ── FSRS-5 state (upgraded scheduler; legacy SM-2 fields kept for compat) ──
+  stability       Float    @default(0)  // FSRS memory stability (days)
+  fsrsDifficulty  Float    @default(5)  // FSRS difficulty (1-10)
+  reps            Int      @default(0)  // FSRS total repetitions
+  lapses          Int      @default(0)  // FSRS lapses (forgot count)
+  lastRating      Int      @default(0)  // last rating 1-4 (again/hard/good/easy)
+  state           Int      @default(0)  // 0 new, 1 learning, 2 review, 3 relearning
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, questionId])
+}
+
+model TutorMessage {
+  id        String   @id @default(cuid())
+  userId    String
+  role      String   @default("user") // user, assistant
+  content   String   @default("")
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+model Collection {
+  id          String   @id @default(cuid())
+  userId      String
+  name        String   @default("")
+  description String   @default("")
+  color       String   @default("#00e5a0") // accent color
+  icon        String   @default("📚") // emoji icon
+  isPublic    Boolean  @default(false)
+  shareCode   String   @default("") // unique share code for public collections
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  items CollectionItem[]
+  user  User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model CollectionItem {
+  id           String   @id @default(cuid())
+  collectionId String
+  questionId   String
+  order        Int      @default(0)
+  addedAt      DateTime @default(now())
+
+  collection Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  question   Question   @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([collectionId, questionId])
+}
+
+model DailyChallenge {
+  id              String   @id @default(cuid())
+  date            String   @default("") // YYYY-MM-DD
+  questionIds     String   @default("[]") // JSON array of question IDs
+  theme           String   @default("") // e.g. "Cardiovascular", "Pharmacology"
+  difficulty      String   @default("Mixed")
+  totalQuestions  Int      @default(5)
+  createdAt       DateTime @default(now())
+
+  @@unique([date])
+}
+
+model DailyChallengeAttempt {
+  id           String   @id @default(cuid())
+  userId       String
+  challengeDate String  @default("") // YYYY-MM-DD
+  score        Int      @default(0)
+  totalQuestions Int    @default(0)
+  answers      String   @default("{}") // JSON
+  timeSpent    Int      @default(0) // seconds
+  completedAt  DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, challengeDate])
+}
+
+// ── Study Planner ──
+
+model StudyPlan {
+  id              String   @id @default(cuid())
+  userId          String
+  name            String   @default("")
+  examDate        DateTime
+  examType        String   @default("") // "final", "usmle_step1", "usmle_step2", "plab", "custom"
+  hoursPerDay     Float    @default(2.0)
+  daysPerWeek     Int      @default(5)
+  topics          String   @default("[]")  // JSON: array of system/topic strings
+  status          String   @default("active") // active, completed, abandoned
+  adherenceScore  Float    @default(0)     // 0-100
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  dailyBlocks     PlanDailyBlock[]
+  user            User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model PlanDailyBlock {
+  id          String   @id @default(cuid())
+  planId      String
+  date        String   @default("") // YYYY-MM-DD
+  tasks       String   @default("[]")  // JSON: array of PlanTask objects
+  completedAt DateTime?
+
+  plan        StudyPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  @@unique([planId, date])
+}
+
+// ── Clinical Case Simulator ──
+
+model ClinicalCase {
+  id            String   @id @default(cuid())
+  title         String   @default("")
+  system        String   @default("")
+  topic         String   @default("")
+  difficulty    String   @default("Medium")
+  caseType      String   @default("diagnostic") // diagnostic, management, emergency
+  patientInfo   String   @default("{}")  // JSON: { age, sex, chiefComplaint, presentingHistory }
+  stages        String   @default("[]")  // JSON: array of CaseStage objects
+  isAIGenerated Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  attempts      CaseAttempt[]
+}
+
+model CaseAttempt {
+  id          String   @id @default(cuid())
+  userId      String
+  caseId      String
+  decisions   String   @default("[]")  // JSON: array of { stageId, selectedOption, correct, timestamp }
+  score       Int      @default(0)     // 0-100
+  completedAt DateTime @default(now())
+
+  case        ClinicalCase @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  user        User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([caseId])
+}
+
+// ── Knowledge Map ──
+
+model ConceptNode {
+  id          String   @id @default(cuid())
+  name        String
+  system      String
+  type        String   @default("disease") // disease, drug, procedure, anatomy, finding
+  description String   @default("")
+  aliases     String   @default("[]") // JSON: alternate names
+  createdAt   DateTime @default(now())
+
+  fromEdges   ConceptEdge[] @relation("FromConcept")
+  toEdges     ConceptEdge[] @relation("ToConcept")
+}
+
+model ConceptEdge {
+  id           String   @id @default(cuid())
+  fromId       String
+  toId         String
+  relationship String   // "causes", "treats", "diagnoses", "complicates", "differential", "risk_factor"
+  strength     Int      @default(1) // 1-5
+  description  String   @default("")
+
+  fromConcept  ConceptNode @relation("FromConcept", fields: [fromId], references: [id], onDelete: Cascade)
+  toConcept    ConceptNode @relation("ToConcept", fields: [toId], references: [id], onDelete: Cascade)
+}
+
+// ── Board Prep Mode ──
+
+model BoardPrepProfile {
+  id            String   @id @default(cuid())
+  userId        String
+  examType      String   @default("usmle_step1") // usmle_step1, usmle_step2, plab1, fmge, custom
+  targetDate    DateTime?
+  targetScore   Int?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  sessions      BoardPrepSession[]
+  user          User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model BoardPrepSession {
+  id            String   @id @default(cuid())
+  profileId     String
+  examType      String   @default("usmle_step1")
+  mode          String   @default("practice") // practice, mock
+  totalBlocks   Int      @default(7)
+  questionsPerBlock Int  @default(40)
+  timePerBlock  Int      @default(60) // minutes
+  status        String   @default("created") // created, in_progress, completed
+  answers       String   @default("{}")  // JSON
+  blockTimes    String   @default("{}")  // JSON
+  questionBlocks String  @default("[]") // JSON
+  markedForReview String @default("{}") // JSON
+  score         Int      @default(0)
+  startedAt     DateTime?
+  completedAt   DateTime?
+  createdAt     DateTime @default(now())
+
+  profile       BoardPrepProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+}
+
+// ── Video Lectures ──
+
+model Lecture {
+  id          String   @id @default(cuid())
+  title       String   @default("")
+  system      String   @default("")
+  topic       String   @default("")
+  slides      String   @default("[]")  // JSON
+  slideCount  Int      @default(0)
+  duration    Int      @default(0)
+  status      String   @default("generating") // generating, ready, failed
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ── Freemium & Subscription System ──
+
+model Subscription {
+  id                     String   @id @default(cuid())
+  userId                 String   @unique
+  tier                   String   @default("free")  // free, premium, pro
+  status                 String   @default("active") // active, past_due, cancelled, expired
+  currentPeriodEnd       DateTime @default(now())
+  // ── Stripe billing linkage ──
+  // Empty when subscription was set manually (admin grant, mock checkout, or
+  // the operator hasn't configured STRIPE_SECRET_KEY). Populated when the
+  // upgrade flowed through Stripe Checkout + Webhook.
+  stripeCustomerId       String   @default("")
+  stripeSubscriptionId   String   @default("")
+  stripePriceId          String   @default("")
+  cancelAtPeriodEnd      Boolean  @default(false)
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ── Payment Orders ──
+// One row per checkout attempt (subscription upgrade OR credit package
+// purchase). Tracks the lifecycle: pending → paid → (refunded). The
+// `kind` field discriminates between the two flows so the webhook can
+// route to the correct fulfillment logic.
+model PaymentOrder {
+  id                      String    @id @default(cuid())
+  userId                  String
+  // "subscription" | "credits"
+  kind                    String    @default("")
+  // For kind=subscription: tier id ("premium"|"pro"). For kind=credits: package id.
+  referenceId             String    @default("")
+  amountUsd               Float     @default(0.0)
+  // Number of credits granted when this order is paid (0 for subscription orders
+  // unless the tier grants a monthly credit allowance — handled separately).
+  credits                 Int       @default(0)
+  // "pending" | "paid" | "failed" | "refunded"
+  status                  String    @default("pending")
+  stripeCheckoutSessionId String    @default("")
+  stripePaymentIntentId   String    @default("")
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+  paidAt                  DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UsageRecord {
+  id        String   @id @default(cuid())
+  userId    String
+  date      String   @default("") // YYYY-MM-DD
+  category  String   @default("") // ai_generations, tutor_messages, video_lessons, etc.
+  count     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date, category])
+}
+
+// ── AI call telemetry (BYOK Analytics) ──
+// One row per completed callChat()/streamChat() attempt that reached the LLM
+// (success OR error). Powers the Settings → AI Providers → Analytics tab:
+// stat cards (requests, success rate, tokens, latency), by-provider /
+// by-model breakdowns, and the recent-calls table. Written fire-and-forget
+// from src/lib/server/ai-call-log.ts — never on the request critical path
+// and never allowed to throw into the caller.
+model AiCallLog {
+  id            String   @id @default(cuid())
+  userId        String?
+  providerId    String   // "openai", "ollama", "zai", …
+  modelId       String   // "gpt-4o", "zai-llm", …
+  stage         String?  // explain | chat | tutor | generate | import-extend …
+  status        String   // "success" | "error"
+  inputTokens   Int      @default(0)
+  outputTokens  Int      @default(0)
+  latencyMs     Int?
+  error         String?  // first 500 chars of the error message
+  endpointRowId String?  // UserApiKey row used (BYOK attribution)
+  createdAt     DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([userId, status, createdAt])
+  @@index([createdAt])
+}
+
+// ── Credit & Coin System ──
+
+model CreditWallet {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  balance       Int      @default(0)
+  totalEarned   Int      @default(0)
+  totalSpent    Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model CreditTransaction {
+  id          String   @id @default(cuid())
+  userId      String
+  type        String   @default("")  // earn_ad, earn_daily, earn_streak, spend_feature, spend_hint, admin_grant
+  amount      Int      @default(0)
+  balance     Int      @default(0)
+  category    String   @default("")
+  description String   @default("")
+  referenceId String   @default("")
+  createdAt   DateTime @default(now())
+}
+
+// ── Professional Ad System ──
+
+model AdCampaign {
+  id          String   @id @default(cuid())
+  name        String   @default("")
+  advertiser  String   @default("")
+  adType      String   @default("banner")  // banner, interstitial, rewarded, native
+  placement   String   @default("")        // dashboard_top, tab_bottom, quiz_result, tab_switch
+  status      String   @default("active")
+  cpm         Float    @default(0.0)
+  cpc         Float    @default(0.0)
+  targetUrl   String   @default("")
+  imageUrl    String   @default("")
+  title       String   @default("")
+  subtitle    String   @default("")
+  ctaText     String   @default("")
+  priority    Int      @default(0)
+  impressions Int      @default(0)
+  clicks      Int      @default(0)
+  revenue     Float    @default(0.0)
+  startDate   DateTime @default(now())
+  endDate     DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model AdImpression {
+  id          String   @id @default(cuid())
+  userId      String?
+  campaignId  String   @default("")
+  adType      String   @default("")
+  placement   String   @default("")
+  clicked     Boolean  @default(false)
+  completed   Boolean  @default(false)
+  rewarded    Boolean  @default(false)
+  revenue     Float    @default(0.0)
+  createdAt   DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model AdReward {
+  id            String   @id @default(cuid())
+  userId        String
+  type          String   @default("") // extra_generation, premium_hour, double_xp, credits
+  creditsEarned Int      @default(0)
+  used          Boolean  @default(false)
+  usedAt        DateTime?
+  expiresAt     DateTime?
+  createdAt     DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ── Revenue Tracking ──
+
+model RevenueRecord {
+  id              String   @id @default(cuid())
+  date            String   @default("") // YYYY-MM-DD
+  adImpressions   Int      @default(0)
+  adClicks        Int      @default(0)
+  adRevenue       Float    @default(0.0)
+  subscriptionRev Float    @default(0.0)
+  totalRevenue    Float    @default(0.0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([date])
+}
+
+// ── Friend System ──
+
+model Friendship {
+  id          String   @id @default(cuid())
+  senderId    String
+  receiverId  String
+  status      String   @default("pending") // pending, accepted, declined, blocked
+  note        String   @default("")        // optional message when sending request
+  isFavorite  Boolean  @default(false)      // pinned/favorite friend
+  nickname    String   @default("")        // custom nickname for friend
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  sender   User @relation("SentRequests", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver User @relation("ReceivedRequests", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@unique([senderId, receiverId])
+}
+
+// ── Blocked Users ──
+
+model BlockedUser {
+  id          String   @id @default(cuid())
+  blockerId   String
+  blockedId   String
+  createdAt   DateTime @default(now())
+
+  blocker User @relation("BlockedUsers", fields: [blockerId], references: [id], onDelete: Cascade)
+  blocked User @relation("BlockedBy", fields: [blockedId], references: [id], onDelete: Cascade)
+
+  @@unique([blockerId, blockedId])
+}
+
+// ── Challenge System ──
+
+model UserChallenge {
+  id              String   @id @default(cuid())
+  challengerId    String
+  challengedId    String
+  questionIds     String   @default("[]") // JSON array of question IDs
+  totalQuestions  Int      @default(5)
+  challengerScore Int      @default(-1)   // -1 = not attempted yet
+  challengedScore Int      @default(-1)
+  challengerTime  Int      @default(0)    // seconds taken
+  challengedTime  Int      @default(0)
+  challengerAnswers String @default("{}") // JSON
+  challengedAnswers String @default("{}") // JSON
+  status          String   @default("pending") // pending, active, completed, expired
+  winnerId        String?
+  topic           String   @default("Mixed")
+  difficulty      String   @default("Mixed")
+  expiresAt       DateTime @default(now())
+  completedAt     DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  challenger User @relation("Challenger", fields: [challengerId], references: [id], onDelete: Cascade)
+  challenged User @relation("Challenged", fields: [challengedId], references: [id], onDelete: Cascade)
+}
+
+// ── Chat System (Telegram-style) ──
+
+model ChatRoom {
+  id          String   @id @default(cuid())
+  type        String   @default("direct")  // direct, group
+  name        String   @default("")        // group name (empty for direct)
+  avatar      String   @default("")        // group avatar emoji/icon
+  description String   @default("")        // group description
+  pinnedMessageIds String @default("[]")  // JSON array of pinned message IDs
+  createdBy   String   @default("")        // creator user ID
+  lastMessageAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  members  ChatRoomMember[]
+  messages ChatMessage[]
+}
+
+model ChatRoomMember {
+  id       String   @id @default(cuid())
+  roomId   String
+  userId   String
+  role     String   @default("member") // member, admin
+  lastReadAt DateTime @default(now())
+  joinedAt DateTime @default(now())
+  isMuted  Boolean  @default(false)     // muted notifications
+  isPinned Boolean  @default(false)     // pinned chat in sidebar
+  pinOrder Int?     // order of pinned chats (lower = higher in list)
+
+  room ChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([roomId, userId])
+}
+
+model ChatMessage {
+  id        String   @id @default(cuid())
+  roomId    String
+  senderId  String
+  content   String   @default("")
+  type      String   @default("text")  // text, image, system, challenge_invite, file
+  metadata  String   @default("{}")    // JSON: attachments, reactions, replyTo, etc.
+  isPinned  Boolean  @default(false)   // pinned messages
+  isDeleted Boolean  @default(false)   // soft delete
+  replyToId String?                    // reply reference
+  editedAt  DateTime?
+  createdAt DateTime @default(now())
+
+  room    ChatRoom    @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  sender  User        @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  replyTo ChatMessage?  @relation("MessageReplies", fields: [replyToId], references: [id], onDelete: SetNull)
+  replies ChatMessage[] @relation("MessageReplies")
+
+  @@index([roomId, isDeleted, createdAt])
+  @@index([senderId])
+  @@index([replyToId])
+}
+
+// ── University/Year Groups ──
+
+model Group {
+  id          String   @id @default(cuid())
+  name        String   @default("")
+  description String   @default("")
+  avatar      String   @default("🎓")     // emoji avatar
+  type        String   @default("university") // university, year, study_group, specialty, general
+  university  String   @default("")        // university name
+  year        String   @default("")        // graduation year or academic year
+  specialty   String   @default("")        // medical specialty
+  isPublic    Boolean  @default(true)
+  inviteCode  String   @default("")        // unique invite code for private groups
+  chatRoomId  String?  @unique             // optional: 1:1 link to a ChatRoom (so chat-room group chats can have study features)
+  memberCount Int      @default(0)
+  createdBy   String   @default("")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  members     GroupMember[]
+  posts       Post[]
+  lectures    GroupLecture[]
+  questions   GroupQuestion[]
+  quizAttempts GroupQuizAttempt[]
+  adPolls     GroupAdPoll[]
+  questionBookmarks GroupQuestionBookmark[]
+  courseMeta  GroupCourseMeta[]
+  flashcardDecks GroupFlashcardDeck[]
+}
+
+model GroupMember {
+  id       String   @id @default(cuid())
+  groupId  String
+  userId   String
+  role     String   @default("member") // member, admin, moderator
+  joinedAt DateTime @default(now())
+
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([groupId, userId])
+}
+
+// ── Social Feed ──
+
+model Post {
+  id          String   @id @default(cuid())
+  authorId    String
+  groupId     String?            // null = public post on personal feed
+  content     String   @default("")
+  imageUrl    String   @default("")
+  type        String   @default("text") // text, image, achievement, challenge_result, study_milestone
+  metadata    String   @default("{}")   // JSON: { challengeId, score, achievementType, etc. }
+  likesCount  Int      @default(0)
+  commentsCount Int    @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  author   User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  group    Group?    @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  comments Comment[]
+  likes    PostLike[]
+
+  @@index([groupId, createdAt])
+  @@index([authorId, createdAt])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  postId    String
+  authorId  String
+  content   String   @default("")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([postId, createdAt])
+  @@index([authorId])
+}
+
+model PostLike {
+  id        String   @id @default(cuid())
+  postId    String
+  userId    String
+  createdAt DateTime @default(now())
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, userId])
+}
+
+// ── Notifications ──
+
+model Notification {
+  id          String   @id @default(cuid())
+  userId      String
+  type        String   @default("") // friend_request, challenge, group_invite, post_like, post_comment, mention, achievement, system
+  title       String   @default("")
+  message     String   @default("")
+  fromUserId  String?
+  referenceId String   @default("") // ID of related entity (friendship, challenge, post, etc.)
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([userId, isRead])
+}
+
+// ── Web Push subscriptions ──
+// One user can have multiple subscriptions (one per device/browser).
+// Endpoint is the unique key — FCM/Mozilla push endpoints are stable per
+// (browser, user) pair. We use it to dedupe and to unsubscribe.
+model PushSubscription {
+  id        String   @id @default(cuid())
+  userId    String
+  endpoint  String   @unique // GCM/FCM/Mozilla push endpoint URL
+  p256dh    String   // base64url-encoded ECDH P-256 public key
+  auth      String   // base64url-encoded auth secret
+  userAgent String?  // browser/device identifier for the user to manage subscriptions
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// ── Question Discussions ──
+
+model QuestionDiscussion {
+  id          String   @id @default(cuid())
+  questionId  String
+  userId      String
+  content     String
+  likes       Int      @default(0)
+  isExpert    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([questionId])
+  @@index([userId])
+}
+
+// ── Question Reports ──
+
+model QuestionReport {
+  id          String   @id @default(cuid())
+  questionId  String
+  userId      String
+  reason      String   // "incorrect", "outdated", "offensive", "duplicate", "other"
+  comment     String?
+  createdAt   DateTime @default(now())
+  status      String   @default("pending") // "pending", "reviewed", "resolved"
+
+  question    Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, questionId])
+  @@index([questionId])
+  @@index([userId])
+}
+
+// ── Question of the Day ──
+
+model QuestionOfDay {
+  id          String   @id @default(cuid())
+  date        String   @unique // YYYY-MM-DD
+  questionId  String
+  theme       String   @default("")
+  hint        String   @default("")
+  funFact     String   @default("")
+  createdAt   DateTime @default(now())
+}
+
+model QOTDAttempt {
+  id          String   @id @default(cuid())
+  userId      String
+  date        String   // YYYY-MM-DD
+  questionId  String
+  answer      String   @default("")
+  correct     Boolean  @default(false)
+  timeSpent   Int      @default(0) // seconds
+  completedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+}
+
+// ── Speed Quiz ──
+
+model SpeedQuizSession {
+  id              String   @id @default(cuid())
+  userId          String
+  mode            String   @default("classic") // classic, survival, blitz
+  topic           String   @default("Mixed")
+  difficulty      String   @default("Mixed")
+  totalQuestions  Int      @default(10)
+  correctAnswers  Int      @default(0)
+  totalTime       Int      @default(0) // seconds
+  score           Int      @default(0)
+  streak          Int      @default(0) // best streak in session
+  answers         String   @default("[]") // JSON array of { questionId, answer, correct, time }
+  status          String   @default("created") // created, active, completed
+  completedAt     DateTime?
+  createdAt       DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, completedAt])
+  @@index([userId, createdAt])
+}
+
+// ── Clinical Vignettes ──
+
+model ClinicalVignette {
+  id            String   @id @default(cuid())
+  title         String   @default("")
+  system        String   @default("")
+  topic         String   @default("")
+  difficulty    String   @default("Medium")
+  scenario      String   @default("") // The full clinical story
+  presentation  String   @default("{}") // JSON: { chiefComplaint, history, vitals, exam, labs }
+  questions     String   @default("[]") // JSON: array of { question, options, answer, explanation }
+  keyLearningPoints String @default("[]") // JSON: array of strings
+  imageUrl      String   @default("")
+  isAIGenerated Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  attempts VignetteAttempt[]
+}
+
+model VignetteAttempt {
+  id          String   @id @default(cuid())
+  userId      String
+  vignetteId  String
+  answers     String   @default("[]") // JSON: array of { questionIndex, answer, correct }
+  score       Int      @default(0)
+  completedAt DateTime @default(now())
+
+  vignette ClinicalVignette @relation(fields: [vignetteId], references: [id], onDelete: Cascade)
+  user     User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, vignetteId])
+}
+
+// ── Quick Notes ──
+
+model QuickNote {
+  id          String   @id @default(cuid())
+  userId      String
+  title       String   @default("")
+  content     String   @default("")
+  category    String   @default("general") // general, clinical, pharmacology, anatomy, study_tip
+  tags        String   @default("[]") // JSON: array of strings
+  color       String   @default("#00e5a0") // accent color
+  isPinned    Boolean  @default(false)
+  isPublic    Boolean  @default(false)
+  linkedQuestionId String @default("") // optional link to a question
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([userId, isPinned])
+}
+
+// ── App Settings (Admin Configurable) ──
+
+model AppSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique  // e.g. "favicon_url", "app_name", "primary_color", "welcome_message"
+  value     String   @default("")
+  type      String   @default("text") // text, color, image, json
+  label     String   @default("")     // Human-readable label for admin UI
+  updatedAt DateTime @updatedAt
+}
+
+// ── Custom 3D Models (Admin Uploaded) ──
+
+model CustomModel {
+  id          String   @id @default(cuid())
+  name        String   @default("")
+  description String   @default("")
+  category    String   @default("custom") // custom, skeletal, muscular, cardiovascular, nervous, digestive, respiratory, urinary
+  fileName    String   @default("")       // original file name
+  filePath    String   @default("")       // stored file path relative to uploads dir
+  fileType    String   @default("obj")    // obj, stl, glb
+  fileSize    Int      @default(0)        // bytes
+  thumbnailUrl String  @default("")       // optional thumbnail
+  color       String   @default("#c0c0c0")// display color
+  tags        String   @default("[]")     // JSON: array of tag strings
+  isPublic    Boolean  @default(true)     // visible to all users
+  downloadCount Int    @default(0)
+  createdBy   String   @default("")       // admin user ID
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ── Clinical Guidelines Library ──
+
+model Guideline {
+  id            String   @id @default(cuid())
+  title         String   @default("")
+  specialty     String   @default("")     // Cardiology, Neurology, etc.
+  society       String   @default("")     // AHA, ESC, ACC, etc.
+  year          Int      @default(2024)
+  summary       String   @default("")
+  keyActions    String   @default("[]")   // JSON: array of key action strings
+  fullUrl       String   @default("")
+  lastUpdated   DateTime @default(now())
+  tags          String   @default("[]")   // JSON: array of tag strings
+  isBuiltin     Boolean  @default(true)   // built-in vs user-added
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  bookmarks     GuidelineBookmark[]
+}
+
+model GuidelineBookmark {
+  id          String   @id @default(cuid())
+  userId      String
+  guidelineId String
+  createdAt   DateTime @default(now())
+
+  guideline   Guideline @relation(fields: [guidelineId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, guidelineId])
+  @@index([userId])
+  @@index([guidelineId])
+}
+
+// ── Procedure Player ──
+
+model Procedure {
+  id            String   @id @default(cuid())
+  title         String   @default("")
+  specialty     String   @default("")     // Cardiology, Surgery, etc.
+  duration      Int      @default(0)      // total duration in seconds
+  videoUrl      String   @default("")     // video source URL
+  thumbnailUrl  String   @default("")     // cover image
+  description   String   @default("")
+  steps         String   @default("[]")   // JSON: array of ProcedureStep objects
+  quiz          String   @default("[]")   // JSON: array of ProcedureQuiz objects
+  difficulty    String   @default("Intermediate") // Beginner, Intermediate, Advanced
+  tags          String   @default("[]")   // JSON: array of tag strings
+  isBuiltin     Boolean  @default(true)   // built-in vs user-added
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  bookmarks     ProcedureBookmark[]
+  progress      ProcedureProgress[]
+  notes         ProcedureNote[]
+}
+
+model ProcedureBookmark {
+  id           String   @id @default(cuid())
+  userId       String
+  procedureId  String
+  createdAt    DateTime @default(now())
+
+  procedure    Procedure @relation(fields: [procedureId], references: [id], onDelete: Cascade)
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, procedureId])
+  @@index([userId])
+  @@index([procedureId])
+}
+
+model ProcedureProgress {
+  id               String   @id @default(cuid())
+  userId           String
+  procedureId      String
+  completedSteps   String   @default("[]")  // JSON: array of completed step indices
+  currentStepIndex Int      @default(0)
+  watchProgress    Float    @default(0)     // 0.0 - 1.0 percentage watched
+  timeSpent        Int      @default(0)     // seconds spent watching
+  quizScore        Int      @default(-1)    // -1 = not attempted, 0-100
+  quizAnswers      String   @default("{}")  // JSON: { questionIndex: selectedOption }
+  isCompleted      Boolean  @default(false)
+  lastWatchedAt    DateTime @default(now())
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  procedure    Procedure @relation(fields: [procedureId], references: [id], onDelete: Cascade)
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, procedureId])
+  @@index([userId])
+  @@index([procedureId])
+}
+
+model ProcedureNote {
+  id           String   @id @default(cuid())
+  userId       String
+  procedureId  String
+  stepIndex    Int      @default(-1)    // -1 = general note, >= 0 = note at specific step
+  content      String   @default("")
+  timestamp    Int      @default(0)     // video timestamp in seconds when note was taken
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  procedure    Procedure @relation(fields: [procedureId], references: [id], onDelete: Cascade)
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([procedureId])
+}
+
+
+// ── CME Tracker ──
+
+model CMECredit {
+  id                 String   @id @default(cuid())
+  userId             String
+  type               String   @default("AMA-PRA Category 1") // AMA-PRA Category 1, MOC, AAPA, ANCC, etc.
+  hours              Float    @default(0)
+  activityReference  String   @default("")  // description of the CME activity
+  dateEarned         DateTime @default(now())
+  accreditationBody  String   @default("")  // AMA, AHA, ABIM, etc.
+  source             String   @default("manual") // qbank, case_simulation, video_lesson, clinical_pathway, procedure_player, guideline_review, flashcard_review, manual
+  specialty          String   @default("")
+  notes              String   @default("")
+  verified           Boolean  @default(false)
+  certificateUrl     String   @default("")
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([type])
+  @@index([source])
+  @@index([dateEarned])
+}
+
+// ── Group Study: Lectures with chunks, categorized questions, self-test ──
+
+model GroupLecture {
+  id          String   @id @default(cuid())
+  groupId     String
+  authorId    String
+  title       String   @default("")
+  description String   @default("")
+  system      String   @default("")     // e.g. "Cardiology"
+  topic       String   @default("")     // e.g. "Heart Failure"
+  coverUrl    String   @default("")
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  group    Group                @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  author   User                 @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  chunks   GroupLectureChunk[]
+  questions GroupQuestion[]
+  progress GroupLectureProgress[]
+
+  @@index([groupId])
+  @@index([authorId])
+}
+
+model GroupLectureChunk {
+  id          String   @id @default(cuid())
+  lectureId   String
+  title       String   @default("")     // section/title within the lecture
+  sourceTitle String   @default("")     // per-source label (e.g. "Short Intro", "Deep Dive")
+  sourceDescription String @default("") // per-source description / notes
+  type        String   @default("video") // video, pdf, image, text, link
+  url         String   @default("")      // media URL
+  textContent String   @default("")      // for text chunks
+  duration    Int      @default(0)       // seconds (video/audio)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // ─── Section-level metadata ───
+  // Sections are implicit (chunks grouped by `title`). These fields live on
+  // the chunk but represent SECTION-level attributes — they're shared across
+  // all alternative sources of the same section (i.e. all chunks with the
+  // same `title` within a lecture). When rendering, we read them from the
+  // FIRST chunk of each section; when saving, we write them to ALL chunks
+  // in the section so they stay in sync regardless of which source the
+  // student picks.
+  sectionDescription String @default("") // what this section covers (shown above the content)
+  sectionObjectives  String @default("") // JSON array of learning objective strings (e.g. ["Understand X", "Apply Y"])
+  sectionTags        String @default("") // JSON array of tag strings (e.g. ["high-yield", "exam"])
+  estimatedMinutes   Int    @default(0)  // admin's estimate of how long the section takes (0 = unknown)
+
+  lecture  GroupLecture @relation(fields: [lectureId], references: [id], onDelete: Cascade)
+
+  @@index([lectureId])
+}
+
+// GroupCourseMeta — per-course (subject) metadata within a group.
+// Courses/subjects are implicit (derived from GroupLecture.system field),
+// but we need a place to store course-level cover images and descriptions
+// without a full Subject model migration. One row per (groupId, subject)
+// pair. Created on-demand when an admin sets a cover or description.
+model GroupCourseMeta {
+  id          String   @id @default(cuid())
+  groupId     String
+  subject     String   // matches GroupLecture.system — the course/subject name
+  coverUrl    String   @default("")
+  description String   @default("")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@unique([groupId, subject])
+  @@index([groupId])
+}
+
+// Group questions categorised by source
+model GroupQuestion {
+  id          String   @id @default(cuid())
+  groupId     String
+  lectureId   String?                  // optional link to a lecture
+  authorId    String                   // who added it (doctor/educator/admin)
+  category    String   @default("lecture") // previous_exam, lecture, doctor, high_yield
+  type        String   @default("mcq")     // mcq, tf, short
+  text        String   @default("")
+  options     String   @default("[]")      // JSON array of strings
+  answer      String   @default("")
+  explanation String   @default("")
+  difficulty  String   @default("Moderate")
+  system      String   @default("")
+  topic       String   @default("")
+  tags        String   @default("[]")      // JSON array
+  notes       String   @default("[]")      // JSON array of {userId,userName,note,createdAt}
+  reports     String   @default("[]")      // JSON array of {userId,reason,comment,createdAt}
+  // ── Media fields (share with media intact) ──
+  imageUrl    String   @default("")
+  audioUrl    String   @default("")
+  videoUrl    String   @default("")
+  modelUrl    String   @default("")
+  labPanel    String   @default("[]")      // JSON: [{name, rows:[{test, value, unit, flag}]}]
+  pcgSpec     String   @default("")
+  hotspots    String   @default("[]")
+  structureTags String @default("[]")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  group    Group              @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  lecture  GroupLecture?      @relation(fields: [lectureId], references: [id], onDelete: SetNull)
+  author   User               @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  attempts GroupQuizAttempt[]
+  bookmarks GroupQuestionBookmark[]
+  comments GroupQuestionComment[]
+
+  @@index([groupId])
+  @@index([lectureId])
+  @@index([category])
+  @@index([authorId])
+}
+
+model GroupQuizAttempt {
+  id           String   @id @default(cuid())
+  userId       String
+  groupId      String
+  questionId   String
+  selectedAnswer String @default("")
+  isCorrect    Boolean  @default(false)
+  timeSpent    Int      @default(0)  // seconds
+  createdAt    DateTime @default(now())
+
+  user     User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  group    Group          @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  question GroupQuestion  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@index([userId, groupId])
+  @@index([questionId])
+}
+
+// ── Group Ad-Acceptance Polls + profit sharing tied to quiz ──
+
+model GroupAdPoll {
+  id            String   @id @default(cuid())
+  groupId       String
+  createdBy     String
+  question      String   @default("")     // poll question text
+  description   String   @default("")
+  status        String   @default("active") // active, closed
+  acceptCount   Int      @default(0)
+  rejectCount   Int      @default(0)
+  // Ad revenue config for this group (when accepted)
+  revenueSharePct Int    @default(60)     // % of ad revenue shared with members
+  // Quiz requirement: members must complete this many correct quiz answers
+  // in the group's question bank to qualify for a revenue share payout.
+  quizThreshold Int      @default(10)
+  totalRevenue  Float    @default(0.0)   // accumulated ad revenue for this group
+  totalDistributed Float @default(0.0)
+  closesAt      DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  group    Group              @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  creator  User               @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+  votes    GroupAdPollVote[]
+  shares   GroupAdRevenueShare[]
+  comments GroupAdPollComment[]
+
+  @@index([groupId])
+  @@index([status])
+}
+
+model GroupAdPollVote {
+  id        String   @id @default(cuid())
+  pollId    String
+  userId    String
+  vote      String   @default("accept") // accept, reject
+  createdAt DateTime @default(now())
+
+  poll  GroupAdPoll @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  user  User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([pollId, userId])
+  @@index([pollId])
+  @@index([userId])
+}
+
+model GroupAdRevenueShare {
+  id          String   @id @default(cuid())
+  pollId      String
+  userId      String
+  amount      Float    @default(0.0)    // credits/coins credited
+  correctAnswers Int   @default(0)      // quiz performance at payout time
+  createdAt   DateTime @default(now())
+
+  poll  GroupAdPoll @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  user  User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([pollId])
+  @@index([userId])
+}
+
+// ── Group Study enhancements: lecture progress, question bookmarks, comments ──
+
+// Tracks per-user-per-chunk completion so members can resume lectures and see % done
+model GroupLectureProgress {
+  id             String   @id @default(cuid())
+  userId         String
+  lectureId      String
+  chunkId        String?  // when null, marks the entire lecture as completed
+  completed      Boolean  @default(false)
+  watchedSeconds Int      @default(0)
+  updatedAt      DateTime @updatedAt
+  createdAt      DateTime @default(now())
+
+  user    User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lecture GroupLecture  @relation(fields: [lectureId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lectureId, chunkId])
+  @@index([userId, lectureId])
+}
+
+// Personal bookmarks / favorites for quick access to important questions
+model GroupQuestionBookmark {
+  id          String   @id @default(cuid())
+  userId      String
+  questionId  String
+  groupId     String
+  createdAt   DateTime @default(now())
+
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question  GroupQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  group     Group         @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, questionId])
+  @@index([userId])
+  @@index([questionId])
+}
+
+// Discussion thread on a question (replies via parentCommentId)
+model GroupQuestionComment {
+  id              String   @id @default(cuid())
+  questionId      String
+  userId          String
+  text            String
+  parentCommentId String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  question GroupQuestion        @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  user     User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent   GroupQuestionComment? @relation("QuestionCommentReplies", fields: [parentCommentId], references: [id], onDelete: SetNull)
+  replies  GroupQuestionComment[] @relation("QuestionCommentReplies")
+
+  @@index([questionId])
+  @@index([userId])
+}
+
+// ── Ad-poll enhancements: discussion thread ──
+
+// Discussion thread on an ad-acceptance poll
+model GroupAdPollComment {
+  id              String   @id @default(cuid())
+  pollId          String
+  userId          String
+  text            String
+  parentCommentId String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  poll     GroupAdPoll          @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  user     User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent   GroupAdPollComment?  @relation("PollCommentReplies", fields: [parentCommentId], references: [id], onDelete: SetNull)
+  replies  GroupAdPollComment[] @relation("PollCommentReplies")
+
+  @@index([pollId])
+  @@index([userId])
+}
+
+// ── Group Flashcards — shared deck per study group ──
+
+model GroupFlashcardDeck {
+  id          String   @id @default(cuid())
+  groupId     String
+  name        String   @default("")
+  description String   @default("")
+  subject     String   @default("")     // optional link to a course/subject
+  lectureId   String?                   // optional link to a specific lecture
+  createdBy   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  group       Group           @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  creator     User?           @relation(fields: [createdBy], references: [id], onDelete: SetNull)
+  flashcards  GroupFlashcard[]
+
+  @@index([groupId])
+  @@index([lectureId])
+}
+
+model GroupFlashcard {
+  id          String   @id @default(cuid())
+  deckId      String
+  front       String   @default("")
+  back        String   @default("")
+  hint        String   @default("")
+  tags        String   @default("[]") // JSON array
+  order       Int      @default(0)
+  createdBy   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  deck        GroupFlashcardDeck     @relation(fields: [deckId], references: [id], onDelete: Cascade)
+  creator     User?                  @relation(fields: [createdBy], references: [id], onDelete: SetNull)
+  reviews     GroupFlashcardReview[]
+
+  @@index([deckId])
+}
+
+// Spaced-repetition state per user per flashcard (simple SM-2-like).
+// interval=0 means new, easeFactor starts at 2.5, repetitions is consecutive correct.
+model GroupFlashcardReview {
+  id           String   @id @default(cuid())
+  flashcardId  String
+  userId       String
+  // Rating: 0=again, 1=hard, 2=good, 3=easy
+  rating       Int      @default(-1)
+  repetitions  Int      @default(0)
+  interval     Int      @default(0)   // days until next review
+  easeFactor   Float    @default(2.5)
+  dueAt        DateTime @default(now())
+  lastReviewed DateTime?
+
+  flashcard    GroupFlashcard @relation(fields: [flashcardId], references: [id], onDelete: Cascade)
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([flashcardId, userId])
+  @@index([userId, dueAt])
+}
+
+// ── Agent v2: Hybrid Memory ────────────────────────────────────────────
+// Two tables power the v2 agent's memory layer:
+//   1. EpisodicMemory — one row per completed turn (user msg + assistant
+//      response + tool calls summary). Stores a 384-dim embedding (base64
+//      Float32Array) of the user's message for cosine-similarity recall.
+//   2. ConversationSummary — rolling LLM-generated summary of the last N
+//      turns, refreshed every few turns. Cheap to fetch and inject into the
+//      system prompt so the agent has long-term context without re-reading
+//      the entire transcript.
+// Both are per-user; guests get nothing persisted (memory is keyed on userId).
+
+model EpisodicMemory {
+  id          String   @id @default(cuid())
+  userId      String
+  // The user's message verbatim (truncated to 2000 chars at write time)
+  userMessage String
+  // The agent's final text response (truncated to 4000 chars)
+  agentResponse String
+  // JSON array of { toolName, args } for tools called during this turn
+  toolCalls   String   @default("[]")
+  // Free-text tags extracted from the message (e.g. ["cardiology", "study-plan"])
+  tags        String   @default("[]")
+  // 384-dim embedding serialized as base64 Float32Array, or "" if unavailable
+  embedding   String   @default("")
+  // Cosine-similarity pre-computed cluster id (reserved for future use)
+  clusterId   Int?
+  // The currentTab the user was on when they sent the message
+  currentTab  String?
+  createdAt   DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([userId, clusterId])
+}
+
+model ConversationSummary {
+  id          String   @id @default(cuid())
+  userId      String
+  // The rolling summary text (typically 200-500 words)
+  summary     String
+  // How many turns were covered by this summary
+  turnCount   Int      @default(0)
+  // The timestamp of the LAST turn covered by this summary
+  lastTurnAt  DateTime @default(now())
+  createdAt   DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, lastTurnAt])
+}
+
+
+// ── Mock-backend wiring: Medical Trivia, ECG Challenge, Flashcard Arena ──
+// These models back the previously-mock tabs. They follow the same pattern
+// as ClinicalVignette + VignetteAttempt: a content table with JSON-embedded
+// options + an attempt table unique on (userId, date) or (userId, contentId).
+
+// Static trivia question bank. Seeded from prisma/seed-mock-backends.ts.
+model MedicalTriviaQuestion {
+  id            String   @id @default(cuid())
+  question      String   @default("")
+  options       String   @default("[]")    // JSON array of strings
+  correctIndex  Int      @default(0)
+  category      String   @default("")
+  difficulty    String   @default("easy") // easy | medium | hard
+  funFact       String   @default("")
+  type          String   @default("mcq")  // mcq | tf
+  createdAt     DateTime @default(now())
+
+  @@index([category])
+  @@index([difficulty])
+}
+
+// One row per completed trivia game (one per user per day).
+model TriviaAttempt {
+  id             String   @id @default(cuid())
+  userId         String
+  score          Int      @default(0)
+  correctCount   Int      @default(0)
+  totalQuestions Int      @default(0)
+  bestStreak     Int      @default(0)
+  date           String   @default("")   // YYYY-MM-DD
+  completedAt    DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([userId, completedAt])
+  @@index([date])
+}
+
+// Static ECG pattern library. Seeded from prisma/seed-mock-backends.ts.
+// Mirrors the ECGPatternAPI interface that the tab previously hard-coded.
+model EcgPattern {
+  id                   String   @id @default(cuid())
+  legacyId             String   @default("") // e.g. 'nsr', 'afib' — for stable references
+  name                 String   @default("")
+  category             String   @default("")
+  difficulty           String   @default("basic") // basic | intermediate | advanced
+  description          String   @default("")
+  keyFeatures          String   @default("[]") // JSON array of strings
+  svgPath              String   @default("")
+  svgWidth             Int      @default(180)
+  rate                 String   @default("")
+  rhythm               String   @default("")
+  axis                 String   @default("")
+  intervals            String   @default("")
+  morphology           String   @default("")
+  interpretation       String   @default("")
+  clinicalSignificance String   @default("")
+  options              String   @default("[]") // JSON array of strings
+  correctOptionIndex   Int      @default(0)
+  createdAt            DateTime @default(now())
+
+  attempts EcgAttempt[]
+
+  @@unique([legacyId])
+  @@index([category])
+  @@index([difficulty])
+}
+
+// One row per ECG interpretation attempt.
+model EcgAttempt {
+  id            String   @id @default(cuid())
+  userId        String
+  ecgPatternId  String
+  correct       Boolean  @default(false)
+  selectedOptionIndex Int @default(-1)
+  timeMs        Int      @default(0)
+  completedAt   DateTime @default(now())
+
+  user    User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pattern EcgPattern @relation(fields: [ecgPatternId], references: [id], onDelete: Cascade)
+
+  @@index([userId, completedAt])
+  @@index([ecgPatternId])
+}
+
+// Leaderboard entry for the Flashcard Arena — replaces in-memory array.
+model FlashcardArenaResult {
+  id           String   @id @default(cuid())
+  userId       String?
+  username     String   @default("Anonymous")
+  avatar       String   @default("🎯")
+  mode         String   @default("speed") // speed | accuracy | marathon
+  score        Int      @default(0)
+  accuracy     Int      @default(0)
+  streak       Int      @default(0)
+  timePerCard  Float    @default(0)
+  totalCards   Int      @default(0)
+  correctCards Int      @default(0)
+  submittedAt  DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([mode, score])
+  @@index([userId])
+}
+
+// ── Whiteboard Studio — saved drawing canvases ──
+// Each document stores the full layer/stroke JSON so it can be reloaded
+// and edited across sessions and devices. Optional groupId allows shared
+// group whiteboards.
+
+model WhiteboardDocument {
+  id          String   @id @default(cuid())
+  userId      String
+  groupId     String?  // optional: shared with a study group
+  title       String   @default("Untitled Canvas")
+  // JSON-serialized: { layers: WhiteboardLayer[], background: string, thumbnail?: string }
+  data        String   @default("{}")
+  thumbnail   String?  // base64 PNG snapshot (small)
+  isPublic    Boolean  @default(false)
+  isStarred   Boolean  @default(false)
+  tags        String   @default("[]") // JSON array of strings
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, updatedAt])
+  @@index([groupId, updatedAt])
+  @@index([isPublic, updatedAt])
+}
+
+// ── Admin Audit Log ──
+// Replaces the in-memory/JSON-file stub audit log used previously.
+// Every admin action (ban/suspend/reset-password/user-update/etc.) writes here.
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  actorId     String   // admin user id performing the action
+  action      String   // e.g. "user.ban", "user.suspend", "user.reset_password", "report.resolve"
+  targetType  String   @default("user") // user | report | setting | ad | model | revenue
+  targetId    String   @default("")
+  metadata    String   @default("{}") // JSON blob of action-specific data
+  ipAddress   String   @default("")
+  createdAt   DateTime @default(now())
+
+  actor       User     @relation(fields: [actorId], references: [id], onDelete: Cascade)
+
+  @@index([actorId, createdAt])
+  @@index([action, createdAt])
+  @@index([targetType, targetId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// Security: Device Fingerprint
+// ─────────────────────────────────────────────────────────────────────────
+// One row per (user, device) pair. The `fingerprintHash` is a stable
+// SHA-256 of client-collected signals (canvas, webgl, audio, fonts, UA,
+// timezone, screen, etc.). See src/lib/security/fingerprint-client.ts.
+//
+// On each login, the client sends its fingerprint; the server:
+//   1. Looks up (userId, fingerprintHash).
+//   2. If found and not revoked → trusted login, update lastSeenAt + ip.
+//   3. If found and revoked → block (or step-up challenge — TODO).
+//   4. If not found → record as new device, emit SecurityEvent "device.new".
+//
+// `label` is an optional user-supplied name ("My iPhone", "Library Mac").
+// `trustScore` is 0-100; starts at 50 for new devices, climbs with
+// successful logins, drops on anomalies.
+
+model DeviceFingerprint {
+  id              String   @id @default(cuid())
+  userId          String
+  fingerprintHash String   // SHA-256 hex, 64 chars
+  label           String?  // user-supplied device name
+  // Stable components stored for diffing / display (never the raw signals):
+  userAgent       String   @default("")
+  platform        String   @default("")  // "Win32", "MacIntel", "iPhone", "Linux x86_64"
+  osGuess         String   @default("")  // "Windows", "macOS", "iOS", "Android", "Linux"
+  browserGuess    String   @default("")  // "Chrome", "Firefox", "Safari", "Edge"
+  screenSummary   String   @default("")  // "1920x1080x2" — width x height x dpr
+  timezone        String   @default("")  // IANA tz, e.g. "Africa/Cairo"
+  trustScore      Int      @default(50)  // 0-100
+  revoked         Boolean  @default(false)
+  revokedAt       DateTime?
+  revokedReason   String?
+  firstSeenAt     DateTime @default(now())
+  lastSeenAt      DateTime @default(now())
+  lastIp          String   @default("")
+  lastGeo         String   @default("")  // "city, country" best-effort from IP
+  loginCount      Int      @default(1)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, fingerprintHash])
+  @@index([userId, lastSeenAt])
+  @@index([fingerprintHash])
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// Security: SecurityEvent
+// ─────────────────────────────────────────────────────────────────────────
+// Append-only log of security-relevant events for a user:
+//   - login.success / login.failed
+//   - device.new / device.revoked / device.trust_changed
+//   - password.changed / password.reset_requested
+//   - location.anomaly (geo mismatch vs. usual IPs)
+//   - rate_limited / csrf_blocked
+//   - session.revoked
+//
+// `severity` is "info" | "warn" | "critical". `metadata` is a JSON string
+// for arbitrary per-event fields (ip, ua, fingerprint, geo, etc.).
+
+model SecurityEvent {
+  id          String   @id @default(cuid())
+  userId      String
+  eventType   String   // see comment above
+  severity    String   @default("info") // info | warn | critical
+  message     String   @default("")
+  metadata    String   @default("{}")   // JSON
+  ipAddress   String   @default("")
+  userAgent   String   @default("")
+  fingerprintHash String @default("")   // optional, links to DeviceFingerprint
+  readAt      DateTime?                  // null = unread
+  createdAt   DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([eventType, createdAt])
+  @@index([severity, createdAt])
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────
+// Rate Limiting (token bucket per key)
+// ─────────────────────────────────────────────────────────────────────────
+// Used by src/lib/security/rate-limit.ts as a persistent fallback when the
+// in-memory LRU cache is empty (e.g. after a server restart, or on a
+// multi-instance deploy where the in-memory cache isn't shared).
+//
+// For dev / single-instance, the in-memory cache handles 99% of requests;
+// this table is the source of truth for the rolling count window.
+
+model RateLimitBucket {
+  id          String   @id @default(cuid())
+  bucketKey   String   @unique // e.g. "login:1.2.3.4" or "api:userId:endpoint"
+  tokens      Float    @default(0)
+  lastRefill  DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([bucketKey, updatedAt])
+}
+
+
+
+// ─────────────────────────────────────────────────────────────────────────
+// MedQ Agent — Skills (ported from reference deep-agent platforms)
+// ─────────────────────────────────────────────────────────────────────────
+// DB source of truth for agent skills. Builtin skills (source="builtin") are
+// seeded from src/lib/agent/skills/builtin-skills.ts; user skills are created
+// through /api/medq-agent/skills. At agent-build time enabled skills are
+// synced to SKILL.md packs inside the per-user agent workspace, where the
+// deepagents skills middleware loads them with progressive disclosure (only
+// name + description enter the system prompt; the body is read on demand).
+
+model AgentSkill {
+  id             String   @id @default(cuid())
+  userId         String?
+  name           String   // kebab-case, unique per user
+  description    String
+  content        String   // markdown body (without frontmatter)
+  suggestedTools String?  // JSON array of tool names the skill steers toward (deep-agent parity)
+  enabled        Boolean  @default(true)
+  source         String   @default("user") // builtin | user | imported | ai
+  category       String   @default("Study")
+  lastEditedBy   String   @default("user") // user | agent — who wrote the CURRENT version
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  revisions      AgentSkillRevision[]
+
+  @@unique([userId, name])
+  @@index([userId, enabled])
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// AgentSkillRevision — version history for the self-improving skill loop.
+// Every content change (agent improvement, user edit, restore) snapshots the
+// PRIOR version first, so any rewrite is reversible from the skills viewer.
+// ─────────────────────────────────────────────────────────────────────────
+model AgentSkillRevision {
+  id          String      @id @default(cuid())
+  skillId     String
+  skill       AgentSkill  @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  name        String      // skill name at snapshot time (survives renames)
+  description String
+  content     String
+  reason      String?     // why the change happened (agent findings / user note / restore)
+  editedBy    String      @default("system") // agent | user | system (restore/import bookkeeping)
+  createdAt   DateTime    @default(now())
+
+  @@index([skillId, createdAt])
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────
+// MedQ Agent — Long-term memory (layered, per user/guest)
+// ─────────────────────────────────────────────────────────────────────────
+// Layers: profile (who the learner is), study (learning habits & progress
+// facts), fact (knowledge learned during interactions). Injected into the
+// agent system prompt each run via buildMemoryContext() and searchable by
+// the save_memory / search_memory agent tools.
+
+model AgentMemory {
+  id         String   @id @default(cuid())
+  userId     String
+  scope      String   // profile | study | fact | conversation | semantic (auto-extracted)
+  key        String?
+  content    String
+  importance Float    @default(0.5)
+  embedding  Bytes?   // 256-d vector (local hashed-trigram or remote embedder) for semantic recall
+  threadId   String?  // conversation-scope working memory (hermes parity)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([userId, scope])
+  @@index([userId, updatedAt])
+  @@index([threadId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// MedQ Agent — Knowledge base / RAG (deep-agent-platform parity,
+// compare-and-integrate-4). Per-user corpus: KnowledgeSource (file | url |
+// text) → KnowledgeDocument (parsed text) → KnowledgeChunk (embedded
+// segment). Retrieval does a cosine scan over chunk embeddings and renders
+// [K#]-cited context for the system prompt + search_knowledge tool.
+// ─────────────────────────────────────────────────────────────────────────
+
+model KnowledgeSource {
+  id          String              @id @default(cuid())
+  userId      String
+  name        String
+  type        String              // file | url | text
+  status      String              @default("pending") // pending | processing | ready | failed
+  error       String?
+  metaJson    String?             // { title, chunks, mimeType, sizeBytes, fileKind, durationSec, transcription }
+  // file content origin: document (pdf/docx/txt) | audio | video | image | url | text
+  fileKind    String              @default("document")
+  documents   KnowledgeDocument[]
+  chunks      KnowledgeChunk[]
+  scenes      VideoScene[]
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  @@index([userId, status])
+}
+
+model KnowledgeDocument {
+  id         String           @id @default(cuid())
+  sourceId   String
+  source     KnowledgeSource  @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+  title      String
+  mimeType   String           @default("text/plain")
+  sizeBytes  Int              @default(0)
+  content    String?          // original parsed text (truncated at 100k chars)
+  chunkCount Int              @default(0)
+  chunks     KnowledgeChunk[]
+  createdAt  DateTime         @default(now())
+
+  @@index([sourceId])
+}
+
+model KnowledgeChunk {
+  id              String            @id @default(cuid())
+  documentId      String
+  document        KnowledgeDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  sourceId        String
+  source          KnowledgeSource   @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+  idx             Int
+  content         String
+  embedding       Bytes?            // serialized Float32Array (model-dependent dim)
+  // Which embedder produced `embedding` (e.g. "openai-compatible:.../text-embedding-3-small"
+  // or "local-hash"). Retrieval only compares chunks whose model matches the
+  // active provider — prevents cross-model dimension/space mismatches.
+  embeddingModel  String            @default("")
+  // Contextual retrieval (Anthropic-style): a 1-2 sentence LLM-written blurb
+  // describing what this chunk contains and where it sits in the document.
+  // Prepended to the content before embedding AND included in BM25 lexical
+  // scoring — this is the single biggest retrieval-accuracy upgrade.
+  contextSummary  String            @default("")
+  tokens          Int               @default(0)
+  metaJson        String?           // { title, timestamp }
+  createdAt       DateTime          @default(now())
+
+  @@index([sourceId])
+  @@index([documentId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// MedQ Agent — Video scene index (Stage 3 temporal RAG). One row per scene
+// (ffmpeg scene-cut boundary, or an even time window when no cuts fire):
+// VLM description of the representative frame + the [mm:ss]-stamped ASR
+// segments inside the span + an embedding of both. Powers search_video_scenes
+// and timestamp-deep-linked question citations (mediaTimeSec).
+// ─────────────────────────────────────────────────────────────────────────
+
+model VideoScene {
+  id             String   @id @default(cuid())
+  sourceId       String
+  source         KnowledgeSource @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+  sceneIdx       Int
+  startSec       Float
+  endSec         Float
+  detection      String   @default("scene-cut") // scene-cut | even-window
+  description    String   @default("")          // VLM description of the representative frame
+  transcript     String   @default("")          // ASR segments within the span
+  embedding      Bytes?
+  embeddingModel String   @default("")
+  createdAt      DateTime @default(now())
+
+  @@index([sourceId, sceneIdx])
+  @@index([sourceId, startSec])
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// MedQ Agent — RAG query observability. One row per hybrid retrieval call:
+// the expanded queries, per-stage rankings and the final fused list. Powers
+// retrieval debugging ("why didn't chunk X surface?") and accuracy tuning.
+// ─────────────────────────────────────────────────────────────────────────
+
+model RagQueryLog {
+  id           String   @id @default(cuid())
+  userId       String
+  query        String
+  sourceIds    String   @default("[]") // JSON array of knowledge source ids (scope filter)
+  queriesJson  String   @default("[]") // JSON array of expanded/reformulated queries
+  retrievedJson String  @default("[]") // JSON array of {chunkId, documentId, sourceId, score, stages}
+  topK         Int      @default(8)
+  latencyMs    Int      @default(0)
+  createdAt    DateTime @default(now())
+
+  @@index([userId, createdAt])
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// MedQ Agent — Tool execution telemetry (deep-agent-platform parity).
+// One best-effort row per builtin tool invocation: status, latency, capped
+// input/output snapshots. Powers the Usage tab's tool-stats rollup and
+// debugging (“which tool is slow / failing?”).
+// ─────────────────────────────────────────────────────────────────────────
+
+model AgentToolExecution {
+  id         String   @id @default(cuid())
+  userId     String
+  threadId   String?
+  toolName   String
+  status     String   // running | completed | failed
+  latencyMs  Int?
+  inputJson  String?  // capped args snapshot
+  outputJson String?  // capped output snapshot
+  error      String?
+  createdAt  DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([toolName])
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// MedQ Agent — Run telemetry (hermes Run parity, compare-and-integrate-3)
+// One row per agent turn (chat / job / webhook / resume) for the usage
+// dashboard's run-health rollup and the /api/medq-agent/runs listing.
+// ──────────────────────────────────────────────────────────────────────────
+
+model AgentRun {
+  id         String    @id @default(cuid())
+  userId     String
+  threadId   String?
+  kind       String    // chat | job | webhook | resume
+  model      String
+  status     String    // running | completed | failed
+  error      String?
+  durationMs Int?
+  createdAt  DateTime  @default(now())
+  completedAt DateTime?
+
+  @@index([userId, createdAt])
+  @@index([userId, status])
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────
+// MedQ Agent — Artifacts (durable deliverables produced by the agent)
+// ─────────────────────────────────────────────────────────────────────────
+// Study guides, cheat sheets, CSV/JSON datasets, charts, generated images.
+// Text content is stored inline; binaries (images) reference a public URL.
+// Registered by the create_artifact / generate_document tools and listed
+// via /api/medq-agent/artifacts.
+
+model AgentArtifact {
+  id        String   @id @default(cuid())
+  userId    String?
+  name      String
+  kind      String   // markdown | html | csv | json | chart | image | document
+  mimeType  String   @default("text/plain")
+  sizeBytes Int      @default(0)
+  content   String?  // inline text content (markdown/html/csv/json)
+  url       String?  // public URL for binary artifacts (images)
+  meta      Json?
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// MedQ Agent — HITL approvals (human-in-the-loop tool gates)
+// ─────────────────────────────────────────────────────────────────────────
+// When a gated tool call (code execution, memory deletion) interrupts the
+// agent graph, one row per requested action is persisted here. The row is
+// the join entity between the SSE interrupt event, the approval card UI and
+// the graph resume (POST /api/agent/approvals → Command resume). Ported
+// from all three reference platforms' Approval models.
+
+model AgentApproval {
+  id          String    @id @default(cuid())
+  userId      String
+  threadId    String
+  toolName    String
+  capability  String    // capability key from permissions.ts (e.g. code.execute)
+  argsJson    String    @default("{}")
+  description String?
+  status      String    @default("pending") // pending | approved | rejected | superseded
+  decidedAt   DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@index([userId, status])
+  @@index([threadId, status])
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// MedQ Agent — per-user permission policy overrides (HITL gate settings)
+// ─────────────────────────────────────────────────────────────────────────
+// Only capabilities the user has explicitly re-configured get a row; the
+// effective policy merges these over DEFAULT_POLICY (permissions.ts).
+// Pattern from deep-agent-platform's UserPreference.security overrides.
+
+model AgentPermissionSetting {
+  id         String   @id @default(cuid())
+  userId     String
+  capability String   // capability key from permissions.ts
+  effect     String   // allow | ask
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([userId, capability])
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// MedQ Agent — Thread & Message persistence (DB-backed conversation history)
+// ─────────────────────────────────────────────────────────────────────────
+// Ported from the reference "Deep Agent" platform's Thread/Message models.
+// The in-process MemorySaver checkpointer (runtime/checkpoints.ts) holds the
+// LangGraph state for HITL resume during a single turn; this DB layer gives
+// durable cross-session history, the thread-sidebar UI, and message replay
+// after a page refresh.
+//
+// Each thread belongs to a user (or the shared guest). The title is set to
+// the first user message, truncated. Messages store role/content/timestamp
+// plus optional toolCalls/toolResults JSON (mirrors the reference shape).
+
+model AgentThread {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String   @default("New conversation")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  messages  AgentThreadMessage[]
+
+  @@index([userId, updatedAt])
+}
+
+model AgentThreadMessage {
+  id           String   @id @default(cuid())
+  threadId     String
+  thread       AgentThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  role         String   // user | assistant | tool
+  content      String   @db.Text
+  toolCalls    String?  // JSON: [{id, name, arguments}]
+  toolResults  String?  // JSON: [{toolCallId, toolName, content, isError?}]
+  metadata     String?  // JSON: {interrupted?: boolean, ...} — interrupted marks an answer persisted mid-generation (user stop / run cap / abort)
+  createdAt    DateTime @default(now())
+
+  @@index([threadId, createdAt])
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Hermes-port models (compare-and-integrate-2): MCP, scheduler, durable queue,
+// usage accounting, audit, agent tasks, messaging integrations, durable
+// LangGraph checkpoints, chat feedback. See worklog Task compare-and-integrate-2.
+// ═══════════════════════════════════════════════════════════════════════════
+
+// ── MCP subsystem ──
+model AgentMcpServer {
+  id           String    @id @default(cuid())
+  userId       String
+  name         String
+  transport    String    @default("http") // http | sse | stdio
+  url          String?
+  command      String?
+  argsJson     String?   // JSON string[] for stdio
+  headersJson  String?   // JSON {header: value}; secret values stored as encrypted envelopes
+  enabled      Boolean   @default(true)
+  status       String    @default("unknown") // unknown | ok | error
+  lastError    String?
+  lastTestedAt DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  tools        AgentMcpTool[]
+
+  @@unique([userId, name])
+  @@index([userId, enabled])
+}
+
+model AgentMcpTool {
+  id          String   @id @default(cuid())
+  serverId    String
+  server      AgentMcpServer @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  name        String
+  description String   @default("")
+  schemaJson  String?  // JSON schema, capped at 8000 chars
+  enabled     Boolean  @default(true)
+
+  @@unique([serverId, name])
+}
+
+// ── Scheduler (cron + one-shot) ──
+model AgentScheduledTask {
+  id             String    @id @default(cuid())
+  userId         String
+  name           String
+  prompt         String    @db.Text
+  cron           String?   // 5-field cron expression (recurring)
+  runAt          DateTime? // one-shot time
+  timezone       String    @default("UTC")
+  status         String    @default("active") // active | paused | completed | failed
+  lastRunAt      DateTime?
+  nextRunAt      DateTime?
+  threadId       String?
+  deliverViaJson String?   // JSON [{channel, target}]
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([userId, status])
+  @@index([nextRunAt])
+}
+
+// ── Durable job queue (lease semantics, retries, cancellation) ──
+model AgentJob {
+  id              String    @id @default(cuid())
+  userId          String
+  kind            String    @default("agent.run") // agent.run | task.run | notify.send
+  payloadJson     String    @db.Text
+  status          String    @default("pending") // pending | leased | done | failed | cancelled
+  priority        Int       @default(50)
+  attempts        Int       @default(0)
+  maxAttempts     Int       @default(3)
+  leasedBy        String?
+  leaseUntil      DateTime?
+  progress        Int       @default(0)
+  lastError       String?   @db.Text
+  cancelRequested Boolean   @default(false)
+  availableAt     DateTime  @default(now())
+  startedAt       DateTime?
+  finishedAt      DateTime?
+  scheduledTaskId String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  events          AgentJobEvent[]
+
+  @@index([status, availableAt, priority])
+  @@index([userId, createdAt])
+}
+
+model AgentJobEvent {
+  id          String   @id @default(cuid())
+  jobId       String
+  job         AgentJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  seq         Int      @default(0)
+  type        String   // progress | text | tool_call | tool_result | subagent | done | error | notice
+  payloadJson String   @db.Text
+  createdAt   DateTime @default(now())
+
+  @@index([jobId, seq])
+}
+
+// ── Usage / cost accounting (agent LLM calls) ──
+model AgentUsage {
+  id           String   @id @default(cuid())
+  userId       String?
+  model        String
+  provider     String
+  inputTokens  Int      @default(0)
+  outputTokens Int      @default(0)
+  costUsd      Float    @default(0)
+  latencyMs    Int?
+  createdAt    DateTime @default(now())
+
+  @@index([userId, createdAt])
+}
+
+// ── Audit log (agent actions) ──
+model AgentAuditLog {
+  id         String   @id @default(cuid())
+  userId     String?
+  action     String   // tool.execute | approval.request | schedule.create | ...
+  target     String?
+  detailJson String?
+  createdAt  DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([action])
+}
+
+// ── Agent-managed tasks (todo list the agent can create/update) ──
+model AgentTask {
+  id        String    @id @default(cuid())
+  userId    String
+  title     String
+  detail    String?
+  status    String    @default("pending") // pending | in_progress | done | blocked
+  priority  String    @default("medium")  // low | medium | high
+  source    String    @default("agent")   // agent | user
+  dueAt     DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([userId, status])
+}
+
+// ── Messaging integrations (telegram/slack/discord/email; dry-run default) ──
+model AgentIntegration {
+  id         String   @id @default(cuid())
+  userId     String
+  channel    String   // telegram | slack | discord | email
+  configJson String   @db.Text // secret-ish fields stored as encrypted envelopes
+  enabled    Boolean  @default(true)
+  status     String   @default("unverified")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([userId, channel])
+}
+
+// ── Durable LangGraph checkpoints (HITL resume survives restarts) ──
+model LgCheckpoint {
+  id                 String  @id @default(cuid())
+  threadId           String
+  checkpointNs       String  @default("")
+  checkpointId       String
+  parentCheckpointId String?
+  type               String?
+  checkpoint         String  @db.Text // base64 serde payload
+  metadata           String? @db.Text // base64 serde payload
+
+  @@unique([threadId, checkpointNs, checkpointId])
+}
+
+model LgWrite {
+  id           String  @id @default(cuid())
+  threadId     String
+  checkpointNs String  @default("")
+  checkpointId String
+  taskId       String
+  idx          Int
+  channel      String
+  type         String?
+  value        String? @db.Text // base64 serde payload
+
+  @@unique([threadId, checkpointNs, checkpointId, taskId, idx])
+}
+
+// ── Chat message feedback (fixes dead /api/agent/feedback/v2 endpoint) ──
+model AgentFeedback {
+  id        String   @id @default(cuid())
+  userId    String?
+  threadId  String?
+  messageId String?
+  rating    String   // up | down
+  comment   String?
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+}
+
+// ── AI question-extraction jobs (Question Bank import) ──
+// Mirrors the KnowledgeSource pattern: the POST creates a PENDING row and
+// returns immediately; processing runs fire-and-continue in the background.
+// Because state lives in the DB (not memory), a job survives server restarts
+// (a stale "processing" row is auto-resumed on the next poll) and the client
+// can close the page and resume the finished/running job later.
+model ImportExtraction {
+  id            String    @id @default(cuid())
+  userId        String
+  fileName      String    @default("pasted text")
+  status        String    @default("pending") // pending | processing | done | error
+  error         String?
+  text          String    // source text (kept for resume/retry, capped at 1.5M chars)
+  maxQuestions  Int       @default(2000)
+  questionsJson String?   // result array (null until done)
+  rawCount      Int?
+  droppedChunks Int?
+  progressDone  Int       @default(0)
+  progressTotal Int       @default(0)
+  // ── Embedded images that need server-side VLM processing ──
+  // Populated when a file (PPTX slide images, DOCX word/media/*, PDF
+  // image-bearing pages, or a standalone image/audio file) carries visual
+  // content the text layer doesn't capture. JSON array of
+  // { dataUrl, caption }. The runJob VLM pass OCRs each, extracts any
+  // questions present in the image, and prepends that text to the chunk
+  // plan so the text-extraction LLM sees image-grounded context.
+  imagesJson    String?
+  // ── Resumable multi-pass extraction ──
+  // Per-chunk results persisted AS THEY COMPLETE (JSON array parallel to
+  // chunkText(text) output: each entry is the parsed questions array for
+  // that chunk, or null while the chunk is still pending). A PAUSED job
+  // (rate-limited / deadline / restart) resumes from these — completed
+  // chunks are NEVER re-extracted and never lost.
+  chunkResults  String?
+  // Number of extraction passes consumed so far (a pass = one full sweep
+  // over the still-pending chunks; PAUSE increments and a later poll may
+  // start the next pass, up to MAX_PASSES before honest settlement).
+  passCount     Int       @default(0)
+  startedAt     DateTime  @default(now())
+  finishedAt    DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([userId, status])
+  @@index([status, updatedAt])
+}
+
+/// Batch AI explanation generator job — same resumable architecture as
+/// ImportExtraction: the target question id list is FROZEN at creation,
+/// batches are deterministic slices, per-batch results are persisted as
+/// they complete, and a rate-limited/deadline-hit job PAUSES (status stays
+/// processing, no heartbeat) instead of losing progress — the next poll
+/// fast-resumes it into a new pass.
+model ExplanationJob {
+  id            String    @id @default(cuid())
+  userId        String
+  status        String    @default("pending") // pending | processing | done | error
+  error         String?
+  // missing = whole-bank questions without an explanation; selected = the
+  // frozen questionIds list below (with overwrite, also regenerates).
+  scope         String    @default("missing")
+  overwrite     Boolean   @default(false)
+  questionIds   String    @default("[]") // JSON: frozen target id list
+  total         Int       @default(0)
+  written       Int?      // settled from the live DB, never from counters
+  failed        Int?
+  progressDone  Int       @default(0)
+  progressTotal Int       @default(0)
+  passCount     Int       @default(0)
+  // JSON array parallel to the batch plan: {explained: string[]} for a
+  // settled batch, null for a still-pending one.
+  chunkResults  String?
+  metaJson      String?   // JSON: {primaryDead?, primaryFailures?}
+  startedAt     DateTime  @default(now())
+  finishedAt    DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([userId, status])
+  @@index([status, updatedAt])
+}
+
+// Retained legacy room mapping from the retired LiveKit integration. No
+// active application route reads or writes this table.
+model LiveKitRoomMap {
+  id        String   @id @default(cuid())
+  roomName  String   @unique // LiveKit room name (sanitized)
+  chatRoomId String  // original MedQ chat room id (pre-sanitization)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([chatRoomId])
+}
+
+// ── OSCE voice trainer sessions ──
+// One row per standardized-patient encounter: the scenario persona (hidden
+// profile included), the full turn-by-turn transcript, and the LLM debrief
+// (coverage checklist, empathy, red flags, SOAP note, score).
+model OsceSession {
+  id          String    @id @default(cuid())
+  userId      String
+  scenario    String    @default("{}")  // JSON: { title, system, persona, hiddenProfile, checklist }
+  transcript  String    @default("[]")  // JSON: [{ role: 'student'|'patient', text, ts }]
+  result      String?   // JSON: { score, coverage, missed, empathy, redFlags, soapNote } — set on debrief
+  status      String    @default("active") // active | completed
+  durationSec Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}

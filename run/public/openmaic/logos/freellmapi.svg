@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+  <!-- FreeLLMAPI: one endpoint (bottom) fanning out to many free providers (top) -->
+  <circle cx="12" cy="19" r="2.2"/>
+  <path d="M12 16.8V14"/>
+  <path d="M12 14 5.5 9.5"/>
+  <path d="M12 14 18.5 9.5"/>
+  <path d="M12 14 12 8.5"/>
+  <circle cx="5.5" cy="7.5" r="1.9"/>
+  <circle cx="12" cy="6.2" r="1.9"/>
+  <circle cx="18.5" cy="7.5" r="1.9"/>
+</svg>

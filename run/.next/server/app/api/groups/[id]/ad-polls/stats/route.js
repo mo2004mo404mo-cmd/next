@@ -1,0 +1,975 @@
+"use strict";
+(() => {
+var exports = {};
+exports.id = 8721;
+exports.ids = [8721];
+exports.modules = {
+
+/***/ 108128:
+/***/ ((module) => {
+
+module.exports = require("next/dist/server/runtime-reacts.external.js");
+
+/***/ }),
+
+/***/ 144865:
+/***/ ((module) => {
+
+module.exports = import("@prisma/client/runtime/query_compiler_fast_bg.postgresql.wasm-base64.mjs");;
+
+/***/ }),
+
+/***/ 164939:
+/***/ ((module) => {
+
+module.exports = import("pg");;
+
+/***/ }),
+
+/***/ 173136:
+/***/ ((module) => {
+
+module.exports = require("node:url");
+
+/***/ }),
+
+/***/ 176760:
+/***/ ((module) => {
+
+module.exports = require("node:path");
+
+/***/ }),
+
+/***/ 192280:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+var __webpack_unused_export__;
+
+__webpack_unused_export__ = ({
+    value: true
+});
+Object.defineProperty(exports, "I", ({
+    enumerable: true,
+    get: function() {
+        return sendResponse;
+    }
+}));
+const _helpers = __webpack_require__(228208);
+const _pipereadable = __webpack_require__(447617);
+const _utils = __webpack_require__(662018);
+async function sendResponse(req, res, response, waitUntil) {
+    if (// The type check here ensures that `req` is correctly typed, and the
+    // environment variable check provides dead code elimination.
+     true && (0, _helpers.isNodeNextResponse)(res)) {
+        var // Copy over the response headers.
+        _response_headers;
+        // Copy over the response status.
+        res.statusCode = response.status;
+        res.statusMessage = response.statusText;
+        // TODO: this is not spec-compliant behavior and we should not restrict
+        // headers that are allowed to appear many times.
+        //
+        // See:
+        // https://github.com/vercel/next.js/pull/70127
+        const headersWithMultipleValuesAllowed = [
+            // can add more headers to this list if needed
+            'set-cookie',
+            'www-authenticate',
+            'proxy-authenticate',
+            'vary'
+        ];
+        (_response_headers = response.headers) == null ? void 0 : _response_headers.forEach((value, name)=>{
+            // `x-middleware-set-cookie` is an internal header not needed for the response
+            if (name.toLowerCase() === 'x-middleware-set-cookie') {
+                return;
+            }
+            // The append handling is special cased for `set-cookie`.
+            if (name.toLowerCase() === 'set-cookie') {
+                // TODO: (wyattjoh) replace with native response iteration when we can upgrade undici
+                for (const cookie of (0, _utils.splitCookiesString)(value)){
+                    res.appendHeader(name, cookie);
+                }
+            } else {
+                // only append the header if it is either not present in the outbound response
+                // or if the header supports multiple values
+                const isHeaderPresent = typeof res.getHeader(name) !== 'undefined';
+                if (headersWithMultipleValuesAllowed.includes(name.toLowerCase()) || !isHeaderPresent) {
+                    res.appendHeader(name, value);
+                }
+            }
+        });
+        /**
+     * The response can't be directly piped to the underlying response. The
+     * following is duplicated from the edge runtime handler.
+     *
+     * See packages/next/server/next-server.ts
+     */ const { originalResponse } = res;
+        // A response body must not be sent for HEAD requests. See https://httpwg.org/specs/rfc9110.html#HEAD
+        if (response.body && req.method !== 'HEAD') {
+            await (0, _pipereadable.pipeToNodeResponse)(response.body, originalResponse, waitUntil);
+        } else {
+            originalResponse.end();
+        }
+    }
+}
+
+//# sourceMappingURL=send-response.js.map
+
+/***/ }),
+
+/***/ 200261:
+/***/ ((module) => {
+
+module.exports = require("next/dist/shared/lib/router/utils/app-paths");
+
+/***/ }),
+
+/***/ 226849:
+/***/ ((module) => {
+
+module.exports = require("@prisma/client/runtime/client");
+
+/***/ }),
+
+/***/ 274552:
+/***/ ((module) => {
+
+module.exports = require("pino");
+
+/***/ }),
+
+/***/ 275811:
+/***/ ((module) => {
+
+module.exports = import("@prisma/client/runtime/query_compiler_fast_bg.postgresql.mjs");;
+
+/***/ }),
+
+/***/ 319225:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+
+if (false) {} else {
+    if (false) {} else {
+        if (false) {} else {
+            if (false) {} else {
+                module.exports = __webpack_require__(744870);
+            }
+        }
+    }
+}
+
+//# sourceMappingURL=module.compiled.js.map
+
+/***/ }),
+
+/***/ 321820:
+/***/ ((module) => {
+
+module.exports = require("os");
+
+/***/ }),
+
+/***/ 333873:
+/***/ ((module) => {
+
+module.exports = require("path");
+
+/***/ }),
+
+/***/ 383519:
+/***/ ((module) => {
+
+module.exports = require("postgres-array");
+
+/***/ }),
+
+/***/ 419121:
+/***/ ((module) => {
+
+module.exports = require("next/dist/server/app-render/action-async-storage.external.js");
+
+/***/ }),
+
+/***/ 455511:
+/***/ ((module) => {
+
+module.exports = require("crypto");
+
+/***/ }),
+
+/***/ 475106:
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   handler: () => (/* binding */ handler),
+/* harmony export */   patchFetch: () => (/* binding */ patchFetch),
+/* harmony export */   routeModule: () => (/* binding */ routeModule),
+/* harmony export */   serverHooks: () => (/* binding */ serverHooks),
+/* harmony export */   workAsyncStorage: () => (/* binding */ workAsyncStorage),
+/* harmony export */   workUnitAsyncStorage: () => (/* binding */ workUnitAsyncStorage)
+/* harmony export */ });
+/* harmony import */ var next_dist_server_route_modules_app_route_module_compiled__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(319225);
+/* harmony import */ var next_dist_server_route_modules_app_route_module_compiled__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(next_dist_server_route_modules_app_route_module_compiled__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var next_dist_server_route_kind__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(684006);
+/* harmony import */ var next_dist_server_lib_patch_fetch__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8317);
+/* harmony import */ var next_dist_server_lib_patch_fetch__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(next_dist_server_lib_patch_fetch__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var next_dist_server_request_meta__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(799373);
+/* harmony import */ var next_dist_server_request_meta__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(next_dist_server_request_meta__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var next_dist_server_lib_trace_tracer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(434775);
+/* harmony import */ var next_dist_server_lib_trace_tracer__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(next_dist_server_lib_trace_tracer__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var next_dist_server_app_render_manifests_singleton__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(524235);
+/* harmony import */ var next_dist_server_app_render_manifests_singleton__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(next_dist_server_app_render_manifests_singleton__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var next_dist_shared_lib_router_utils_app_paths__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(200261);
+/* harmony import */ var next_dist_shared_lib_router_utils_app_paths__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(next_dist_shared_lib_router_utils_app_paths__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var next_dist_server_base_http_node__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(754365);
+/* harmony import */ var next_dist_server_base_http_node__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(next_dist_server_base_http_node__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var next_dist_server_web_spec_extension_adapters_next_request__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(590771);
+/* harmony import */ var next_dist_server_web_spec_extension_adapters_next_request__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(next_dist_server_web_spec_extension_adapters_next_request__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var next_dist_server_lib_trace_constants__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(473461);
+/* harmony import */ var next_dist_server_lib_trace_constants__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(next_dist_server_lib_trace_constants__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var next_dist_server_instrumentation_utils__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(767798);
+/* harmony import */ var next_dist_server_send_response__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(192280);
+/* harmony import */ var next_dist_server_web_utils__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(662018);
+/* harmony import */ var next_dist_server_web_utils__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(next_dist_server_web_utils__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var next_dist_server_lib_cache_control__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(445696);
+/* harmony import */ var next_dist_lib_constants__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(347929);
+/* harmony import */ var next_dist_lib_constants__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(next_dist_lib_constants__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var next_dist_shared_lib_no_fallback_error_external__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(986439);
+/* harmony import */ var next_dist_shared_lib_no_fallback_error_external__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(next_dist_shared_lib_no_fallback_error_external__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var next_dist_server_response_cache__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(137527);
+/* harmony import */ var next_dist_server_response_cache__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(next_dist_server_response_cache__WEBPACK_IMPORTED_MODULE_16__);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// We inject the nextConfigOutput here so that we can use them in the route
+// module.
+const nextConfigOutput = ""
+const routeModule = new next_dist_server_route_modules_app_route_module_compiled__WEBPACK_IMPORTED_MODULE_0__.AppRouteRouteModule({
+    definition: {
+        kind: next_dist_server_route_kind__WEBPACK_IMPORTED_MODULE_1__.RouteKind.APP_ROUTE,
+        page: "/api/groups/[id]/ad-polls/stats/route",
+        pathname: "/api/groups/[id]/ad-polls/stats",
+        filename: "route",
+        bundlePath: "app/api/groups/[id]/ad-polls/stats/route"
+    },
+    distDir: ".next" || 0,
+    relativeProjectDir:  false || '',
+    resolvedPagePath: "/workspaces/next/run/src/app/api/groups/[id]/ad-polls/stats/route.ts",
+    nextConfigOutput,
+    // The lazy require factory ensures that:
+    // - In dev: devRequestTimingInternalsEnd is set before userland executes,
+    //   correctly attributing module load time to application-code rather than
+    //   framework internals.
+    // - In all modes: async modules (route files with top-level await) are
+    //   handled correctly — require() returns a Promise for such modules, which
+    //   ensureUserland() awaits before the first request is handled.
+    userland: ()=>__webpack_require__(968187),
+    // In Turbopack dev mode, also provide a synchronous per-request getter so
+    // server HMR updates are picked up without re-executing the entry chunk.
+    // Using require() (synchronous) avoids adding async overhead that would be
+    // incorrectly attributed to application-code time in devRequestTiming.
+    ... false ? 0 : {}
+});
+// Pull out the exports that we need to expose from the module. This should
+// be eliminated when we've moved the other routes to the new format. These
+// are used to hook into the route.
+const { workAsyncStorage, workUnitAsyncStorage, serverHooks } = routeModule;
+function patchFetch() {
+    return (0,next_dist_server_lib_patch_fetch__WEBPACK_IMPORTED_MODULE_2__.patchFetch)({
+        workAsyncStorage,
+        workUnitAsyncStorage
+    });
+}
+
+async function handler(req, res, ctx) {
+    if (ctx.requestMeta) {
+        (0,next_dist_server_request_meta__WEBPACK_IMPORTED_MODULE_3__.setRequestMeta)(req, ctx.requestMeta);
+    }
+    if (routeModule.isDev) {
+        (0,next_dist_server_request_meta__WEBPACK_IMPORTED_MODULE_3__.addRequestMeta)(req, 'devRequestTimingInternalsEnd', process.hrtime.bigint());
+    }
+    let srcPage = "/api/groups/[id]/ad-polls/stats/route";
+    // turbopack doesn't normalize `/index` in the page name
+    // so we need to to process dynamic routes properly
+    // TODO: fix turbopack providing differing value from webpack
+    if (false) {} else if (srcPage === '/index') {
+        // we always normalize /index specifically
+        srcPage = '/';
+    }
+    const multiZoneDraftMode = false;
+    const prepareResult = await routeModule.prepare(req, res, {
+        srcPage,
+        multiZoneDraftMode
+    });
+    if (!prepareResult) {
+        res.statusCode = 400;
+        res.end('Bad Request');
+        ctx.waitUntil == null ? void 0 : ctx.waitUntil.call(ctx, Promise.resolve());
+        return null;
+    }
+    const { buildId, deploymentId, params, nextConfig, parsedUrl, isDraftMode, prerenderManifest, routerServerContext, isOnDemandRevalidate, revalidateOnlyGenerated, resolvedPathname, clientReferenceManifest, serverActionsManifest } = prepareResult;
+    const normalizedSrcPage = (0,next_dist_shared_lib_router_utils_app_paths__WEBPACK_IMPORTED_MODULE_6__.normalizeAppPath)(srcPage);
+    let isIsr = Boolean(prerenderManifest.dynamicRoutes[normalizedSrcPage] || prerenderManifest.routes[resolvedPathname]);
+    const render404 = async ()=>{
+        // TODO: should route-module itself handle rendering the 404
+        if (routerServerContext == null ? void 0 : routerServerContext.render404) {
+            await routerServerContext.render404(req, res, parsedUrl, false);
+        } else {
+            res.end('This page could not be found');
+        }
+        return null;
+    };
+    if (isIsr && !isDraftMode) {
+        const isPrerendered = Boolean(prerenderManifest.routes[resolvedPathname]);
+        const prerenderInfo = prerenderManifest.dynamicRoutes[normalizedSrcPage];
+        if (prerenderInfo) {
+            if (prerenderInfo.fallback === false && !isPrerendered) {
+                if (nextConfig.adapterPath) {
+                    return await render404();
+                }
+                throw new next_dist_shared_lib_no_fallback_error_external__WEBPACK_IMPORTED_MODULE_15__.NoFallbackError();
+            }
+        }
+    }
+    let cacheKey = null;
+    if (isIsr && !routeModule.isDev && !isDraftMode) {
+        cacheKey = resolvedPathname;
+        // ensure /index and / is normalized to one key
+        cacheKey = cacheKey === '/index' ? '/' : cacheKey;
+    }
+    const supportsDynamicResponse = // If we're in development, we always support dynamic HTML
+    routeModule.isDev === true || // If this is not SSG or does not have static paths, then it supports
+    // dynamic HTML.
+    !isIsr;
+    // This is a revalidation request if the request is for a static
+    // page and it is not being resumed from a postponed render and
+    // it is not a dynamic RSC request then it is a revalidation
+    // request.
+    const isStaticGeneration = isIsr && !supportsDynamicResponse;
+    // Before rendering (which initializes component tree modules), we have to
+    // set the reference manifests to our global store so Server Action's
+    // encryption util can access to them at the top level of the page module.
+    if (serverActionsManifest && clientReferenceManifest) {
+        (0,next_dist_server_app_render_manifests_singleton__WEBPACK_IMPORTED_MODULE_5__.setManifestsSingleton)({
+            page: srcPage,
+            clientReferenceManifest,
+            serverActionsManifest
+        });
+    }
+    const method = req.method || 'GET';
+    const tracer = (0,next_dist_server_lib_trace_tracer__WEBPACK_IMPORTED_MODULE_4__.getTracer)();
+    const activeSpan = tracer.getActiveScopeSpan();
+    const isWrappedByNextServer = Boolean(routerServerContext == null ? void 0 : routerServerContext.isWrappedByNextServer);
+    const isMinimalMode = Boolean((0,next_dist_server_request_meta__WEBPACK_IMPORTED_MODULE_3__.getRequestMeta)(req, 'minimalMode'));
+    const incrementalCache = (0,next_dist_server_request_meta__WEBPACK_IMPORTED_MODULE_3__.getRequestMeta)(req, 'incrementalCache') || await routeModule.getIncrementalCache(req, nextConfig, prerenderManifest, isMinimalMode);
+    incrementalCache == null ? void 0 : incrementalCache.resetRequestCache();
+    globalThis.__incrementalCache = incrementalCache;
+    const context = {
+        params,
+        previewProps: prerenderManifest.preview,
+        renderOpts: {
+            experimental: {
+                authInterrupts: Boolean(nextConfig.experimental.authInterrupts),
+                useCacheTimeout: nextConfig.experimental.useCacheTimeout
+            },
+            cacheComponents: Boolean(nextConfig.cacheComponents),
+            validationLevel: nextConfig.experimental.instantInsights.validationLevel,
+            supportsDynamicResponse,
+            incrementalCache,
+            hmrRefreshHash: (0,next_dist_server_request_meta__WEBPACK_IMPORTED_MODULE_3__.getRequestMeta)(req, 'hmrRefreshHash'),
+            cacheLifeProfiles: nextConfig.cacheLife,
+            staticPageGenerationTimeout: nextConfig.staticPageGenerationTimeout,
+            waitUntil: ctx.waitUntil,
+            onClose: (cb)=>{
+                res.on('close', cb);
+            },
+            onAfterTaskError: undefined,
+            onInstrumentationRequestError: (error, _request, errorContext, silenceLog)=>routeModule.onRequestError(req, error, errorContext, silenceLog, routerServerContext)
+        },
+        sharedContext: {
+            buildId,
+            deploymentId
+        }
+    };
+    const nodeNextReq = new next_dist_server_base_http_node__WEBPACK_IMPORTED_MODULE_7__.NodeNextRequest(req);
+    const nodeNextRes = new next_dist_server_base_http_node__WEBPACK_IMPORTED_MODULE_7__.NodeNextResponse(res);
+    const nextReq = next_dist_server_web_spec_extension_adapters_next_request__WEBPACK_IMPORTED_MODULE_8__.NextRequestAdapter.fromNodeNextRequest(nodeNextReq, (0,next_dist_server_web_spec_extension_adapters_next_request__WEBPACK_IMPORTED_MODULE_8__.signalFromNodeResponse)(res));
+    const responseGenerator = async ({ previousCacheEntry })=>{
+        try {
+            if (!isMinimalMode && isOnDemandRevalidate && revalidateOnlyGenerated && !previousCacheEntry) {
+                res.statusCode = 404;
+                // on-demand revalidate always sets this header
+                res.setHeader('x-nextjs-cache', 'REVALIDATED');
+                res.end('This page could not be found');
+                return null;
+            }
+            const response = await routeModule.handle(nextReq, context);
+            req.fetchMetrics = context.renderOpts.fetchMetrics;
+            let pendingWaitUntil = context.renderOpts.pendingWaitUntil;
+            // Attempt using provided waitUntil if available
+            // if it's not we fallback to sendResponse's handling
+            if (pendingWaitUntil) {
+                if (ctx.waitUntil) {
+                    ctx.waitUntil(pendingWaitUntil);
+                    pendingWaitUntil = undefined;
+                }
+            }
+            const cacheTags = context.renderOpts.collectedTags;
+            // If the request is for a static response, we can cache it so long
+            // as it's not edge.
+            if (isIsr) {
+                const blob = await response.blob();
+                // Copy the headers from the response.
+                const headers = (0,next_dist_server_web_utils__WEBPACK_IMPORTED_MODULE_12__.toNodeOutgoingHttpHeaders)(response.headers);
+                if (cacheTags) {
+                    headers[next_dist_lib_constants__WEBPACK_IMPORTED_MODULE_14__.NEXT_CACHE_TAGS_HEADER] = cacheTags;
+                }
+                if (!headers['content-type'] && blob.type) {
+                    headers['content-type'] = blob.type;
+                }
+                const revalidate = typeof context.renderOpts.collectedRevalidate === 'undefined' || context.renderOpts.collectedRevalidate >= next_dist_lib_constants__WEBPACK_IMPORTED_MODULE_14__.INFINITE_CACHE ? false : context.renderOpts.collectedRevalidate;
+                const expire = typeof context.renderOpts.collectedExpire === 'undefined' || context.renderOpts.collectedExpire >= next_dist_lib_constants__WEBPACK_IMPORTED_MODULE_14__.INFINITE_CACHE ? // route has a numeric `revalidate` but didn't declare an
+                // explicit `expire` (e.g. via `cacheLife`). This mirrors the
+                // build-time fallback in `build/index.ts` so cache entries
+                // and the response Cache-Control header agree on the route's
+                // effective expire. Routes that opt out of revalidation
+                // (`revalidate: false`) or that are dynamic (`revalidate: 0`)
+                // keep `expire: undefined`.
+                revalidate !== false && revalidate > 0 ? nextConfig.expireTime : undefined : context.renderOpts.collectedExpire;
+                // Create the cache entry for the response.
+                const cacheEntry = {
+                    value: {
+                        kind: next_dist_server_response_cache__WEBPACK_IMPORTED_MODULE_16__.CachedRouteKind.APP_ROUTE,
+                        status: response.status,
+                        body: Buffer.from(await blob.arrayBuffer()),
+                        headers
+                    },
+                    cacheControl: {
+                        revalidate,
+                        expire
+                    }
+                };
+                return cacheEntry;
+            } else {
+                // send response without caching if not ISR
+                await (0,next_dist_server_send_response__WEBPACK_IMPORTED_MODULE_11__/* .sendResponse */ .I)(nodeNextReq, nodeNextRes, response, pendingWaitUntil);
+                return null;
+            }
+        } catch (err) {
+            // if this is a background revalidate we need to report
+            // the request error here as it won't be bubbled
+            if (previousCacheEntry == null ? void 0 : previousCacheEntry.isStale) {
+                const silenceLog = false;
+                await routeModule.onRequestError(req, err, {
+                    routerKind: 'App Router',
+                    routePath: srcPage,
+                    routeType: 'route',
+                    revalidateReason: (0,next_dist_server_instrumentation_utils__WEBPACK_IMPORTED_MODULE_10__.getRevalidateReason)({
+                        isStaticGeneration,
+                        isOnDemandRevalidate
+                    })
+                }, silenceLog, routerServerContext);
+            }
+            throw err;
+        }
+    };
+    const handleResponse = async (currentSpan, parentSpan)=>{
+        try {
+            var _cacheEntry_value;
+            const cacheEntry = await routeModule.handleResponse({
+                req,
+                nextConfig,
+                cacheKey,
+                routeKind: next_dist_server_route_kind__WEBPACK_IMPORTED_MODULE_1__.RouteKind.APP_ROUTE,
+                isFallback: false,
+                prerenderManifest,
+                isRoutePPREnabled: false,
+                isOnDemandRevalidate,
+                revalidateOnlyGenerated,
+                responseGenerator,
+                waitUntil: ctx.waitUntil,
+                isMinimalMode
+            });
+            // we don't create a cacheEntry for ISR
+            if (!isIsr) {
+                return;
+            }
+            if ((cacheEntry == null ? void 0 : (_cacheEntry_value = cacheEntry.value) == null ? void 0 : _cacheEntry_value.kind) !== next_dist_server_response_cache__WEBPACK_IMPORTED_MODULE_16__.CachedRouteKind.APP_ROUTE) {
+                var _cacheEntry_value1;
+                throw Object.defineProperty(new Error(`Invariant: app-route received invalid cache entry ${cacheEntry == null ? void 0 : (_cacheEntry_value1 = cacheEntry.value) == null ? void 0 : _cacheEntry_value1.kind}`), "__NEXT_ERROR_CODE", {
+                    value: "E701",
+                    enumerable: false,
+                    configurable: true
+                });
+            }
+            if (!isMinimalMode) {
+                res.setHeader('x-nextjs-cache', isOnDemandRevalidate ? 'REVALIDATED' : cacheEntry.isMiss ? 'MISS' : cacheEntry.isStale ? 'STALE' : 'HIT');
+            }
+            // Draft mode should never be cached
+            if (isDraftMode) {
+                res.setHeader('Cache-Control', 'private, no-cache, no-store, max-age=0, must-revalidate');
+            }
+            const headers = (0,next_dist_server_web_utils__WEBPACK_IMPORTED_MODULE_12__.fromNodeOutgoingHttpHeaders)(cacheEntry.value.headers);
+            if (!(isMinimalMode && isIsr)) {
+                headers.delete(next_dist_lib_constants__WEBPACK_IMPORTED_MODULE_14__.NEXT_CACHE_TAGS_HEADER);
+            }
+            // If cache control is already set on the response we don't
+            // override it to allow users to customize it via next.config
+            if (cacheEntry.cacheControl && !res.getHeader('Cache-Control') && !headers.get('Cache-Control')) {
+                headers.set('Cache-Control', (0,next_dist_server_lib_cache_control__WEBPACK_IMPORTED_MODULE_13__.getCacheControlHeader)(cacheEntry.cacheControl));
+            }
+            await (0,next_dist_server_send_response__WEBPACK_IMPORTED_MODULE_11__/* .sendResponse */ .I)(nodeNextReq, nodeNextRes, // @ts-expect-error - Argument of type 'Buffer<ArrayBufferLike>' is not assignable to parameter of type 'BodyInit | null | undefined'.
+            new Response(cacheEntry.value.body, {
+                headers,
+                status: cacheEntry.value.status || 200
+            }));
+            return;
+        } catch (err) {
+            if (!(err instanceof next_dist_shared_lib_no_fallback_error_external__WEBPACK_IMPORTED_MODULE_15__.NoFallbackError)) {
+                const silenceLog = false;
+                await routeModule.onRequestError(req, err, {
+                    routerKind: 'App Router',
+                    routePath: normalizedSrcPage,
+                    routeType: 'route',
+                    revalidateReason: (0,next_dist_server_instrumentation_utils__WEBPACK_IMPORTED_MODULE_10__.getRevalidateReason)({
+                        isStaticGeneration,
+                        isOnDemandRevalidate
+                    })
+                }, silenceLog, routerServerContext);
+            }
+            // rethrow so that we can handle serving error page
+            // If this is during static generation, throw the error again.
+            if (isIsr) throw err;
+            // Otherwise, send a 500 response.
+            await (0,next_dist_server_send_response__WEBPACK_IMPORTED_MODULE_11__/* .sendResponse */ .I)(nodeNextReq, nodeNextRes, new Response(null, {
+                status: 500
+            }));
+            return;
+        } finally{
+            ;
+            (()=>{
+                if (!currentSpan) {
+                    return;
+                }
+                let statusCode = res.statusCode;
+                currentSpan.setAttributes({
+                    'http.status_code': statusCode,
+                    'next.rsc': false
+                });
+                if (statusCode && statusCode >= 500) {
+                    // For 5xx status codes: SHOULD be set to 'Error' span status.
+                    // x-ref: https://opentelemetry.io/docs/specs/semconv/http/http-spans/#status
+                    currentSpan.setStatus({
+                        code: next_dist_server_lib_trace_tracer__WEBPACK_IMPORTED_MODULE_4__.SpanStatusCode.ERROR
+                    });
+                    // For span status 'Error', SHOULD set 'error.type' attribute.
+                    currentSpan.setAttribute('error.type', statusCode.toString());
+                }
+                const rootSpanAttributes = tracer.getRootSpanAttributes();
+                // We were unable to get attributes, probably OTEL is not enabled
+                if (!rootSpanAttributes) {
+                    return;
+                }
+                if (rootSpanAttributes.get('next.span_type') !== next_dist_server_lib_trace_constants__WEBPACK_IMPORTED_MODULE_9__.BaseServerSpan.handleRequest) {
+                    console.warn(`Unexpected root span type '${rootSpanAttributes.get('next.span_type')}'. Please report this Next.js issue https://github.com/vercel/next.js`);
+                    return;
+                }
+                const route = rootSpanAttributes.get('next.route') || normalizedSrcPage;
+                const name = `${method} ${route}`;
+                currentSpan.setAttributes({
+                    'next.route': route,
+                    'http.route': route,
+                    'next.span_name': name
+                });
+                currentSpan.updateName(name);
+                // Propagate http.route to the parent span if one exists (e.g.
+                // a platform-created HTTP span in adapter deployments).
+                if (parentSpan && parentSpan !== currentSpan) {
+                    parentSpan.setAttribute('http.route', route);
+                    parentSpan.updateName(name);
+                }
+            })();
+        }
+    };
+    // TODO: activeSpan code path is for when wrapped by
+    // next-server can be removed when this is no longer used
+    if (isWrappedByNextServer && activeSpan) {
+        await handleResponse(activeSpan, undefined);
+    } else {
+        let parentSpan = tracer.getActiveScopeSpan();
+        await tracer.withPropagatedContext(req.headers, ()=>tracer.trace(next_dist_server_lib_trace_constants__WEBPACK_IMPORTED_MODULE_9__.BaseServerSpan.handleRequest, {
+                spanName: `${method} ${srcPage}`,
+                kind: next_dist_server_lib_trace_tracer__WEBPACK_IMPORTED_MODULE_4__.SpanKind.SERVER,
+                attributes: {
+                    'http.method': method,
+                    'http.target': req.url
+                }
+            }, (span)=>handleResponse(span, parentSpan)), undefined, !isWrappedByNextServer);
+    }
+}
+
+//# sourceMappingURL=app-route.js.map
+
+
+/***/ }),
+
+/***/ 504573:
+/***/ ((module) => {
+
+module.exports = require("node:buffer");
+
+/***/ }),
+
+/***/ 529294:
+/***/ ((module) => {
+
+module.exports = require("next/dist/server/app-render/work-async-storage.external.js");
+
+/***/ }),
+
+/***/ 629021:
+/***/ ((module) => {
+
+module.exports = require("fs");
+
+/***/ }),
+
+/***/ 663033:
+/***/ ((module) => {
+
+module.exports = require("next/dist/server/app-render/work-unit-async-storage.external.js");
+
+/***/ }),
+
+/***/ 710846:
+/***/ ((module) => {
+
+module.exports = require("next/dist/compiled/next-server/app-page.runtime.prod.js");
+
+/***/ }),
+
+/***/ 744870:
+/***/ ((module) => {
+
+module.exports = require("next/dist/compiled/next-server/app-route.runtime.prod.js");
+
+/***/ }),
+
+/***/ 903295:
+/***/ ((module) => {
+
+module.exports = require("next/dist/server/app-render/after-task-async-storage.external.js");
+
+/***/ }),
+
+/***/ 968187:
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   GET: () => (/* binding */ GET)
+/* harmony export */ });
+/* harmony import */ var _lib_db__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(520903);
+/* harmony import */ var _lib_auth_helpers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(122035);
+var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([_lib_db__WEBPACK_IMPORTED_MODULE_0__, _lib_auth_helpers__WEBPACK_IMPORTED_MODULE_1__]);
+([_lib_db__WEBPACK_IMPORTED_MODULE_0__, _lib_auth_helpers__WEBPACK_IMPORTED_MODULE_1__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__);
+
+
+async function getUser(req) {
+    const userId = await (0,_lib_auth_helpers__WEBPACK_IMPORTED_MODULE_1__/* .getAuthenticatedUserId */ .At)(req);
+    if (!userId) return null;
+    return _lib_db__WEBPACK_IMPORTED_MODULE_0__.db.user.findUnique({
+        where: {
+            id: userId
+        }
+    });
+}
+/**
+ * GET /api/groups/[id]/ad-polls/stats
+ *
+ * Aggregated ad-revenue analytics dashboard for a group, PLUS per-poll
+ * interactive voting state. Returns:
+ *   - totals: overall revenue / distributed / available / counts
+ *   - monthly: last 6 months of revenue + distribution (for the bar chart)
+ *   - myEarnings: the current user's payout total, rank, correct answers, threshold, next milestone
+ *   - topEarners: top 5 members by total payouts in this group
+ *   - recentPayouts: last 5 payouts (member, amount, campaign, date)
+ *   - campaigns: every ad-poll rendered as a campaign card. Each campaign
+ *     ALSO includes vote data (myVote, acceptCount, rejectCount,
+ *     myCorrectAnswers, eligibleForShare) so the UI can render the
+ *     interactive Accept/Reject poll on top of the statistics.
+ *
+ * The dashboard unifies BOTH views: live voting UI for active polls AND
+ * aggregate revenue statistics. Stats sections (KPIs, chart, leaderboard)
+ * are NOT affected by individual votes — they only reflect payouts.
+ */ async function GET(request, { params }) {
+    try {
+        const { id } = await params;
+        const user = await getUser(request);
+        if (!user) return Response.json({
+            error: 'Unauthorized'
+        }, {
+            status: 401
+        });
+        const membership = await _lib_db__WEBPACK_IMPORTED_MODULE_0__.db.groupMember.findUnique({
+            where: {
+                groupId_userId: {
+                    groupId: id,
+                    userId: user.id
+                }
+            }
+        });
+        if (!membership) return Response.json({
+            error: 'Not a member'
+        }, {
+            status: 403
+        });
+        const isAdmin = membership.role === 'admin';
+        // 1) All polls in this group, with their payouts + votes (for live voting UI)
+        const polls = await _lib_db__WEBPACK_IMPORTED_MODULE_0__.db.groupAdPoll.findMany({
+            where: {
+                groupId: id
+            },
+            orderBy: {
+                createdAt: 'desc'
+            },
+            include: {
+                shares: {
+                    include: {
+                        user: {
+                            select: {
+                                id: true,
+                                name: true,
+                                image: true
+                            }
+                        }
+                    },
+                    orderBy: {
+                        createdAt: 'desc'
+                    }
+                },
+                votes: true,
+                _count: {
+                    select: {
+                        votes: true,
+                        shares: true
+                    }
+                }
+            }
+        });
+        // Auto-close polls whose deadline has passed (mirrors list endpoint behavior)
+        const now = new Date();
+        const toClose = polls.filter((p)=>p.status === 'active' && p.closesAt && new Date(p.closesAt) <= now);
+        if (toClose.length > 0) {
+            await _lib_db__WEBPACK_IMPORTED_MODULE_0__.db.groupAdPoll.updateMany({
+                where: {
+                    id: {
+                        in: toClose.map((p)=>p.id)
+                    }
+                },
+                data: {
+                    status: 'closed'
+                }
+            });
+            for (const p of toClose)p.status = 'closed';
+        }
+        // 2) Totals
+        const totalRevenue = polls.reduce((s, p)=>s + p.totalRevenue, 0);
+        const totalDistributed = polls.reduce((s, p)=>s + p.totalDistributed, 0);
+        const totalAvailable = totalRevenue - totalDistributed;
+        const activeCount = polls.filter((p)=>p.status !== 'closed').length;
+        const closedCount = polls.filter((p)=>p.status === 'closed').length;
+        // 3) Monthly aggregates — last 6 months (including current)
+        // Each share's createdAt determines which month it landed in.
+        // Revenue is attributed to the month the poll was credited (we approximate
+        // using the latest updatedAt on the poll, since revenue is added via the
+        // /revenue POST endpoint which updates updatedAt).
+        const monthBuckets = [];
+        for(let i = 5; i >= 0; i--){
+            const d = new Date();
+            d.setDate(1);
+            d.setMonth(d.getMonth() - i);
+            const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+            const label = d.toLocaleString('en-US', {
+                month: 'short'
+            });
+            monthBuckets.push({
+                key,
+                label,
+                revenue: 0,
+                distributed: 0
+            });
+        }
+        const bucketMap = new Map(monthBuckets.map((b)=>[
+                b.key,
+                b
+            ]));
+        // Distribute revenue across months using each poll's updatedAt (proxy for
+        // when revenue was credited). Distribute payouts (shares) by their createdAt.
+        for (const p of polls){
+            const pollMonthKey = `${p.updatedAt.getFullYear()}-${String(p.updatedAt.getMonth() + 1).padStart(2, '0')}`;
+            const bucket = bucketMap.get(pollMonthKey);
+            if (bucket) bucket.revenue += p.totalRevenue;
+            for (const share of p.shares){
+                const shareMonthKey = `${share.createdAt.getFullYear()}-${String(share.createdAt.getMonth() + 1).padStart(2, '0')}`;
+                const sBucket = bucketMap.get(shareMonthKey);
+                if (sBucket) sBucket.distributed += share.amount;
+            }
+        }
+        // 4) Top earners — aggregate all shares by user
+        const earnerMap = new Map();
+        for (const p of polls){
+            for (const share of p.shares){
+                const existing = earnerMap.get(share.userId);
+                if (existing) {
+                    existing.totalEarned += share.amount;
+                    existing.payoutCount += 1;
+                } else {
+                    earnerMap.set(share.userId, {
+                        userId: share.userId,
+                        name: share.user?.name || 'Unknown',
+                        image: share.user?.image || null,
+                        totalEarned: share.amount,
+                        payoutCount: 1
+                    });
+                }
+            }
+        }
+        const topEarners = Array.from(earnerMap.values()).sort((a, b)=>b.totalEarned - a.totalEarned).slice(0, 5);
+        // 5) Recent payouts — flat list of last 5 shares across all polls, newest first
+        const recentPayouts = polls.flatMap((p)=>p.shares.map((s)=>({
+                    id: s.id,
+                    userId: s.userId,
+                    userName: s.user?.name || 'Unknown',
+                    userImage: s.user?.image || null,
+                    amount: s.amount,
+                    correctAnswers: s.correctAnswers,
+                    pollId: p.id,
+                    pollQuestion: p.question,
+                    createdAt: s.createdAt
+                }))).sort((a, b)=>new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 5);
+        // 6) My earnings + my correct answers + my rank
+        const myCorrectAgg = await _lib_db__WEBPACK_IMPORTED_MODULE_0__.db.groupQuizAttempt.groupBy({
+            by: [
+                'userId'
+            ],
+            where: {
+                userId: user.id,
+                groupId: id,
+                isCorrect: true
+            },
+            _count: {
+                _all: true
+            }
+        });
+        const myCorrectAnswers = myCorrectAgg[0]?._count?._all ?? 0;
+        // Use the lowest threshold among active campaigns as the "next milestone"
+        // (so members always have a target to qualify for at least one campaign).
+        const activeThresholds = polls.filter((p)=>p.status !== 'closed').map((p)=>p.quizThreshold).sort((a, b)=>a - b);
+        const nextMilestone = activeThresholds[0] ?? polls[0]?.quizThreshold ?? 10;
+        const myEarnings = earnerMap.get(user.id);
+        const myRank = myEarnings ? Array.from(earnerMap.values()).sort((a, b)=>b.totalEarned - a.totalEarned).findIndex((e)=>e.userId === user.id) + 1 : null;
+        // 7) Campaigns — one card per ad poll. Each card carries BOTH:
+        //    (a) Statistics (revenue / distributed / available / recipients)
+        //    (b) Live voting state (myVote, acceptCount, rejectCount, eligibility)
+        //    so the UI can render the interactive Accept/Reject poll inline with
+        //    the campaign stats. Accept/reject counts come straight from the
+        //    poll row (kept up-to-date by the /vote endpoint on every cast).
+        const campaigns = polls.map((p)=>{
+            const myVote = p.votes.find((v)=>v.userId === user.id)?.vote || null;
+            const eligibleForShare = myCorrectAnswers >= p.quizThreshold;
+            return {
+                id: p.id,
+                question: p.question,
+                description: p.description,
+                status: p.status,
+                createdAt: p.createdAt,
+                closesAt: p.closesAt,
+                revenueSharePct: p.revenueSharePct,
+                quizThreshold: p.quizThreshold,
+                totalRevenue: p.totalRevenue,
+                totalDistributed: p.totalDistributed,
+                available: p.totalRevenue - p.totalDistributed,
+                recipientCount: p._count.shares,
+                participantCount: p._count.votes,
+                // Vote-related fields for the interactive poll UI
+                acceptCount: p.acceptCount,
+                rejectCount: p.rejectCount,
+                myVote,
+                myCorrectAnswers,
+                eligibleForShare
+            };
+        });
+        return Response.json({
+            totals: {
+                totalRevenue,
+                totalDistributed,
+                totalAvailable,
+                activeCount,
+                closedCount,
+                campaignCount: polls.length
+            },
+            monthly: monthBuckets,
+            myEarnings: {
+                totalEarned: myEarnings?.totalEarned ?? 0,
+                payoutCount: myEarnings?.payoutCount ?? 0,
+                rank: myRank,
+                correctAnswers: myCorrectAnswers,
+                nextMilestone,
+                eligible: myCorrectAnswers >= nextMilestone
+            },
+            topEarners,
+            recentPayouts,
+            campaigns,
+            isAdmin
+        });
+    } catch (error) {
+        console.error('Error computing ad-revenue stats:', error);
+        return Response.json({
+            error: 'Failed to compute stats'
+        }, {
+            status: 500
+        });
+    }
+}
+
+__webpack_async_result__();
+} catch(e) { __webpack_async_result__(e); } });
+
+/***/ }),
+
+/***/ 986439:
+/***/ ((module) => {
+
+module.exports = require("next/dist/shared/lib/no-fallback-error.external");
+
+/***/ })
+
+};
+;
+
+// load runtime
+var __webpack_require__ = require("../../../../../../webpack-runtime.js");
+__webpack_require__.C(exports);
+var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
+var __webpack_exports__ = __webpack_require__.X(0, [4741,5592,6912,5573,1435,859,2035], () => (__webpack_exec__(475106)));
+module.exports = __webpack_exports__;
+
+})();

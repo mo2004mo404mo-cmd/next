@@ -1,0 +1,36 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "incremental": false,
+    "skipLibCheck": true
+  },
+  "include": [
+    "next-env.d.ts",
+    "src/lib/server-file-extract.ts",
+    "src/lib/file-extract.ts",
+    "src/app/api/extract/route.ts",
+    "src/lib/agent/knowledge/scene-detect.ts",
+    "src/lib/agent/knowledge/video-scenes.ts",
+    "src/lib/agent/knowledge/ingest-media.ts",
+    "src/lib/agent/knowledge/pipeline.ts",
+    "src/lib/agent/knowledge/process-url.ts",
+    "src/lib/agent/tools/video-search.ts",
+    "src/lib/agent/tools/spreadsheet.ts",
+    "src/lib/agent/tools/chat-registry.ts",
+    "src/lib/agent/tools/index.ts",
+    "src/lib/agent/question-deep-agent.ts",
+    "src/app/api/knowledge/upload/route.ts",
+    "src/components/medq/ImportQuestionsModal.tsx",
+    "src/app/generate/page.tsx",
+    "src/components/medq/ai-agent/useFileAttachments.ts",
+    "src/lib/db.ts",
+    "test/**/*.test.ts",
+    "src/lib/uploads/**/*",
+    "src/app/api/uploads/**/*",
+    "src/components/medq/KnowledgeLibraryPanel.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

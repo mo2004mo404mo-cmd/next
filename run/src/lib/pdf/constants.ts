@@ -1,0 +1,56 @@
+/**
+ * Ported from OpenMAIC (https://github.com/THU-MAIC/OpenMAIC)
+ * License: MIT — Attribution preserved.
+ * Original: lib/pdf/constants.ts
+ *
+ * Verbatim port — only the import path is adapted (`./types` is unchanged
+ * because the directory layout matches OpenMAIC's). The constants are pure
+ * data and self-contained.
+ */
+
+import type { PDFProviderId, PDFProviderConfig } from './types';
+
+export const MINERU_CLOUD_DEFAULT_BASE = 'https://mineru.net/api/v4';
+
+/**
+ * PDF Provider Registry
+ */
+export const PDF_PROVIDERS: Record<PDFProviderId, PDFProviderConfig> = {
+  unpdf: {
+    id: 'unpdf',
+    name: 'unpdf',
+    requiresApiKey: false,
+    icon: '/logos/unpdf.svg',
+    features: ['text', 'images', 'metadata'],
+  },
+
+  mineru: {
+    id: 'mineru',
+    name: 'MinerU',
+    requiresApiKey: false,
+    icon: '/logos/mineru.png',
+    features: ['text', 'images', 'tables', 'formulas', 'layout-analysis'],
+  },
+
+  'mineru-cloud': {
+    id: 'mineru-cloud',
+    name: 'MinerU (Cloud)',
+    requiresApiKey: true,
+    icon: '/logos/mineru.png',
+    features: ['text', 'images', 'tables', 'formulas', 'layout-analysis'],
+  },
+};
+
+/**
+ * Get all available PDF providers
+ */
+export function getAllPDFProviders(): PDFProviderConfig[] {
+  return Object.values(PDF_PROVIDERS);
+}
+
+/**
+ * Get PDF provider by ID
+ */
+export function getPDFProvider(providerId: PDFProviderId): PDFProviderConfig | undefined {
+  return PDF_PROVIDERS[providerId];
+}

@@ -1,0 +1,20 @@
+1:"$Sreact.fragment"
+2:I[90484,[],"OutletBoundary"]
+3:"$Sreact.suspense"
+7:I[90484,[],"ViewportBoundary"]
+8:I[90484,[],"MetadataBoundary"]
+9:I[86869,[],"IconMark"]
+b:I[57121,[],""]
+c:I[74581,[],""]
+6:X
+e:X
+e:C
+0:{"buildId":"1qBpmi4JFMxBVgXRipMsz","data":[{"rsc":["$","$1","c",{"children":[["$","div",null,{"children":"about"}],null,["$","$L2",null,{"children":["$","$3",null,{"name":"Next.MetadataOutlet","children":"$@4"}]}]]}],"isPartial":"$@5","staleTime":"$6","varyParams":null},{"rsc":["$","$1","h",{"children":[null,["$","$L7",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","2",{"name":"theme-color","content":"#00e5a0"}]]}],["$","div",null,{"hidden":true,"children":["$","$L8",null,{"children":["$","$3",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"MedQ — Medical Question Generator"}],["$","meta","1",{"name":"description","content":"Generate visually rich, exam-ready medical questions powered by AI"}],["$","link","2",{"rel":"manifest","href":"/manifest.json"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"MedQ"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","meta","6",{"property":"og:title","content":"MedQ — Medical Question Generator"}],["$","meta","7",{"property":"og:description","content":"Generate visually rich, exam-ready medical questions powered by AI"}],["$","meta","8",{"property":"og:image","content":"http://localhost:3000/opengraph-image.jpg?f6a9d396c00f4060"}],["$","meta","9",{"property":"og:image:type","content":"image/jpeg"}],["$","meta","10",{"property":"og:image:width","content":"1024"}],["$","meta","11",{"property":"og:image:height","content":"1024"}],["$","meta","12",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","13",{"name":"twitter:title","content":"MedQ — Medical Question Generator"}],["$","meta","14",{"name":"twitter:description","content":"Generate visually rich, exam-ready medical questions powered by AI"}],["$","meta","15",{"name":"twitter:image","content":"http://localhost:3000/opengraph-image.jpg?f6a9d396c00f4060"}],["$","meta","16",{"name":"twitter:image:type","content":"image/jpeg"}],["$","meta","17",{"name":"twitter:image:width","content":"1024"}],["$","meta","18",{"name":"twitter:image:height","content":"1024"}],["$","link","19",{"rel":"icon","href":"/favicon.ico?bfdba65b84bfc68d","type":"image/x-icon","sizes":"192x192"}],["$","link","20",{"rel":"icon","href":"/favicon.ico","sizes":"32x32"}],["$","link","21",{"rel":"icon","href":"/icon.png","sizes":"512x512","type":"image/png"}],["$","link","22",{"rel":"apple-touch-icon","href":"/apple-icon.png","sizes":"180x180","type":"image/png"}],["$","$L9","23",{}]]}]}]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"isPartial":"$@a","staleTime":"$6","varyParams":null},{"rsc":["$","$1","c",{"children":[null,["$","$Lb",null,{"parallelRouterKey":"children","template":["$","$Lc",null,{}]}]]}],"isPartial":"$@d","staleTime":"$6","varyParams":"$e"}],"isUpgradeableISRFallback":false,"a":"$@f","rootVaryParams":null,"needsRuntimeRequest":"$@10"}
+4:null
+10:true
+6:300
+6:C
+f:0
+a:"$undefined"
+d:"$undefined"
+5:"$undefined"

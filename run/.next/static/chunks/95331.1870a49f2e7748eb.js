@@ -1,0 +1,20 @@
+"use strict";
+(self["webpackChunk_N_E"] = self["webpackChunk_N_E"] || []).push([[95331],{
+
+/***/ 95331:
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+const lang = Object.freeze(JSON.parse("{\"displayName\":\"Berry\",\"name\":\"berry\",\"patterns\":[{\"include\":\"#controls\"},{\"include\":\"#strings\"},{\"include\":\"#comment-block\"},{\"include\":\"#comments\"},{\"include\":\"#keywords\"},{\"include\":\"#function\"},{\"include\":\"#member\"},{\"include\":\"#identifier\"},{\"include\":\"#number\"},{\"include\":\"#operator\"}],\"repository\":{\"comment-block\":{\"begin\":\"#-\",\"end\":\"-#\",\"name\":\"comment.berry\",\"patterns\":[{}]},\"comments\":{\"begin\":\"#\",\"end\":\"\\\\n\",\"name\":\"comment.line.berry\",\"patterns\":[{}]},\"controls\":{\"patterns\":[{\"match\":\"\\\\b(if|elif|else|for|while|do|end|break|continue|return|try|except|raise)\\\\b\",\"name\":\"keyword.control.berry\"}]},\"function\":{\"patterns\":[{\"match\":\"\\\\b([A-Z_a-z][0-9A-Z_a-z]*(?=\\\\s*\\\\())\",\"name\":\"entity.name.function.berry\"}]},\"identifier\":{\"patterns\":[{\"match\":\"\\\\b[A-Z_a-z]\\\\w+\\\\b\",\"name\":\"identifier.berry\"}]},\"keywords\":{\"patterns\":[{\"match\":\"\\\\b(var|static|def|class|true|false|nil|self|super|import|as|_class)\\\\b\",\"name\":\"keyword.berry\"}]},\"member\":{\"patterns\":[{\"captures\":{\"0\":{\"name\":\"entity.other.attribute-name.berry\"}},\"match\":\"\\\\.([A-Z_a-z][0-9A-Z_a-z]*)\"}]},\"number\":{\"patterns\":[{\"match\":\"0x\\\\h+|\\\\d+|(\\\\d+\\\\.?|\\\\.\\\\d)\\\\d*([Ee][-+]?\\\\d+)?\",\"name\":\"constant.numeric.berry\"}]},\"operator\":{\"patterns\":[{\"match\":\"[-\\\\]!%\\\\&(-+./:<=>\\\\[^|~]\",\"name\":\"keyword.operator.berry\"}]},\"strings\":{\"patterns\":[{\"begin\":\"f(?=[\\\"'])\",\"patterns\":[{\"begin\":\"\\\"\",\"end\":\"\\\"\",\"name\":\"string.quoted.other.berry\",\"patterns\":[{\"match\":\"(\\\\\\\\x\\\\h{2})|(\\\\\\\\[0-7]{3})|(\\\\\\\\\\\\\\\\)|(\\\\\\\\\\\")|(\\\\\\\\')|(\\\\\\\\a)|(\\\\\\\\b)|(\\\\\\\\f)|(\\\\\\\\n)|(\\\\\\\\r)|(\\\\\\\\t)|(\\\\\\\\v)\",\"name\":\"constant.character.escape.berry\"},{\"match\":\"\\\\{\\\\{[^}]*}}\",\"name\":\"string.quoted.other.berry\"},{\"begin\":\"\\\\{\",\"end\":\"}\",\"name\":\"keyword.other.unit.berry\",\"patterns\":[{\"include\":\"#keywords\"},{\"include\":\"#numbers\"},{\"include\":\"#identifier\"},{\"include\":\"#operator\"},{\"include\":\"#member\"},{\"include\":\"#function\"}]}]},{\"begin\":\"'\",\"end\":\"'\",\"name\":\"string.quoted.other.berry\",\"patterns\":[{\"match\":\"(\\\\\\\\x\\\\h{2})|(\\\\\\\\[0-7]{3})|(\\\\\\\\\\\\\\\\)|(\\\\\\\\\\\")|(\\\\\\\\')|(\\\\\\\\a)|(\\\\\\\\b)|(\\\\\\\\f)|(\\\\\\\\n)|(\\\\\\\\r)|(\\\\\\\\t)|(\\\\\\\\v)\",\"name\":\"constant.character.escape.berry\"},{\"match\":\"\\\\{\\\\{[^}]*}}\",\"name\":\"string.quoted.other.berry\"},{\"begin\":\"\\\\{\",\"end\":\"}\",\"name\":\"keyword.other.unit.berry\",\"patterns\":[{\"include\":\"#keywords\"},{\"include\":\"#numbers\"},{\"include\":\"#identifier\"},{\"include\":\"#operator\"},{\"include\":\"#member\"},{\"include\":\"#function\"}]}]}],\"while\":\"\\\\G|^[\\\\t ]*(?=[\\\"'])\"},{\"begin\":\"([\\\"'])\",\"end\":\"\\\\1\",\"name\":\"string.quoted.double.berry\",\"patterns\":[{\"match\":\"(\\\\\\\\x\\\\h{2})|(\\\\\\\\[0-7]{3})|(\\\\\\\\\\\\\\\\)|(\\\\\\\\\\\")|(\\\\\\\\')|(\\\\\\\\a)|(\\\\\\\\b)|(\\\\\\\\f)|(\\\\\\\\n)|(\\\\\\\\r)|(\\\\\\\\t)|(\\\\\\\\v)\",\"name\":\"constant.character.escape.berry\"}]}]}},\"scopeName\":\"source.berry\",\"aliases\":[\"be\"]}"))
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ([
+lang
+]);
+
+
+/***/ })
+
+}]);

@@ -1,0 +1,13 @@
+import pg from 'pg';
+import fs from 'fs';
+const client = new pg.Client({ connectionString: 'postgresql://postgres:postgres@127.0.0.1:5432/nextapp' });
+await client.connect();
+const { rows } = await client.query(`SELECT id, name FROM "KnowledgeSource" WHERE name LIKE '%prevention%' LIMIT 1`);
+const buffer = fs.readFileSync(`upload/file-store/${rows[0].id}.bin`);
+const { getDocumentProxy, extractText } = await import('unpdf');
+const pdf = await getDocumentProxy(new Uint8Array(buffer));
+const { text } = await extractText(pdf, { mergePages: true });
+const i = text.indexOf('Low-endemicity pattern');
+console.log('--- RAW (pre-normalization) ---');
+console.log(JSON.stringify(text.slice(i - 120, i + 420)));
+await client.end();

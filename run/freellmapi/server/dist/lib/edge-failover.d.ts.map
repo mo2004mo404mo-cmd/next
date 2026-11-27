@@ -1,0 +1,1 @@
+{"version":3,"file":"edge-failover.d.ts","sourceRoot":"","sources":["../../src/lib/edge-failover.ts"],"names":[],"mappings":"AA4BA,MAAM,MAAM,SAAS,GAAG,CAAC,GAAG,EAAE,MAAM,EAAE,IAAI,CAAC,EAAE,WAAW,KAAK,OAAO,CAAC,QAAQ,CAAC,CAAC;AAuD/E,wBAAsB,qBAAqB,CACzC,OAAO,EAAE,SAAS,EAClB,GAAG,EAAE,MAAM,EACX,IAAI,CAAC,EAAE,WAAW,GACjB,OAAO,CAAC,QAAQ,CAAC,CAgFnB"}

@@ -1,0 +1,10 @@
+import { $ } from 'bun';
+const B = 'http://127.0.0.1:3000';
+const JAR = '/tmp/agent-raw.jar';
+const csrfToken = JSON.parse(await $`curl -s -c ${JAR} ${B}/api/auth/csrf`.text()).csrfToken;
+await $`curl -s -b ${JAR} -c ${JAR} -X POST ${B}/api/auth/callback/credentials -H 'Content-Type: application/x-www-form-urlencoded' --data-urlencode csrfToken=${csrfToken} --data-urlencode email=admin@medq.com --data-urlencode password=test123 --data-urlencode callbackUrl=${B}/ -o /dev/null`.quiet();
+const raw = await $`curl -s -b ${JAR} --max-time 120 -N -X POST ${B}/api/agent/chat/v2 -H 'Content-Type: application/json' -d '{"message":"hi","context":""}'`.text();
+const lines = raw.split('\n').filter(Boolean);
+console.log('total lines:', lines.length);
+for (const l of lines.slice(0, 14)) console.log(l.slice(0, 150));
+process.exit(0);

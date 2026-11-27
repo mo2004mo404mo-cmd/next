@@ -1,0 +1,22 @@
+1:"$Sreact.fragment"
+2:I[61304,[],"ClientPageRoot"]
+3:I[35986,["98500","static/chunks/98500-66e9d398b7d3a686.js","81147","static/chunks/81147-5860277bed7ccfc7.js","61890","static/chunks/61890-5b65877922949775.js","5608","static/chunks/5608-6e2776205e64c5b8.js","7018","static/chunks/app/landing/page-994d0754cd699aac.js"],"default"]
+6:I[90484,[],"OutletBoundary"]
+7:"$Sreact.suspense"
+b:I[90484,[],"ViewportBoundary"]
+c:I[90484,[],"MetadataBoundary"]
+d:I[86869,[],"IconMark"]
+f:I[57121,[],""]
+10:I[74581,[],""]
+a:X
+0:{"buildId":"1qBpmi4JFMxBVgXRipMsz","data":[{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"Component":"$3","serverProvidedParams":{"searchParams":{},"params":{},"promises":["$@4","$@5"]}}],null,["$","$L6",null,{"children":["$","$7",null,{"name":"Next.MetadataOutlet","children":"$@8"}]}]]}],"isPartial":"$@9","staleTime":"$a","varyParams":null},{"rsc":["$","$1","h",{"children":[null,["$","$Lb",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","2",{"name":"theme-color","content":"#00e5a0"}]]}],["$","div",null,{"hidden":true,"children":["$","$Lc",null,{"children":["$","$7",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"landing page — MedQ"}],["$","meta","1",{"name":"description","content":"a marketing surface that explains the app to new visitors and drives them to sign up / launch the app."}],["$","link","2",{"rel":"manifest","href":"/manifest.json"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"MedQ"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","meta","6",{"property":"og:title","content":"landing page — MedQ"}],["$","meta","7",{"property":"og:description","content":"a marketing surface that explains the app to new visitors and drives them to sign up / launch the app."}],["$","meta","8",{"property":"og:image","content":"http://localhost:3000/opengraph-image.jpg?f6a9d396c00f4060"}],["$","meta","9",{"property":"og:image:type","content":"image/jpeg"}],["$","meta","10",{"property":"og:image:width","content":"1024"}],["$","meta","11",{"property":"og:image:height","content":"1024"}],["$","meta","12",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","13",{"name":"twitter:title","content":"landing page — MedQ"}],["$","meta","14",{"name":"twitter:description","content":"a marketing surface that explains the app to new visitors and drives them to sign up / launch the app."}],["$","meta","15",{"name":"twitter:image","content":"http://localhost:3000/opengraph-image.jpg?f6a9d396c00f4060"}],["$","meta","16",{"name":"twitter:image:type","content":"image/jpeg"}],["$","meta","17",{"name":"twitter:image:width","content":"1024"}],["$","meta","18",{"name":"twitter:image:height","content":"1024"}],["$","link","19",{"rel":"icon","href":"/favicon.ico?bfdba65b84bfc68d","type":"image/x-icon","sizes":"192x192"}],["$","link","20",{"rel":"icon","href":"/favicon.ico","sizes":"32x32"}],["$","link","21",{"rel":"icon","href":"/icon.png","sizes":"512x512","type":"image/png"}],["$","link","22",{"rel":"apple-touch-icon","href":"/apple-icon.png","sizes":"180x180","type":"image/png"}],["$","$Ld","23",{}]]}]}]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"isPartial":"$@e","staleTime":"$a","varyParams":null},{"rsc":["$","$1","c",{"children":[null,[["$","$Lf",null,{"parallelRouterKey":"children","template":["$","$L10",null,{}]}],["$","$Lf",null,{"parallelRouterKey":"modal","template":["$","$L10",null,{}]}]]]}],"isPartial":"$@11","staleTime":"$a","varyParams":null}],"isUpgradeableISRFallback":false,"a":"$@12","rootVaryParams":null,"needsRuntimeRequest":"$@13"}
+4:{}
+5:"$0:data:0:rsc:props:children:0:props:serverProvidedParams:params"
+8:null
+13:true
+a:300
+a:C
+12:0
+e:"$undefined"
+11:"$undefined"
+9:"$undefined"

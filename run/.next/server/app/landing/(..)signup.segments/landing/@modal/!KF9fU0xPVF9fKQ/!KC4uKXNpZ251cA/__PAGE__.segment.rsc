@@ -1,0 +1,24 @@
+1:"$Sreact.fragment"
+2:I[61304,[],"ClientPageRoot"]
+3:I[19548,["18409","static/chunks/18409-561e9c4d6f4390a3.js","68298","static/chunks/68298-d599790162114ddc.js","27173","static/chunks/27173-f8918f7bea74005e.js","33697","static/chunks/33697-7a9bce3d608f5187.js","98500","static/chunks/98500-66e9d398b7d3a686.js","35008","static/chunks/35008-6ba3c0de7a6e1986.js","77492","static/chunks/77492-8681dd746946451d.js","8352","static/chunks/8352-d01e127c59dc14c0.js","25684","static/chunks/app/landing/%40modal/(..)signup/page-5b8b69695104afad.js"],"default"]
+8:I[90484,[],"ViewportBoundary"]
+9:I[90484,[],"MetadataBoundary"]
+a:"$Sreact.suspense"
+b:I[86869,[],"IconMark"]
+d:I[57121,[],""]
+e:I[74581,[],""]
+7:X
+10:X
+10:C
+0:{"buildId":"1qBpmi4JFMxBVgXRipMsz","data":[{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"Component":"$3","serverProvidedParams":{"searchParams":{},"params":{},"promises":["$@4","$@5"]}}],null,null]}],"isPartial":"$@6","staleTime":"$7","varyParams":null},{"rsc":["$","$1","h",{"children":[null,["$","$L8",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","2",{"name":"theme-color","content":"#00e5a0"}]]}],["$","div",null,{"hidden":true,"children":["$","$L9",null,{"children":["$","$a",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"landing page — MedQ"}],["$","meta","1",{"name":"description","content":"a marketing surface that explains the app to new visitors and drives them to sign up / launch the app."}],["$","link","2",{"rel":"manifest","href":"/manifest.json"}],["$","meta","3",{"name":"mobile-web-app-capable","content":"yes"}],["$","meta","4",{"name":"apple-mobile-web-app-title","content":"MedQ"}],["$","meta","5",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","meta","6",{"property":"og:title","content":"landing page — MedQ"}],["$","meta","7",{"property":"og:description","content":"a marketing surface that explains the app to new visitors and drives them to sign up / launch the app."}],["$","meta","8",{"property":"og:image","content":"http://localhost:3000/opengraph-image.jpg?f6a9d396c00f4060"}],["$","meta","9",{"property":"og:image:type","content":"image/jpeg"}],["$","meta","10",{"property":"og:image:width","content":"1024"}],["$","meta","11",{"property":"og:image:height","content":"1024"}],["$","meta","12",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","13",{"name":"twitter:title","content":"landing page — MedQ"}],["$","meta","14",{"name":"twitter:description","content":"a marketing surface that explains the app to new visitors and drives them to sign up / launch the app."}],["$","meta","15",{"name":"twitter:image","content":"http://localhost:3000/opengraph-image.jpg?f6a9d396c00f4060"}],["$","meta","16",{"name":"twitter:image:type","content":"image/jpeg"}],["$","meta","17",{"name":"twitter:image:width","content":"1024"}],["$","meta","18",{"name":"twitter:image:height","content":"1024"}],["$","link","19",{"rel":"icon","href":"/favicon.ico?bfdba65b84bfc68d","type":"image/x-icon","sizes":"192x192"}],["$","link","20",{"rel":"icon","href":"/favicon.ico","sizes":"32x32"}],["$","link","21",{"rel":"icon","href":"/icon.png","sizes":"512x512","type":"image/png"}],["$","link","22",{"rel":"apple-touch-icon","href":"/apple-icon.png","sizes":"180x180","type":"image/png"}],["$","$Lb","23",{}]]}]}]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"isPartial":"$@c","staleTime":"$7","varyParams":null},{"rsc":["$","$1","c",{"children":[null,["$","$Ld",null,{"parallelRouterKey":"children","template":["$","$Le",null,{}]}]]}],"isPartial":"$@f","staleTime":"$7","varyParams":"$10"},{"rsc":["$","$1","c",{"children":[null,["$","$Ld",null,{"parallelRouterKey":"children","template":["$","$Le",null,{}]}]]}],"isPartial":"$@11","staleTime":"$7","varyParams":"$10"},{"rsc":["$","$1","c",{"children":[null,[["$","$Ld",null,{"parallelRouterKey":"children","template":["$","$Le",null,{}]}],["$","$Ld",null,{"parallelRouterKey":"modal","template":["$","$Le",null,{}]}]]]}],"isPartial":"$@12","staleTime":"$7","varyParams":null}],"isUpgradeableISRFallback":false,"a":"$@13","rootVaryParams":null,"needsRuntimeRequest":"$@14"}
+4:{}
+5:"$0:data:0:rsc:props:children:0:props:serverProvidedParams:params"
+14:true
+7:300
+7:C
+13:0
+c:"$undefined"
+f:"$undefined"
+11:"$undefined"
+12:"$undefined"
+6:"$undefined"
